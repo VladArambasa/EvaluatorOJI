@@ -1204,6 +1204,7 @@ function rescore(ws, prob, res) {
     }
     sr.tests = newTests;
     total += pCompile;
+    if ('sizeMain' in sr) sr.sizeJudged = C.sizeScope === 'all' ? (sr.sizeAll || 0) : sr.sizeMain; // FOLLOW THE CURRENT SIZE CHOICE
     const sizeOk = C.sourceKb <= 0 || num(sr.sizeJudged) <= C.sourceKb * 1024;
     sr.sizeOk = sizeOk;
     if (sizeOk) total += pSize;

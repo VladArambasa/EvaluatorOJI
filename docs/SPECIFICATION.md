@@ -119,13 +119,16 @@ A resulting path that is not absolute is relative to `{root}`. Both `/` and `\` 
 ```
 
 * `tests[].input`/`ok` are relative to the tests folder (or absolute).
-  `timeMs`/`memMb` = 0 means "the problem limit".
+  `timeMs`/`memMb` of a test = 0 means "the limit of the problem" (the usual case; the interface
+  shows these per-test columns only when asked).
 * `limits.timeMs`, `memMb`, `stackMb`, `sourceKb`: 0 = no limit.
 
 A scoring scheme exported for one problem (`<problem>.scoring.json`):
 `{ "format": "olympiad-evaluator/scoring", "version": 1, "problem": { … } }`.
 Import also accepts the older format id `evaluator-olimpiada/barem`, a whole `evaluator.json`
-(the user picks the problem), an OJI `teste.txt` and an OJI `rounds.xml`.
+(the user picks the problem), an OJI `teste.txt` and an OJI `rounds.xml`. In `rounds.xml` the units
+are guessed: a time up to 30 is in seconds (×1000), a memory or stack over 16384 is in KB, a source
+size over 1024 is in bytes.
 
 ## 2. Detection
 
@@ -261,6 +264,9 @@ Student total = Σ test scores + `points.compile` + (`sizeOk` ? `points.size` : 
 source exceeds `sourceKb`: `zero` → 0, `percent` → total·p/100, `penalty` → max(0, total − penalty),
 `ignore` → unchanged. Compilation error → total 0 (`CE`). No source → `NOSRC`.
 Maximum = Σ(P+TP+MP) + `points.compile` + `points.size`. Rounded to 2 decimals.
+
+`/api/rescore` applies the current scoring scheme to existing results without running anything; it
+also re-derives `sizeJudged` from the stored `sizeMain` / `sizeAll` with the current `sizeScope`.
 
 Final test statuses: `OK`, `PARTIAL`, `WA`, `TLE`, `MLE`, `RE`, `NOOUT`, `CHKERR`, `SKIP`.
 

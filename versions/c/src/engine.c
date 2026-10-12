@@ -2228,6 +2228,8 @@ static void rescore_inplace(const jval *ws, const jval *prob, jval *res)
         }
         j_set(sr, "tests", new_tests);
         total += p_compile;
+        if (j_get(sr, "sizeMain")) /* FOLLOW THE CURRENT SIZE CHOICE (FILE OR PROJECT) */
+            jset_n(sr, "sizeJudged", eq(C.size_scope, "all") ? j_number(G(sr, "sizeAll"), 0) : j_number(G(sr, "sizeMain"), 0));
         size_ok = C.source_kb <= 0 || j_number(G(sr, "sizeJudged"), 0) <= C.source_kb * 1024;
         jset_b(sr, "sizeOk", size_ok);
         if (size_ok) total += p_size;

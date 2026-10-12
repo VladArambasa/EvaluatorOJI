@@ -92,6 +92,15 @@ def run_version(name, base, report):
                 ws = change(ws)
             results, log, secs = c.evaluate(ws, probs)
             report[(name, case)] = (api_client.summarize(results, ws["root"]), secs, log)
+            if case == "contest" and "sum" in results:
+                # RESCORE WITHOUT RUNNING: SIZE MEASURED ON THE WHOLE PROJECT, WITH A TINY SIZE LIMIT
+                for p in ws["problems"]:
+                    if p["name"] == "sum":
+                        p["project"]["sizeScope"] = "all"
+                        p["limits"]["sourceKb"] = 0.4
+                t0 = time.time()
+                r = c.post("/api/rescore", {"workspace": ws, "problem": "sum", "results": results["sum"]})
+                report[(name, "rescore")] = (api_client.summarize({"sum": r["results"]}, ws["root"]), time.time() - t0, [])
     finally:
         proc.terminate()
         try:
@@ -128,7 +137,7 @@ def main():
         print("== %s FAILED: %s" % (n, e))
         problems += 1
     ref = names[0]
-    for case, _, _, _ in CASES:
+    for case in [c[0] for c in CASES] + ["rescore"]:
         if (ref, case) not in report:
             continue
         print("== %s (reference: %s, %.1f s)" % (case, ref, report[(ref, case)][1]))

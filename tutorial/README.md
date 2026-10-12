@@ -87,7 +87,28 @@ In the example, for `sum`:
 Select **max** in the problem list and evaluate it too: bogdan gets partial scores from the checker
 (he prints the right maximum but a wrong count), cristi fails only the test with negative numbers.
 
-## 5. Change the scoring scheme
+## 5. Set the limits of a problem
+
+Every problem has its own limits. Open the **Problem** tab: right under the name, **Limits of
+problem sum** holds
+
+- **Time** in ms (processor time, or real time if you choose so);
+- **Total memory** in MB and **Stack** in MB;
+- **Size on disk** in KB, measured on **the main source file** or on **the whole project** (all its
+  source files; the extensions counted can be changed, the ignored folders are never counted);
+- the hard limits (when a program is stopped), the maximum output and the memory calibration.
+
+The **Workspace** tab lists every problem with its time, memory, stack and size limits in one table,
+so a whole contest can be set up at once. The Evaluation tab shows the limits of the current problem
+above the table. Changing a limit recomputes the scores at once from the measured time, memory and
+size; a program that was stopped at the old hard limit is not run again by itself, so after raising
+a time or memory limit evaluate again.
+
+On **Tests and scoring**, tick **Some tests have their own time or memory limit** only when a test
+needs a different limit than its problem; two more columns then appear in the tests table (empty =
+the limit of the problem).
+
+## 6. Change the scoring scheme
 
 Open **Tests and scoring**:
 
@@ -95,16 +116,15 @@ Open **Tests and scoring**:
   scores are already recomputed: changing the scoring scheme never runs the programs again.
 - In **What happens when a limit is exceeded**, set *Time limit exceeded* to *percentage of the
   points* and keep 50%: a test that finishes over the time limit (but before the hard limit,
-  2 × the limit) now keeps half of its points. A program stopped at the hard limit, like dana's on
-  the big tests, still gets 0.
+  2 × the limit) now keeps half of its points. A program stopped at the hard limit still gets 0.
 - **Export scoring…** saves the scheme as `sum.scoring.json`; **Import scoring…** loads a scheme,
   an `evaluator.json`, an OJI `teste.txt` or `rounds.xml`.
 
-The **Problem** tab holds how the program gets its data (local files, console, a folder inside the
-project), how the project is built and the rules that find the project root. **Check the detection**
-shows what the rules find for every student.
+The **Problem** tab also holds how the program gets its data (local files, console, a folder inside
+the project), how the project is built and the rules that find the project root. **Check the
+detection** shows what the rules find for every student.
 
-## 6. Ranking and reports
+## 7. Ranking and reports
 
 Open **Ranking and reports** (evaluate all problems first with **All problems** on the Evaluation tab):
 
@@ -114,7 +134,7 @@ Open **Ranking and reports** (evaluate all problems first with **All problems** 
 - **TXT score sheets (OJI style)**: `score-sheets/<student>-res.txt` and `All_Results-res.txt`.
 - **Export the results (JSON)**.
 
-## 7. Your own contest
+## 8. Your own contest
 
 1. Make an empty folder, e.g. `C:\Contests\Club-October`.
 2. In the title bar press the folder button (or **Open a workspace** on the start screen), choose
@@ -133,11 +153,12 @@ Open **Ranking and reports** (evaluate all problems first with **All problems** 
    exists, otherwise 10 per test.
 8. Copy each student's project into the student's folder. Whole IDE projects are fine (CLion,
    Code::Blocks, VS Code): the root rules find the real project inside.
-9. Set the limits, the comparison and, on the **Problem** tab, the input/output mode, then evaluate.
+9. Set the limits of each problem (the table on the **Workspace** tab, or the **Problem** tab), the
+   input/output mode (**Problem** tab) and the comparison (**Tests and scoring**), then evaluate.
 
 Everything is saved automatically in `evaluator.json`; **Ctrl+S** saves at once.
 
-## 8. Projects built with the course scripts
+## 9. Projects built with the course scripts
 
 The students of the course build their projects with `bash-scripts/compile.sh` (every `.c`/`.cpp`
 into an object in `build/`) and `bash-scripts/build.sh` (links `release/program` and adds libraries
@@ -149,20 +170,21 @@ such as `-lm` from the `#include` lines). On the **Problem** tab, *Building the 
 - **The student's scripts**: runs the student's own `compile.sh` and `build.sh` (needs bash) and
   tests `release/program`.
 
-## 9. Coming from the OJI Evaluator
+## 10. Coming from the OJI Evaluator
 
 **Import from the OJI Evaluator…** (start screen or Workspace tab) reads the old evaluator's folder:
-`rounds.xml` (limits), `probleme/<problem>/teste` (tests and `teste.txt`), the `verif` checker,
+`rounds.xml` (the limits of each problem; a time written in seconds, such as `0.1`, becomes 100 ms),
+`probleme/<problem>/teste` (tests and `teste.txt`), the `verif` checker,
 `contestants.txt` and the sources in `surse_concurenti`, and creates the same contest as a workspace
 with the shared-folder layout. The TXT score sheets have the familiar `-res.txt` format.
 
-## 10. Translations
+## 11. Translations
 
 The interface language is chosen in the title bar. To change a text, or to add a language, edit the
 files in `master-translations/` and run the install script for your system there; see
 [master-translations/README.md](../master-translations/README.md).
 
-## 11. When something goes wrong
+## 12. When something goes wrong
 
 | symptom | what to do |
 |---------|------------|

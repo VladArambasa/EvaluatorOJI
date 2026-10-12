@@ -487,7 +487,7 @@ const S = {
   info: null, settings: { recent: [] }, ws: null, cur: '', tab: 'eval',
   scan: {}, results: {}, job: { running: false }, logs: [], logNext: 0, rv: -1,
   sel: {}, dirty: false, saveState: '', saveTimer: null, rescoreTimer: null, pollTimer: null,
-  sort: 'id', lastRender: 0
+  sort: 'id', lastRender: 0, ownLimits: {}, rescorePending: new Set()
 };
 
 /* ---------------------------------------------------------------- TRANSLATIONS */
@@ -819,10 +819,11 @@ function applyTheme() {
 }
 
 function markDirty(rescore) {
+  // RESCORE: TRUE FOR THE CURRENT PROBLEM, OR A PROBLEM NAME
   S.dirty = true; S.saveState = 'dirty'; renderSaveState();
   clearTimeout(S.saveTimer);
   S.saveTimer = setTimeout(() => saveWs().catch(fail), 700);
-  if (rescore) scheduleRescore();
+  if (rescore) scheduleRescore(rescore === true ? S.cur : rescore);
 }
 async function saveWs() {
   if (!S.ws) return;
@@ -842,9 +843,14 @@ function renderSaveState() {
   el.textContent = m[0] ? t(m[0]) : '';
   el.className = 'savestate ' + m[1];
 }
-function scheduleRescore() {
+function scheduleRescore(name) {
+  S.rescorePending.add(name);
   clearTimeout(S.rescoreTimer);
-  S.rescoreTimer = setTimeout(() => rescore(S.cur).catch(fail), 650);
+  S.rescoreTimer = setTimeout(async () => {
+    const names = Array.from(S.rescorePending);
+    S.rescorePending.clear();
+    for (const n of names) await rescore(n).catch(fail);
+  }, 650);
 }
 async function rescore(name) {
   const p = probByName(name);
@@ -977,7 +983,7 @@ function sel(path, options, attrs = '') {
   const v = String(fld(path) ?? '');
   return `<select ${bind(path, 'str')} ${attrs}>${options.map(([k, n]) => `<option value="${esc(k)}" ${String(k) === v ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
 }
-const SCORING_PATHS = /^(tests|limits|policy|points|compare\.mode|compare\.protocol)/;
+const SCORING_PATHS = /^(tests|limits|policy|points|compare\.mode|compare\.protocol|project\.sizeScope)/;
 function onBind(el) {
   const path = el.dataset.bind, type = el.dataset.type;
   const b = resolveBindPath(path);
@@ -986,7 +992,9 @@ function onBind(el) {
   else if (type === 'num') { v = el.value === '' ? 0 : Number(String(el.value).replace(',', '.')); if (isNaN(v)) v = 0; }
   else v = el.value;
   b.set(v);
-  markDirty(b.scope === 'p' && SCORING_PATHS.test(b.rest));
+  const wp = b.scope === 'ws' ? /^problems\.(\d+)\.(.*)$/.exec(b.rest) : null;
+  if (wp && S.ws.problems[Number(wp[1])] && SCORING_PATHS.test(wp[2])) markDirty(S.ws.problems[Number(wp[1])].name);
+  else markDirty(b.scope === 'p' && SCORING_PATHS.test(b.rest));
   if (el.dataset.rerender) renderMain();
   else if (b.scope === 'p' && /^(tests|points)/.test(b.rest)) { const mx = $('#maxscore'); if (mx) mx.textContent = dec(maxScoreOf(P())); }
 }
@@ -1043,6 +1051,7 @@ function viewEval() {
     <div class="sep-v"></div>
     <div class="progress" id="progress"><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="what">${esc(what)}${job.total ? ` · ${job.done}/${job.total}` : ''}</span></div>
   </div>
+  ${limitsHint(p)}
   ${!p.tests.length ? `<p class="hint">${t('The problem has no tests in its scoring scheme yet. Open %{tab} and press “Detect tests”.', { tab: testsLink })}</p>` : ''}
   ${res && res.updated ? `<p class="hint">${t('Results from %{date}', { date: esc(res.updated) })} · ${t('engine %{name}', { name: esc(res.variant || '') })}${base}</p>` : ''}
   ${body}
@@ -1052,6 +1061,16 @@ function tmLog(line) {
   // LOG LINES START WITH THE TIME (HH:MM:SS); ONLY THE MESSAGE AFTER IT IS TRANSLATED
   const m = /^(\d\d:\d\d:\d\d )([\s\S]*)$/.exec(line);
   return m ? m[1] + tm(m[2]) : tm(line);
+}
+function limitsLine(p) {
+  // SHORT TEXT WITH THE LIMITS OF A PROBLEM
+  const L = p.limits, part = (v, unit) => (Number(v) > 0 ? dec(v) + ' ' + unit : t('no limit'));
+  const where = p.project.sizeScope === 'all' ? t('project') : t('main file');
+  return [t('time %{value}', { value: part(L.timeMs, 'ms') }), t('memory %{value}', { value: part(L.memMb, 'MB') }),
+    t('stack %{value}', { value: part(L.stackMb, 'MB') }), t('size %{value} (%{where})', { value: part(L.sourceKb, 'KB'), where })].join(' · ');
+}
+function limitsHint(p) {
+  return `<p class="hint">${t('Limits: %{list}', { list: esc(limitsLine(p)) })} <button class="linkbtn" data-act="tab" data-v="problem">${t('Change')}</button></p>`;
 }
 function logText() { return S.logs.slice(-600).map(tmLog).join('\n'); }
 function rowHtml(p, r, checked) {
@@ -1235,8 +1254,10 @@ async function showStudent(sid) {
 }
 
 /* ================================================================ TESTS AND SCORING */
+function hasOwnLimits(p) { return p.tests.some(te => Number(te.timeMs) > 0 || Number(te.memMb) > 0); }
 function viewTests() {
   const p = P(), tdir = testsDirOf(p);
+  const own = !!S.ownLimits[p.name] || hasOwnLimits(p);
   const rows = p.tests.map((te, i) => `<tr>
     <td>${i + 1}</td>
     <td><input type="text" class="w-s" ${bind(`p:tests.${i}.id`)} value="${esc(te.id)}" aria-label="${esc(t('Test id'))}"></td>
@@ -1245,8 +1266,8 @@ function viewTests() {
     <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.points`, 'num')} value="${esc(te.points)}" aria-label="${esc(t('Points'))}"></td>
     <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.timePoints`, 'num')} value="${esc(te.timePoints)}" aria-label="${esc(t('Time points'))}"></td>
     <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.memPoints`, 'num')} value="${esc(te.memPoints)}" aria-label="${esc(t('Memory points'))}"></td>
-    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.timeMs`, 'num')} value="${esc(te.timeMs || '')}" placeholder="${esc(p.limits.timeMs)}" aria-label="${esc(t('Time limit'))}"></td>
-    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.memMb`, 'num')} value="${esc(te.memMb || '')}" placeholder="${esc(p.limits.memMb)}" aria-label="${esc(t('Memory limit'))}"></td>
+    ${own ? `<td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.timeMs`, 'num')} value="${esc(te.timeMs || '')}" placeholder="${esc(p.limits.timeMs)}" aria-label="${esc(t('Time limit'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.memMb`, 'num')} value="${esc(te.memMb || '')}" placeholder="${esc(p.limits.memMb)}" aria-label="${esc(t('Memory limit'))}"></td>` : ''}
     <td><button class="btn small" data-act="test-view" data-i="${i}">${t('View')}</button> <button class="iconbtn" data-act="test-del" data-i="${i}" title="${esc(t('Delete the test'))}">${ICON.x}</button></td></tr>`).join('');
   const pol = (k, modes) => `${sel(`p:policy.${k}.mode`, modes, 'data-rerender="1"')}
      ${p.policy[k].mode === 'percent' ? `<span class="row">${t('keep %{input} %', { input: inp(`p:policy.${k}.percent`, 'num', 'class="w-s"') })}</span>` : ''}
@@ -1276,27 +1297,17 @@ function viewTests() {
       <button class="btn" data-act="scoring-import">${t('Import scoring…')}</button>
       <button class="btn" data-act="scoring-export">${t('Export scoring…')}</button>
     </div>
-    ${p.tests.length ? `<div class="tablewrap tests-table"><table class="grid"><thead><tr><th>#</th><th>Id</th><th>${t('Input')}</th><th>${t('Correct output')}</th><th class="num">${t('Points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the time limit'))}">${t('Time points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the memory limit'))}">${t('Memory points')}</th><th class="num">${t('Time (ms)')}</th><th class="num">${t('Memory (MB)')}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+    ${p.tests.length ? `<div class="tablewrap tests-table"><table class="grid"><thead><tr><th>#</th><th>Id</th><th>${t('Input')}</th><th>${t('Correct output')}</th><th class="num">${t('Points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the time limit'))}">${t('Time points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the memory limit'))}">${t('Memory points')}</th>${own ? `<th class="num" title="${esc(t('Empty: the limit of the problem'))}">${t('Own time (ms)')}</th><th class="num" title="${esc(t('Empty: the limit of the problem'))}">${t('Own memory (MB)')}</th>` : ''}<th></th></tr></thead><tbody>${rows}</tbody></table></div>`
       : `<p class="hint">${t('The scoring scheme has no tests. Put the files in the tests folder and press “Detect tests”.')}</p>`}
-    <p style="margin:12px 0 0">${t('Maximum score: %{score} points', { score: `<b id="maxscore">${dec(maxScoreOf(p))}</b>` })}</p>
+    <div class="row" style="margin:12px 0 0;gap:16px;flex-wrap:wrap">
+      <span>${t('Maximum score: %{score} points', { score: `<b id="maxscore">${dec(maxScoreOf(p))}</b>` })}</span>
+      ${p.tests.length ? `<label class="chk"><input type="checkbox" data-act="own-limits" ${own ? 'checked' : ''}> ${t('Some tests have their own time or memory limit')}</label>` : ''}
+    </div>
   </section>
   <div class="cols" style="margin-top:16px">
     <section class="sheet panel">
-      <h2>${t('Limits')}</h2>
-      <p class="hint">${t('Values set on a test (the Time and Memory columns) take priority. 0 means no limit.')}</p>
-      <div class="form">
-        <label>${t('Time')}</label><div class="row">${t('%{input} ms, measured as %{mode}', { input: inp('p:limits.timeMs', 'num'), mode: sel('p:limits.timeMode', [['cpu', t('processor time')], ['wall', t('real time')]]) })}</div>
-        <label>${t('Hard time limit')}</label><div class="row">${t('%{input} × the limit (the program is stopped after that)', { input: inp('p:limits.hardTimeFactor', 'num', 'class="w-s"') })}</div>
-        <label>${t('Total memory')}</label><div class="row">${inp('p:limits.memMb', 'num')} MB</div>
-        <label>${t('Hard memory limit')}</label><div class="row">${t('%{input} × the limit', { input: inp('p:limits.hardMemFactor', 'num', 'class="w-s"') })}</div>
-        <label>${t('Stack')}</label><div class="row">${inp('p:limits.stackMb', 'num')} MB</div>
-        <label>${t('Source size')}</label><div class="row">${inp('p:limits.sourceKb', 'num')} KB</div>
-        <label>${t('Maximum output')}</label><div class="row">${inp('p:limits.outputMb', 'num')} MB</div>
-        <label>${t('Memory calibration')}</label><label class="chk">${inp('p:limits.calibrate', 'bool')} ${t('subtract the memory of an empty program (like at OJI)')}</label>
-      </div>
-    </section>
-    <section class="sheet panel">
       <h2>${t('What happens when a limit is exceeded')}</h2>
+      ${limitsHint(p)}
       <p class="hint">${t('A test that finished but went over a limit can get 0, a percentage or a linear decrease. A program stopped at the hard limit gets 0.')}</p>
       <div class="form">
         <label>${t('Time limit exceeded')}</label><div class="row">${pol('time', tmodes)}</div>
@@ -1309,8 +1320,7 @@ function viewTests() {
         <label>${t('For size')}</label><div class="row">${t('%{input} points if the source is within the limit', { input: inp('p:points.size', 'num') })}</div>
       </div>
     </section>
-  </div>
-  <section class="sheet panel" style="margin-top:16px">
+    <section class="sheet panel">
     <h2>${t('Output comparison')}</h2>
     <div class="form">
       <label>${t('Mode')}</label>${sel('p:compare.mode', [['lines', t('line by line, ignoring trailing spaces (like at OJI)')], ['tokens', t('word by word (ignores spaces)')], ['exact', t('identical')], ['real', t('real numbers with tolerance')], ['checker', t('external checker (verif)')]], 'data-rerender="1"')}
@@ -1322,7 +1332,8 @@ function viewTests() {
       <label>${t('Arguments')}</label><div class="row">${inp('p:compare.args', 'str', 'class="w-m" placeholder="' + esc(argHint) + '"')} <span class="vars">${t('variables:')} <code>{input}</code> <code>{ok}</code> <code>{output}</code></span></div>` : ''}
     </div>
     ${p.compare.mode === 'checker' ? `<p class="hint" style="margin-top:10px">${t('A .c or .cpp checker is compiled automatically. With the OJI protocol the checker finds %{in}, %{ok} and %{out} in its current folder, and the printed score is capped at the points of the test.', { in: `<code>${name}.in</code>`, ok: `<code>${name}.ok</code>`, out: `<code>${name}.out</code>` })}</p>` : ''}
-  </section>`;
+    </section>
+  </div>`;
 }
 async function detectTests() {
   const p = P();
@@ -1457,8 +1468,11 @@ function parseRoundsXml(xml) {
     const val = k => { const c = el.getElementsByTagName(k)[0]; return c ? c.textContent.trim() : (el.getAttribute(k) || ''); };
     const name = val('nume');
     if (!name) continue;
-    out.push({ name, timeMs: parseFloat(val('limita_timp').replace(',', '.')) || 0, memMb: parseFloat(val('limita_memorie').replace(',', '.')) || 0,
-      stackMb: parseFloat(val('limita_stiva').replace(',', '.')) || 0, sourceKb: parseFloat(val('limita_dimens_sursa').replace(',', '.')) || 0 });
+    const v = k => parseFloat(val(k).replace(',', '.')) || 0;
+    // UNITS ARE GUESSED: A TIME UP TO 30 IS IN SECONDS, A MEMORY OVER 16384 IN KB, A SIZE OVER 1024 IN BYTES
+    const tm0 = v('limita_timp'), mem = v('limita_memorie'), stk = v('limita_stiva'), src = v('limita_dimens_sursa');
+    out.push({ name, timeMs: tm0 > 0 && tm0 <= 30 ? Math.round(tm0 * 1000) : tm0, memMb: mem > 16384 ? mem / 1024 : mem,
+      stackMb: stk > 16384 ? stk / 1024 : stk, sourceKb: src > 1024 ? Math.round(src / 1024 * 100) / 100 : src });
   }
   return out;
 }
@@ -1546,6 +1560,21 @@ function viewProblem() {
     </div>
   </section>
   <section class="sheet panel">
+    <h2>${t('Limits of problem %{name}', { name })}</h2>
+    <p class="hint">${t('They apply to every test of this problem. 0 means no limit. The Workspace tab shows the limits of all problems side by side.')}</p>
+    <div class="form">
+      <label>${t('Time')}</label><div class="row">${t('%{input} ms, measured as %{mode}', { input: inp('p:limits.timeMs', 'num'), mode: sel('p:limits.timeMode', [['cpu', t('processor time')], ['wall', t('real time')]]) })}</div>
+      <label>${t('Total memory')}</label><div class="row">${inp('p:limits.memMb', 'num')} MB</div>
+      <label>${t('Stack')}</label><div class="row">${inp('p:limits.stackMb', 'num')} MB</div>
+      <label>${t('Size on disk')}</label><div class="row">${t('%{input} KB, measured on %{scope}', { input: inp('p:limits.sourceKb', 'num'), scope: sel('p:project.sizeScope', [['main', t('the main source file')], ['all', t('the whole project (all its source files)')]], 'data-rerender="1"') })}</div>
+      ${p.project.sizeScope === 'all' ? `<label>${t('Files counted')}</label><div class="row">${inp('p:project.sizeExt', 'str', 'class="w-m mono"')} <span class="hint" style="margin:0">${t('extensions; the ignored folders are not counted')}</span></div>` : ''}
+      <label>${t('Hard time limit')}</label><div class="row">${t('%{input} × the limit (the program is stopped after that)', { input: inp('p:limits.hardTimeFactor', 'num', 'class="w-s"') })}</div>
+      <label>${t('Hard memory limit')}</label><div class="row">${t('%{input} × the limit', { input: inp('p:limits.hardMemFactor', 'num', 'class="w-s"') })}</div>
+      <label>${t('Maximum output')}</label><div class="row">${inp('p:limits.outputMb', 'num')} MB</div>
+      <label>${t('Memory calibration')}</label><label class="chk">${inp('p:limits.calibrate', 'bool')} ${t('subtract the memory of an empty program (like at OJI)')}</label>
+    </div>
+  </section>
+  <section class="sheet panel">
     <h2>${t('How the program gets its data')}</h2>
     <div class="presets">
       <button class="preset" data-act="io-preset" data-v="files" aria-pressed="${pr === 'files'}"><b>${t('Local files (olympiad)')}</b><span>${t('Reads %{in} and writes %{out} in the current folder.', { in: `<code>${name}.in</code>`, out: `<code>${name}.out</code>` })}</span></button>
@@ -1588,8 +1617,6 @@ function viewProblem() {
       <div class="form">
         <label>${t('Maximum depth')}</label>${inp('p:project.maxDepth', 'num', 'class="w-s"')}
         <label>${t('Main file')}</label>${inp('p:project.mainPatterns', 'str', 'class="w-l mono"')}
-        <label>${t('Source size')}</label>${sel('p:project.sizeScope', [['main', t('the main file')], ['all', t('all the files below')]])}
-        <label>${t('Extensions counted in the size')}</label>${inp('p:project.sizeExt', 'str', 'class="w-l mono"')}
       </div>
     </div>
     <div class="toolbar" style="margin-top:14px;margin-bottom:0"><button class="btn" data-act="scan">${ICON.scan} ${t('Check the detection')}</button></div>
@@ -1637,6 +1664,20 @@ function viewWorkspace() {
     </div>
   </section>
   <section class="sheet panel">
+    <h2>${t('Problems and their limits')}</h2>
+    <p class="hint">${t('Each problem has its own limits; 0 means no limit. The other limit settings are on the Problem tab.')}</p>
+    <div class="toolbar"><button class="btn" data-act="problem-add">${t('Add a problem')}</button><button class="btn" data-act="import-oji">${t('Import from the OJI Evaluator…')}</button></div>
+    <div class="tablewrap"><table class="grid"><thead><tr><th>${t('Name')}</th><th>${t('No.')}</th><th class="num">${t('Tests')}</th><th class="num">${t('Time (ms)')}</th><th class="num">${t('Memory (MB)')}</th><th class="num">${t('Stack (MB)')}</th><th class="num">${t('Size (KB)')}</th><th>${t('Size measured on')}</th><th class="num">${t('Maximum score')}</th><th>${t('Tests folder')}</th></tr></thead><tbody>
+    ${ws.problems.map((p, i) => `<tr><td><button class="linkbtn" data-act="goto-problem" data-v="${esc(p.name)}">${esc(p.name)}</button></td><td>${esc(p.nr)}</td><td class="num">${p.tests.length}</td>
+      <td class="num">${inp(`ws:problems.${i}.limits.timeMs`, 'num', `class="w-s" aria-label="${esc(t('Time (ms)'))}"`)}</td>
+      <td class="num">${inp(`ws:problems.${i}.limits.memMb`, 'num', `class="w-s" aria-label="${esc(t('Memory (MB)'))}"`)}</td>
+      <td class="num">${inp(`ws:problems.${i}.limits.stackMb`, 'num', `class="w-s" aria-label="${esc(t('Stack (MB)'))}"`)}</td>
+      <td class="num">${inp(`ws:problems.${i}.limits.sourceKb`, 'num', `class="w-s" aria-label="${esc(t('Size (KB)'))}"`)}</td>
+      <td>${sel(`ws:problems.${i}.project.sizeScope`, [['main', t('main source file')], ['all', t('whole project')]], `aria-label="${esc(t('Size measured on'))}"`)}</td>
+      <td class="num">${dec(maxScoreOf(p))}</td><td class="mono">${esc(testsDirOf(p))}</td></tr>`).join('') || `<tr><td colspan="10" class="hint">${t('No problems.')}</td></tr>`}
+    </tbody></table></div>
+  </section>
+  <section class="sheet panel">
     <h2>${t('Students')}</h2>
     <p class="hint">${t('The list is optional: if it is empty, the students are taken from the folder names. Students in the list appear in the ranking even if they did not submit a source.')}</p>
     <div class="toolbar">
@@ -1646,13 +1687,6 @@ function viewWorkspace() {
       ${ws.students.length ? `<button class="btn danger" data-act="students-clear">${t('Clear the list')}</button>` : ''}
     </div>
     ${ws.students.length ? `<div class="tablewrap"><table class="grid"><thead><tr><th>#</th><th>${t('Id (folder name)')}</th><th>${t('Name')}</th><th>${t('Group')}</th><th></th></tr></thead><tbody>${studs}</tbody></table></div>` : `<p class="hint">${t('No students in the list.')}</p>`}
-  </section>
-  <section class="sheet panel">
-    <h2>${t('Problems')}</h2>
-    <div class="toolbar"><button class="btn" data-act="problem-add">${t('Add a problem')}</button><button class="btn" data-act="import-oji">${t('Import from the OJI Evaluator…')}</button></div>
-    <div class="tablewrap"><table class="grid"><thead><tr><th>${t('Name')}</th><th>${t('No.')}</th><th class="num">${t('Tests')}</th><th class="num">${t('Maximum score')}</th><th>${t('Tests folder')}</th></tr></thead><tbody>
-    ${ws.problems.map(p => `<tr><td><button class="linkbtn" data-act="goto-problem" data-v="${esc(p.name)}">${esc(p.name)}</button></td><td>${esc(p.nr)}</td><td class="num">${p.tests.length}</td><td class="num">${dec(maxScoreOf(p))}</td><td class="mono">${esc(testsDirOf(p))}</td></tr>`).join('') || `<tr><td colspan="5" class="hint">${t('No problems.')}</td></tr>`}
-    </tbody></table></div>
   </section>`;
 }
 const KINDS = { tests: N_('tests'), student: N_('student'), work: N_('work'), results: N_('results'), sources: N_('sources') };
@@ -2104,6 +2138,15 @@ const ACT = {
     const id = String(ids.length ? Math.max(...ids) + 1 : 0);
     p.tests.push({ id, input: tpl(p.inputPattern, { problem: p.name, nr: p.nr, n: id }), ok: tpl(p.okPattern, { problem: p.name, nr: p.nr, n: id }), points: 10, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 });
     markDirty(true); renderMain();
+  },
+  'own-limits': async a => {
+    const p = P(), own = p.tests.filter(te => Number(te.timeMs) > 0 || Number(te.memMb) > 0);
+    if (a.checked) { S.ownLimits[p.name] = true; renderMain(); return; }
+    if (own.length && !await confirmBox(t('Remove the own limits of %{n} tests? They will use the limits of the problem.', { n: own.length }))) { renderMain(); return; }
+    own.forEach(te => { te.timeMs = 0; te.memMb = 0; });
+    S.ownLimits[p.name] = false;
+    if (own.length) markDirty(true);
+    renderMain();
   },
   'test-del': a => { P().tests.splice(Number(a.dataset.i), 1); markDirty(true); renderMain(); },
   'test-view': a => viewTestFiles(Number(a.dataset.i)),

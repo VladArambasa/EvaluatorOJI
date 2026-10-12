@@ -1314,6 +1314,7 @@ Value rescore(const Value &ws, const Value &prob, Value res) {
         }
         sr.set("tests", newTests);
         total += pCompile;
+        if (sr.find("sizeMain")) sr.set("sizeJudged", C.sizeScope == "all" ? sr["sizeAll"].num(0) : sr["sizeMain"].num(0)); // FOLLOW THE CURRENT SIZE CHOICE
         bool sizeOk = C.sourceKb <= 0 || sr["sizeJudged"].num(0) <= C.sourceKb * 1024;
         sr.set("sizeOk", sizeOk);
         if (sizeOk) total += pSize;

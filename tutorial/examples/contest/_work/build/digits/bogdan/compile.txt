@@ -1,0 +1,2 @@
+In file included from C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\digits\bogdan\main.c:1:
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\digits\bogdan\master.h:3: No include path in which to find stdio.h

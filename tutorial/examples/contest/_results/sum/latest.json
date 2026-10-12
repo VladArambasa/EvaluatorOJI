@@ -1,0 +1,697 @@
+{
+ "format": "olympiad-evaluator/results",
+ "version": 1,
+ "problem": "sum",
+ "variant": "Web",
+ "os": "windows",
+ "updated": "2026-10-12 19:07:01",
+ "students": [
+  {
+   "id": "ana",
+   "name": "Ana Popescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ana",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 245,
+   "sizeAll": 245,
+   "sizeJudged": 245,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 24.8,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ana\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\ana\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "bogdan",
+   "name": "Bogdan Ionescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\bogdan",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\bogdan\\sum_clion",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 336,
+   "sizeAll": 336,
+   "sizeJudged": 336,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 42.2,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\bogdan\\sum_clion\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\bogdan\\sum_clion\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\bogdan\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "cristi",
+   "name": "Cristian Pop",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\cristi",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\cristi",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 330,
+   "sizeAll": 330,
+   "sizeJudged": 330,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 36.9,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\cristi\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\cristi\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\cristi\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "dana",
+   "name": "Dana Marin",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\dana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\dana",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 461,
+   "sizeAll": 461,
+   "sizeJudged": 461,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 18.5,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\dana\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\dana\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "emil",
+   "name": "Emil Stan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\emil",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\emil",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 412,
+   "sizeAll": 412,
+   "sizeJudged": 412,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 36.2,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\emil\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\emil\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\emil\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "flavia",
+   "name": "Flavia Dobre",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\flavia",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\flavia",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 148,
+   "sizeAll": 148,
+   "sizeJudged": 148,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 18.5,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\flavia\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\flavia\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "george",
+   "name": "George Radu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\george",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\george",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 412,
+   "sizeAll": 412,
+   "sizeJudged": 412,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 19.1,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\george\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\george\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "horia",
+   "name": "Horia Matei",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\horia",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\horia",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 279,
+   "sizeAll": 279,
+   "sizeJudged": 279,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 46.2,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\horia\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\horia\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\horia\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "ioana",
+   "name": "Ioana Lazăr",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c",
+    "util.c"
+   ],
+   "sizeMain": 283,
+   "sizeAll": 568,
+   "sizeJudged": 283,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 63.9,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\main.c:2: No include path in which to find math.h\r\nIn file included from C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\main.c:3:\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\util.h:3: No include path in which to find stdio.h\r\nIn file included from C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\util.c:1:\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\util.h:3: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\ioana\\util.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\ioana\\prog.exe -lm -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "jianu",
+   "name": "Jianu Ene",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\jianu",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\jianu",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 475,
+   "sizeAll": 475,
+   "sizeJudged": 475,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 42.3,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\jianu\\main.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\jianu\\main.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\jianu\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:06:59",
+   "tests": []
+  },
+  {
+   "id": "kira",
+   "name": "Kira Neagu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\kira",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\kira",
+   "main": "main.py",
+   "lang": "py",
+   "sources": [
+    "main.py"
+   ],
+   "sizeMain": 157,
+   "sizeAll": 157,
+   "sizeJudged": 157,
+   "sizeOk": true,
+   "compile": {
+    "ok": true,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "DONE",
+   "score": 100,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:00",
+   "tests": [
+    {
+     "id": "0",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 109.375,
+     "wallMs": 54.275,
+     "timeMs": 109.375,
+     "memKb": 11420,
+     "memRawKb": 11420,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\0.out",
+     "err": "",
+     "max": 10,
+     "status": "OK",
+     "score": 10,
+     "msg": "Correct"
+    },
+    {
+     "id": "1",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 31.25,
+     "wallMs": 47.107,
+     "timeMs": 31.25,
+     "memKb": 11392,
+     "memRawKb": 11392,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\1.out",
+     "err": "",
+     "max": 10,
+     "status": "OK",
+     "score": 10,
+     "msg": "Correct"
+    },
+    {
+     "id": "2",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 31.25,
+     "wallMs": 57.467,
+     "timeMs": 31.25,
+     "memKb": 11444,
+     "memRawKb": 11444,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\2.out",
+     "err": "",
+     "max": 15,
+     "status": "OK",
+     "score": 15,
+     "msg": "Correct"
+    },
+    {
+     "id": "3",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 62.5,
+     "wallMs": 84.981,
+     "timeMs": 62.5,
+     "memKb": 18492,
+     "memRawKb": 18492,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\3.out",
+     "err": "",
+     "max": 20,
+     "status": "OK",
+     "score": 20,
+     "msg": "Correct"
+    },
+    {
+     "id": "4",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 78.125,
+     "wallMs": 109.027,
+     "timeMs": 78.125,
+     "memKb": 27180,
+     "memRawKb": 27180,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\4.out",
+     "err": "",
+     "max": 25,
+     "status": "OK",
+     "score": 25,
+     "msg": "Correct"
+    },
+    {
+     "id": "5",
+     "raw": "OK",
+     "msg0": "Correct",
+     "detail": "",
+     "f": 1,
+     "pts": null,
+     "cpuMs": 31.25,
+     "wallMs": 52.41,
+     "timeMs": 31.25,
+     "memKb": 11488,
+     "memRawKb": 11488,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\sum\\kira\\5.out",
+     "err": "",
+     "max": 20,
+     "status": "OK",
+     "score": 20,
+     "msg": "Correct"
+    },
+    {
+     "id": "6",
+     "raw": "CHKERR",
+     "msg0": "Test input file missing: C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\_tests\\6-sum.in",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 0,
+     "wallMs": 0,
+     "timeMs": 0,
+     "memKb": 0,
+     "memRawKb": 0,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "",
+     "err": "",
+     "max": 10,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Test input file missing: C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\_tests\\6-sum.in"
+    },
+    {
+     "id": "7",
+     "raw": "CHKERR",
+     "msg0": "Test input file missing: C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\_tests\\7-sum.in",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 0,
+     "wallMs": 0,
+     "timeMs": 0,
+     "memKb": 0,
+     "memRawKb": 0,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "",
+     "err": "",
+     "max": 10,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Test input file missing: C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\_tests\\7-sum.in"
+    }
+   ]
+  },
+  {
+   "id": "lia",
+   "name": "Lia Ștefan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\lia",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\lia",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 15162,
+   "sizeAll": 15162,
+   "sizeJudged": 15162,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 22.6,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\lia\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\lia\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:00",
+   "tests": []
+  },
+  {
+   "id": "mihai",
+   "name": "Mihai Toma",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\mihai",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\mihai",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 365,
+   "sizeAll": 365,
+   "sizeJudged": 365,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 19.2,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\mihai\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\mihai\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:00",
+   "tests": []
+  },
+  {
+   "id": "nicu",
+   "name": "Nicu Vlad",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\nicu",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\nicu",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 120,
+   "notes": [
+    "Main file not found in C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\nicu"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:00",
+   "tests": []
+  },
+  {
+   "id": "oana",
+   "name": "Oana Țurcanu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\oana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\oana\\Sum",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 257,
+   "sizeAll": 257,
+   "sizeJudged": 257,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 20.3,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\oana\\Sum\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\oana\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:00",
+   "tests": []
+  },
+  {
+   "id": "petra",
+   "name": "Petra Iliescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\petra",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\petra",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "main.cpp"
+   ],
+   "sizeMain": 374,
+   "sizeAll": 374,
+   "sizeJudged": 374,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 19.1,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\sum\\petra\\main.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\sum\\petra\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 120,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  }
+ ],
+ "baseline": {
+  "py": 0
+ },
+ "maxScore": 120,
+ "tests": [
+  {
+   "id": "0",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "1",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "2",
+   "points": 15,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "3",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "4",
+   "points": 25,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "5",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "6",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "7",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  }
+ ],
+ "limits": {
+  "timeMs": 1000,
+  "memMb": 64,
+  "stackMb": 8,
+  "sourceKb": 10,
+  "timeMode": "cpu"
+ }
+}

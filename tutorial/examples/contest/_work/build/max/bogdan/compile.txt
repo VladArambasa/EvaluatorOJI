@@ -1,0 +1,6 @@
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\max\bogdan\max.c:1: No include path in which to find stdio.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\_work\olieval_probe.c:14: No include path in which to find windows.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\_work\olieval_probe.c:15: No include path in which to find psapi.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\_work\olieval_probe.c:20: No include path in which to find stdio.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\_work\olieval_probe.c:21: No include path in which to find stdlib.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\_work\olieval_probe.c:22: No include path in which to find string.h

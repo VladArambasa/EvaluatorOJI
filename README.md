@@ -86,12 +86,14 @@ table for details.
    scoring scheme) is saved there. Choose the folder layout and press **Create the folders** to
    prepare the structure for every student of the list (paste the list as text or take it from the
    folders).
-2. **Problem**: the name (it appears in file names: `sum.in`), how the program gets its data, how
-   the project is built and how the student's project is found inside the student folder.
+2. **Problem**: the name (it appears in file names: `sum.in`), **the limits of the problem** (time
+   in ms, total memory, stack, size on disk measured on the main source file or on the whole
+   project), how the program gets its data, how the project is built and how the student's project
+   is found inside the student folder. The Workspace tab shows the limits of all problems in one table.
 3. **Tests and scoring**: put the tests in the tests folder of the problem (e.g. `0-sum.in` +
    `0-sum.ok`) and press **Detect tests**. Each test has points for correctness, points for time and
-   points for memory, plus its own limits (optional). Set the limits (time, memory, stack, source
-   size), what happens when they are exceeded and the comparison mode. **Import/Export scoring**.
+   points for memory; a test can also get its own time or memory limit (optional). Set what happens
+   when a limit is exceeded and the comparison mode. **Import/Export scoring**.
 4. **Evaluation**: **Evaluate problem**, **Evaluate selection** (the ticked students) or **All
    problems**. The table shows the score and verdict of every student on every test; a click on a
    cell opens the input, the correct output and the program's output (with the differing line
@@ -164,7 +166,8 @@ are edited there too (variables: `{sources}` `{exe}` `{libs}` `{main}` `{stack}`
   OJI), so only what the student uses counts.
 - **Stack**: the stack used (through the measuring probe compiled with the source; it does not count
   towards the size).
-- **Source size**: only the main file or every `.c .h .cpp .hpp …` file of the project.
+- **Size on disk**, per problem: the main source file only, or the whole project (every `.c .h .cpp .hpp …`
+  file outside the ignored folders).
 
 The limits are enforced while running: on Linux through `setrlimit` (time, memory, stack, output
 size), on Windows through a Job Object (memory, time, one process) and `-Wl,--stack=…` when compiling.

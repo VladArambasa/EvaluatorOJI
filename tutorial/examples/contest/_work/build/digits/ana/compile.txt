@@ -1,0 +1,3 @@
+In file included from C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\digits\ana\main.c:1:
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\digits\ana\master.h:3: No include path in which to find stdio.h
+C:\Users\vlada\gits\EvaluatorOJI\tutorial\examples\contest\digits\ana\master.h:4: No include path in which to find math.h

@@ -1,0 +1,486 @@
+{
+ "format": "olympiad-evaluator/results",
+ "version": 1,
+ "problem": "digits",
+ "variant": "Web",
+ "os": "windows",
+ "updated": "2026-10-12 19:07:02",
+ "students": [
+  {
+   "id": "ana",
+   "name": "Ana Popescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ana",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "digits.c",
+    "main.c"
+   ],
+   "sizeMain": 298,
+   "sizeAll": 650,
+   "sizeJudged": 298,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 74.3,
+    "log": "Compiled: digits.c -> digits.o\ngcc.exe: installation problem, cannot exec `cc1': No such file or directory\nCompiled: main.c -> main.o\nIn file included from C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ana\\main.c:1:\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ana\\master.h:3: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ana\\master.h:4: No include path in which to find math.h\nCompilation failed; linking skipped.",
+    "cmd": "compile.sh + build.sh: 2 sources"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 100,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "bogdan",
+   "name": "Bogdan Ionescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\bogdan",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\bogdan",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c"
+   ],
+   "sizeMain": 240,
+   "sizeAll": 300,
+   "sizeJudged": 240,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 31.8,
+    "log": "Compiled: main.c -> main.o\nIn file included from C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\bogdan\\main.c:1:\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\bogdan\\master.h:3: No include path in which to find stdio.h\nCompilation failed; linking skipped.",
+    "cmd": "compile.sh + build.sh: 1 sources"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 100,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "cristi",
+   "name": "Cristian Pop",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\cristi",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\cristi",
+   "main": "main.cpp",
+   "lang": "cpp",
+   "sources": [
+    "digits.c",
+    "main.cpp"
+   ],
+   "sizeMain": 322,
+   "sizeAll": 594,
+   "sizeJudged": 322,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 55.2,
+    "log": "Compiled: digits.c -> digits.o\ngcc.exe: installation problem, cannot exec `cc1': No such file or directory\nCompiled: main.cpp -> main.o\ng++.exe: error: unrecognized command line option '-std=c++17'\nCompilation failed; linking skipped.",
+    "cmd": "compile.sh + build.sh: 2 sources"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 100,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "dana",
+   "name": "Dana Marin",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\dana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\dana",
+   "main": "main.c",
+   "lang": "c",
+   "sources": [
+    "main.c",
+    "util.c"
+   ],
+   "sizeMain": 268,
+   "sizeAll": 306,
+   "sizeJudged": 268,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 64.5,
+    "log": "Compiled: main.c -> main.o\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\dana\\main.c:1: No include path in which to find stdio.h\nCompiled: util.c -> util.o\ngcc.exe: installation problem, cannot exec `cc1': No such file or directory\nCompilation failed; linking skipped.",
+    "cmd": "compile.sh + build.sh: 2 sources"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 100,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "emil",
+   "name": "Emil Stan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\emil",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "flavia",
+   "name": "Flavia Dobre",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\flavia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "george",
+   "name": "George Radu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\george",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "horia",
+   "name": "Horia Matei",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\horia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "ioana",
+   "name": "Ioana Lazăr",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\ioana",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "jianu",
+   "name": "Jianu Ene",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\jianu",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "kira",
+   "name": "Kira Neagu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\kira",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "lia",
+   "name": "Lia Ștefan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\lia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "mihai",
+   "name": "Mihai Toma",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\mihai",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "nicu",
+   "name": "Nicu Vlad",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\nicu",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "oana",
+   "name": "Oana Țurcanu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\oana",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  },
+  {
+   "id": "petra",
+   "name": "Petra Iliescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\digits\\petra",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 100,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:02",
+   "tests": []
+  }
+ ],
+ "baseline": {},
+ "maxScore": 100,
+ "tests": [
+  {
+   "id": "1",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "2",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "3",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "4",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "5",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  }
+ ],
+ "limits": {
+  "timeMs": 10002,
+  "memMb": 64,
+  "stackMb": 8,
+  "sourceKb": 0,
+  "timeMode": "cpu"
+ }
+}

@@ -1,0 +1,576 @@
+{
+ "format": "olympiad-evaluator/results",
+ "version": 1,
+ "problem": "max",
+ "variant": "Web",
+ "os": "windows",
+ "updated": "2026-10-12 19:07:01",
+ "students": [
+  {
+   "id": "ana",
+   "name": "Ana Popescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\ana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\ana",
+   "main": "max.cpp",
+   "lang": "cpp",
+   "sources": [
+    "max.cpp"
+   ],
+   "sizeMain": 290,
+   "sizeAll": 290,
+   "sizeJudged": 290,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 25,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\ana\\max.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\max\\ana\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 50,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "bogdan",
+   "name": "Bogdan Ionescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\bogdan",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\bogdan",
+   "main": "max.c",
+   "lang": "c",
+   "sources": [
+    "max.c"
+   ],
+   "sizeMain": 303,
+   "sizeAll": 303,
+   "sizeJudged": 303,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 38.5,
+    "log": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\bogdan\\max.c:1: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:14: No include path in which to find windows.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:15: No include path in which to find psapi.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:20: No include path in which to find stdio.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:21: No include path in which to find stdlib.h\r\nC:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c:22: No include path in which to find string.h\r\n",
+    "cmd": "gcc -O2 -Wall -std=c11 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\bogdan\\max.c C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\max\\bogdan\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 50,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "cristi",
+   "name": "Cristian Pop",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\cristi",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\cristi",
+   "main": "max.cpp",
+   "lang": "cpp",
+   "sources": [
+    "max.cpp"
+   ],
+   "sizeMain": 302,
+   "sizeAll": 302,
+   "sizeJudged": 302,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 21,
+    "log": "g++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+    "cmd": "g++ -O2 -Wall -std=c++17 C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\cristi\\max.cpp C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\olieval_probe.c -o C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\build\\max\\cristi\\prog.exe -Wl,--stack=8388608"
+   },
+   "status": "CE",
+   "score": 0,
+   "max": 50,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "dana",
+   "name": "Dana Marin",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\dana",
+   "root": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\dana",
+   "main": "max.py",
+   "lang": "py",
+   "sources": [
+    "max.py"
+   ],
+   "sizeMain": 119,
+   "sizeAll": 119,
+   "sizeJudged": 119,
+   "sizeOk": true,
+   "compile": {
+    "ok": true,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "DONE",
+   "score": 0,
+   "max": 50,
+   "notes": [],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": [
+    {
+     "id": "1",
+     "raw": "CHKERR",
+     "msg0": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 46.875,
+     "wallMs": 52.063,
+     "timeMs": 46.875,
+     "memKb": 11416,
+     "memRawKb": 11416,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\max\\dana\\1.out",
+     "err": "",
+     "max": 10,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n"
+    },
+    {
+     "id": "2",
+     "raw": "CHKERR",
+     "msg0": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 31.25,
+     "wallMs": 45.886,
+     "timeMs": 31.25,
+     "memKb": 11380,
+     "memRawKb": 11380,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\max\\dana\\2.out",
+     "err": "",
+     "max": 10,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n"
+    },
+    {
+     "id": "3",
+     "raw": "CHKERR",
+     "msg0": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 31.25,
+     "wallMs": 46.55,
+     "timeMs": 31.25,
+     "memKb": 11416,
+     "memRawKb": 11416,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\max\\dana\\3.out",
+     "err": "",
+     "max": 10,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n"
+    },
+    {
+     "id": "4",
+     "raw": "CHKERR",
+     "msg0": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n",
+     "detail": "",
+     "f": 0,
+     "pts": null,
+     "cpuMs": 46.875,
+     "wallMs": 61.558,
+     "timeMs": 46.875,
+     "memKb": 17648,
+     "memRawKb": 17648,
+     "stackKb": null,
+     "exit": 0,
+     "signal": 0,
+     "timedOut": false,
+     "stderr": "",
+     "out": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\_work\\outputs\\max\\dana\\4.out",
+     "err": "",
+     "max": 20,
+     "status": "CHKERR",
+     "score": 0,
+     "msg": "Checker error: The checker does not compile:\ng++.exe: error: unrecognized command line option '-std=c++17'\r\n"
+    }
+   ]
+  },
+  {
+   "id": "emil",
+   "name": "Emil Stan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\emil",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "flavia",
+   "name": "Flavia Dobre",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\flavia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "george",
+   "name": "George Radu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\george",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "horia",
+   "name": "Horia Matei",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\horia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "ioana",
+   "name": "Ioana Lazăr",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\ioana",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "jianu",
+   "name": "Jianu Ene",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\jianu",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "kira",
+   "name": "Kira Neagu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\kira",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "lia",
+   "name": "Lia Ștefan",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\lia",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "mihai",
+   "name": "Mihai Toma",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\mihai",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "nicu",
+   "name": "Nicu Vlad",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\nicu",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "oana",
+   "name": "Oana Țurcanu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\oana",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  },
+  {
+   "id": "petra",
+   "name": "Petra Iliescu",
+   "dir": "C:\\Users\\vlada\\gits\\EvaluatorOJI\\tutorial\\examples\\contest\\max\\petra",
+   "root": "",
+   "main": "",
+   "lang": "",
+   "sources": [],
+   "sizeMain": 0,
+   "sizeAll": 0,
+   "sizeJudged": 0,
+   "sizeOk": true,
+   "compile": {
+    "ok": false,
+    "ms": 0,
+    "log": "",
+    "cmd": ""
+   },
+   "status": "NOSRC",
+   "score": 0,
+   "max": 50,
+   "notes": [
+    "No source (the student folder or file does not exist)"
+   ],
+   "evaluatedAt": "2026-10-12 19:07:01",
+   "tests": []
+  }
+ ],
+ "baseline": {
+  "py": 0
+ },
+ "maxScore": 50,
+ "tests": [
+  {
+   "id": "1",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "2",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "3",
+   "points": 10,
+   "timePoints": 0,
+   "memPoints": 0
+  },
+  {
+   "id": "4",
+   "points": 20,
+   "timePoints": 0,
+   "memPoints": 0
+  }
+ ],
+ "limits": {
+  "timeMs": 1000,
+  "memMb": 64,
+  "stackMb": 8,
+  "sourceKb": 0,
+  "timeMode": "cpu"
+ }
+}

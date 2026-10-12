@@ -1755,6 +1755,8 @@ def rescore(ws, prob, res):
             newtests.append(tr)
         sr["tests"] = newtests
         total += p_compile
+        if "sizeMain" in sr:  # THE SIZE MAY BE MEASURED ON THE FILE OR THE PROJECT: FOLLOW THE CURRENT CHOICE
+            sr["sizeJudged"] = sr.get("sizeAll", 0) if C.size_scope == "all" else sr["sizeMain"]
         size_ok = C.source_kb <= 0 or num(sr.get("sizeJudged")) <= C.source_kb * 1024
         sr["sizeOk"] = size_ok
         if size_ok:
