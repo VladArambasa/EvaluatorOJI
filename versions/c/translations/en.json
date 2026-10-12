@@ -1,0 +1,8 @@
+{
+  "language": "en",
+  "name": "English",
+  "decimal": ".",
+  "about": "Base language: every key is already English, so \"ui\" and \"messages\" stay empty.",
+  "ui": {},
+  "messages": {}
+}

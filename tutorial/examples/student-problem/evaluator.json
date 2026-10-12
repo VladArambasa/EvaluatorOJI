@@ -1,0 +1,456 @@
+{
+  "format": "olympiad-evaluator",
+  "version": 1,
+  "name": "Example: student, then problem",
+  "layout": "student-problem",
+  "studentDir": "{root}/{student}/{problem}",
+  "flatDir": "{root}/{problem}/sources",
+  "flatPattern": "{student}{nr}.{ext}",
+  "testsDir": "{root}/_tests/{problem}",
+  "workDir": "{root}/_work",
+  "resultsDir": "{root}/_results",
+  "students": [
+    {
+      "id": "ana",
+      "name": "Ana Popescu",
+      "group": "7A"
+    },
+    {
+      "id": "bogdan",
+      "name": "Bogdan Ionescu",
+      "group": "7A"
+    },
+    {
+      "id": "cristi",
+      "name": "Cristian Pop",
+      "group": "7A"
+    },
+    {
+      "id": "dana",
+      "name": "Dana Marin",
+      "group": "7A"
+    },
+    {
+      "id": "emil",
+      "name": "Emil Stan",
+      "group": "7A"
+    },
+    {
+      "id": "flavia",
+      "name": "Flavia Dobre",
+      "group": "7A"
+    },
+    {
+      "id": "george",
+      "name": "George Radu",
+      "group": "7A"
+    },
+    {
+      "id": "horia",
+      "name": "Horia Matei",
+      "group": "7A"
+    },
+    {
+      "id": "ioana",
+      "name": "Ioana Lazăr",
+      "group": "7A"
+    },
+    {
+      "id": "jianu",
+      "name": "Jianu Ene",
+      "group": "7A"
+    },
+    {
+      "id": "kira",
+      "name": "Kira Neagu",
+      "group": "7A"
+    },
+    {
+      "id": "lia",
+      "name": "Lia Ștefan",
+      "group": "7A"
+    },
+    {
+      "id": "mihai",
+      "name": "Mihai Toma",
+      "group": "7A"
+    },
+    {
+      "id": "nicu",
+      "name": "Nicu Vlad",
+      "group": "7A"
+    },
+    {
+      "id": "oana",
+      "name": "Oana Țurcanu",
+      "group": "7A"
+    },
+    {
+      "id": "petra",
+      "name": "Petra Iliescu",
+      "group": "7A"
+    }
+  ],
+  "problems": [
+    {
+      "name": "sum",
+      "nr": 1,
+      "title": "",
+      "testsDir": "",
+      "inputPattern": "{n}-{problem}.in",
+      "okPattern": "{n}-{problem}.ok",
+      "tests": [
+        {
+          "id": "0",
+          "input": "0-sum.in",
+          "ok": "0-sum.ok",
+          "points": 10,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "1",
+          "input": "1-sum.in",
+          "ok": "1-sum.ok",
+          "points": 10,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "2",
+          "input": "2-sum.in",
+          "ok": "2-sum.ok",
+          "points": 15,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "3",
+          "input": "3-sum.in",
+          "ok": "3-sum.ok",
+          "points": 20,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "4",
+          "input": "4-sum.in",
+          "ok": "4-sum.ok",
+          "points": 25,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "5",
+          "input": "5-sum.in",
+          "ok": "5-sum.ok",
+          "points": 20,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        }
+      ],
+      "io": {
+        "input": "file",
+        "output": "file",
+        "inputPath": "{problem}.in",
+        "outputPath": "{problem}.out",
+        "cwd": "",
+        "runIn": "sandbox"
+      },
+      "project": {
+        "rootRules": [
+          {
+            "pattern": "CMakeLists.txt",
+            "up": 0
+          },
+          {
+            "pattern": "*.cbp",
+            "up": 0
+          },
+          {
+            "pattern": "bash-scripts/compile.sh",
+            "up": 0
+          },
+          {
+            "pattern": "bash-scripts/build.sh",
+            "up": 0
+          },
+          {
+            "pattern": "compile.sh",
+            "up": 0
+          },
+          {
+            "pattern": "build.sh",
+            "up": 0
+          },
+          {
+            "pattern": "main.cpp",
+            "up": 0
+          },
+          {
+            "pattern": "main.c",
+            "up": 0
+          },
+          {
+            "pattern": "*.cpp",
+            "up": 0
+          },
+          {
+            "pattern": "*.c",
+            "up": 0
+          },
+          {
+            "pattern": "*.py",
+            "up": 0
+          }
+        ],
+        "maxDepth": 6,
+        "mainPatterns": "main.cpp main.c {problem}.cpp {problem}.c *.cpp *.c *.py",
+        "compileScope": "all",
+        "sizeScope": "main",
+        "sizeExt": ".c .h .cpp .hpp .cc .cxx .hh .py",
+        "buildMode": "command",
+        "buildCommand": "auto",
+        "buildExe": "release/program"
+      },
+      "compileExtra": "",
+      "limits": {
+        "timeMs": 1000,
+        "timeMode": "cpu",
+        "hardTimeFactor": 2,
+        "memMb": 64,
+        "hardMemFactor": 2,
+        "stackMb": 8,
+        "sourceKb": 10,
+        "outputMb": 64,
+        "calibrate": true
+      },
+      "policy": {
+        "time": {
+          "mode": "zero",
+          "percent": 50
+        },
+        "memory": {
+          "mode": "zero",
+          "percent": 50
+        },
+        "size": {
+          "mode": "percent",
+          "percent": 50,
+          "penalty": 10
+        }
+      },
+      "points": {
+        "compile": 0,
+        "size": 0
+      },
+      "compare": {
+        "mode": "lines",
+        "ignoreCase": false,
+        "epsilon": 1e-06,
+        "checker": "",
+        "protocol": "oji",
+        "args": ""
+      }
+    },
+    {
+      "name": "max",
+      "nr": 2,
+      "title": "",
+      "testsDir": "",
+      "inputPattern": "{n}-{problem}.in",
+      "okPattern": "{n}-{problem}.ok",
+      "tests": [
+        {
+          "id": "1",
+          "input": "1-max.in",
+          "ok": "1-max.ok",
+          "points": 10,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "2",
+          "input": "2-max.in",
+          "ok": "2-max.ok",
+          "points": 10,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "3",
+          "input": "3-max.in",
+          "ok": "3-max.ok",
+          "points": 10,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        },
+        {
+          "id": "4",
+          "input": "4-max.in",
+          "ok": "4-max.ok",
+          "points": 20,
+          "timePoints": 0,
+          "memPoints": 0,
+          "timeMs": 0,
+          "memMb": 0
+        }
+      ],
+      "io": {
+        "input": "stdin",
+        "output": "stdout",
+        "inputPath": "{problem}.in",
+        "outputPath": "{problem}.out",
+        "cwd": "",
+        "runIn": "sandbox"
+      },
+      "project": {
+        "rootRules": [
+          {
+            "pattern": "CMakeLists.txt",
+            "up": 0
+          },
+          {
+            "pattern": "*.cbp",
+            "up": 0
+          },
+          {
+            "pattern": "bash-scripts/compile.sh",
+            "up": 0
+          },
+          {
+            "pattern": "bash-scripts/build.sh",
+            "up": 0
+          },
+          {
+            "pattern": "compile.sh",
+            "up": 0
+          },
+          {
+            "pattern": "build.sh",
+            "up": 0
+          },
+          {
+            "pattern": "main.cpp",
+            "up": 0
+          },
+          {
+            "pattern": "main.c",
+            "up": 0
+          },
+          {
+            "pattern": "*.cpp",
+            "up": 0
+          },
+          {
+            "pattern": "*.c",
+            "up": 0
+          },
+          {
+            "pattern": "*.py",
+            "up": 0
+          }
+        ],
+        "maxDepth": 6,
+        "mainPatterns": "main.cpp main.c {problem}.cpp {problem}.c *.cpp *.c *.py",
+        "compileScope": "main",
+        "sizeScope": "main",
+        "sizeExt": ".c .h .cpp .hpp .cc .cxx .hh .py",
+        "buildMode": "command",
+        "buildCommand": "auto",
+        "buildExe": "release/program"
+      },
+      "compileExtra": "",
+      "limits": {
+        "timeMs": 1000,
+        "timeMode": "cpu",
+        "hardTimeFactor": 2,
+        "memMb": 64,
+        "hardMemFactor": 2,
+        "stackMb": 8,
+        "sourceKb": 0,
+        "outputMb": 64,
+        "calibrate": true
+      },
+      "policy": {
+        "time": {
+          "mode": "zero",
+          "percent": 50
+        },
+        "memory": {
+          "mode": "zero",
+          "percent": 50
+        },
+        "size": {
+          "mode": "zero",
+          "percent": 50,
+          "penalty": 10
+        }
+      },
+      "points": {
+        "compile": 0,
+        "size": 0
+      },
+      "compare": {
+        "mode": "checker",
+        "ignoreCase": false,
+        "epsilon": 1e-06,
+        "checker": "verif.cpp",
+        "protocol": "oji",
+        "args": ""
+      }
+    }
+  ],
+  "current": "sum",
+  "autoLibs": {
+    "enabled": true,
+    "rules": [
+      {
+        "name": "Math",
+        "headers": "math.h complex.h tgmath.h fenv.h",
+        "flags": "-lm"
+      },
+      {
+        "name": "Threads",
+        "headers": "pthread.h threads.h",
+        "flags": "-pthread"
+      },
+      {
+        "name": "OpenGL",
+        "headers": "GL/*",
+        "flags": "-lGL -lGLU -lglut"
+      },
+      {
+        "name": "wxWidgets",
+        "headers": "wx/*",
+        "flags": "$(wx-config --cxxflags --libs)"
+      }
+    ]
+  },
+  "ignoreDirs": ".* _* cmake-build-* CMakeFiles build bin obj out release debug __MACOSX node_modules venv __pycache__",
+  "options": {
+    "keepOutputs": true,
+    "windowsStackFlag": true,
+    "compileTimeoutSec": 60,
+    "nonzeroExitIsError": true,
+    "useProbe": true
+  }
+}

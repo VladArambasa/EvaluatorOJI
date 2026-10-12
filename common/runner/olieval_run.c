@@ -1,16 +1,10 @@
 /*
- * olieval_run — utilitar folosit de varianta Web (Node.js) a Evaluatorului Olimpiadă
- * pentru a rula un program cu limite și a-l măsura (Node.js nu poate seta limite de memorie
- * și nu poate citi timpul procesor al proceselor copil).
- *
- *   olieval-run [opțiuni] -- program argumente...
- *     --cwd DIR  --stdin F  --stdout F  --stderr F   (implicit: dispozitivul nul)
- *     --wall MS  --cpu S  --mem KB  --stack KB  --fsize KB  --single
- *     --env NUME=VALOARE (se poate repeta)   --result FIȘIER (implicit: ieșirea standard)
- *
- * Rezultat: un obiect JSON pe o linie.
+ * OLIEVAL-RUN - HELPER FOR THE WEB VERSION: RUN A PROGRAM WITH LIMITS AND MEASURE IT
+ * (NODE.JS CANNOT SET MEMORY LIMITS OR READ CHILD CPU TIME)
+ * OPTIONS: CWD, STDIN, STDOUT, STDERR, WALL (MS), CPU (S), MEM/STACK/FSIZE (KB), SINGLE, ENV, RESULT
+ * OUTPUT: ONE JSON OBJECT ON ONE LINE
  */
-/* API Windows minim: Windows 7 (unele MinGW mai vechi pornesc de la XP/2003) */
+/* MINIMUM WINDOWS API: WINDOWS 7 (OLD MINGW DEFAULTS TO XP/2003) */
 #if defined(_WIN32) && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0601)
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
@@ -26,7 +20,7 @@
 #include <shellapi.h>
 #endif
 
-/* la SIGTERM/SIGINT (oprire cerută de evaluator) programul elevului este oprit și el */
+/* ON SIGTERM/SIGINT (STOP REQUESTED) ALSO STOP THE STUDENT PROGRAM */
 static volatile int g_cancel = 0;
 static void on_signal(int sig) { (void)sig; g_cancel = 1; }
 
@@ -59,7 +53,7 @@ static int real_main(int argc, char **argv)
         const char *v = (i + 1 < argc) ? argv[i + 1] : NULL;
         if (strcmp(a, "--") == 0) { i++; break; }
         if (strcmp(a, "--single") == 0) { sp.single_process = 1; continue; }
-        if (v == NULL) { fprintf(stderr, "lipsește valoarea pentru %s\n", a); return 2; }
+        if (v == NULL) { fprintf(stderr, "missing value for %s\n", a); return 2; }
         if (strcmp(a, "--cwd") == 0) sp.cwd = v;
         else if (strcmp(a, "--stdin") == 0) sp.stdin_path = v;
         else if (strcmp(a, "--stdout") == 0) sp.stdout_path = v;
@@ -71,10 +65,10 @@ static int real_main(int argc, char **argv)
         else if (strcmp(a, "--fsize") == 0) sp.fsize_kb = atoll(v);
         else if (strcmp(a, "--env") == 0) envs[ne++] = v;
         else if (strcmp(a, "--result") == 0) result_path = v;
-        else { fprintf(stderr, "opțiune necunoscută: %s\n", a); return 2; }
+        else { fprintf(stderr, "unknown option: %s\n", a); return 2; }
         i++;
     }
-    if (i >= argc) { fprintf(stderr, "utilizare: olieval-run [opțiuni] -- program [argumente]\n"); return 2; }
+    if (i >= argc) { fprintf(stderr, "usage: olieval-run [options] -- program [arguments]\n"); return 2; }
     envs[ne] = NULL;
     sp.env_add = envs;
     sp.cancel = &g_cancel;
@@ -99,7 +93,7 @@ static int real_main(int argc, char **argv)
 }
 
 #ifdef _WIN32
-/* argumentele în UTF-8, indiferent de pagina de cod a consolei */
+/* UTF-8 ARGUMENTS REGARDLESS OF THE CONSOLE CODE PAGE */
 int main(void)
 {
     int argc = 0, i, rc;

@@ -1,0 +1,2217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Olympiad Evaluator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9.6.6 2.8 9.2h4.1l-1.6 6.2 7-9H8.3z' fill='%23ffd400' stroke='%23825400' stroke-width='.9' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>window.EVAL_TOKEN = "__EVAL_TOKEN__";</script>
+<style>
+/*
+ * =====================================================================================
+ * RETRO LOOK: XP (2009, LIKE THE OJI EVALUATOR) BY DEFAULT, OR CLASSIC (WINDOWS 95/98)
+ * THE PAGE LAYOUT STAYS THE SAME; ONLY THE APPEARANCE CHANGES HERE
+ * =====================================================================================
+ */
+:root {
+  --face: #ece9d8;          /* WINDOW BACKGROUND (XP "CONTROL" COLOR) */
+  --field: #ffffff;         /* FIELDS, LISTS, GRIDS */
+  --ink: #000000;
+  --muted: #4a4a4a;
+  --faint: #808080;
+  --line: #aca899;          /* GRID LINES AND SEPARATORS */
+  --line-soft: #dcd8c8;
+  --group: #d0d0bf;         /* GROUP BOX BORDER */
+  --caption: #0046d5;       /* GROUP BOX CAPTION */
+  --field-border: #7f9db9;  /* FIELD BORDER */
+  --sel: #316ac5;           /* SELECTION */
+  --sel-ink: #ffffff;
+  --link: #0000cc;
+  --red: #c00000;
+  --green: #007a00;
+  --amber: #8a5a00;
+  --tip: #ffffe1;           /* TOOLTIP BALLOON */
+  --v-ok: #006100; --v-ok-bg: #ccffcc;
+  --v-partial: #6b5000; --v-partial-bg: #ffff99;
+  --v-wa: #c00000; --v-wa-bg: #ffcccc;
+  --v-tle: #9c3d00; --v-tle-bg: #ffdca8;
+  --v-mle: #55289a; --v-mle-bg: #e4d4ff;
+  --v-re: #8f003a; --v-re-bg: #ffc8dc;
+  --v-noout: #a3007f; --v-noout-bg: #ffd0f2;
+  --v-chk: #404040; --v-chk-bg: #e0e0e0;
+  --v-skip: #707070; --v-skip-bg: #f2f2f2;
+  --v-ce: #404040; --v-ce-bg: #d8d8d8;
+  --font: Tahoma, "Segoe UI", Verdana, "DejaVu Sans", sans-serif;
+  --title-font: bold 13px/1 "Trebuchet MS", Tahoma, "DejaVu Sans", sans-serif;
+  --mono: "Lucida Console", "Courier New", "DejaVu Sans Mono", monospace;
+  --xp-title: linear-gradient(180deg, #0997ff 0%, #0053ee 8%, #0050ee 40%, #0066ff 88%, #0066ff 93%, #005bff 95%, #003dd7 96%, #003dd7 100%);
+  --xp-btn: linear-gradient(180deg, #ffffff 0%, #ecebe6 86%, #d6d0c5 100%);
+  --xp-btn-down: linear-gradient(180deg, #cdcac3 0%, #e3e3db 8%, #e5e5de 94%, #f2f2f1 100%);
+  --xp-hover: inset -1px 1px #fff0cf, inset 1px 2px #fdd889, inset -2px 2px #fbc761, inset 2px -2px #e5a01a;
+  --xp-default: inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6, inset 1px -1px #89ade4, inset 2px -2px #89ade4;
+  /* CLASSIC BEVELS (WINDOWS 95/98) */
+  --raised: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --pressed: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  --sunken: inset -1px -1px #ffffff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+  color-scheme: light;
+}
+:root[data-theme="classic"] {
+  --face: #c0c0c0;
+  --muted: #303030;
+  --line: #808080;
+  --line-soft: #c0c0c0;
+  --group: #808080;
+  --caption: #000000;
+  --field-border: #808080;
+  --sel: #000080;
+  --link: #0000ff;
+  --font: "Microsoft Sans Serif", "MS Sans Serif", Tahoma, Arial, "DejaVu Sans", sans-serif;
+  --title-font: bold 12px/1 "Microsoft Sans Serif", "MS Sans Serif", Tahoma, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--face); color: var(--ink); font: 12px/1.35 var(--font); }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--link); }
+code, .mono { font-family: var(--mono); font-size: 12px; }
+:focus-visible { outline: 1px dotted var(--ink); outline-offset: 1px; }
+
+/* ---------- SCROLLBARS (CHROME / EDGE) ---------- */
+::-webkit-scrollbar { width: 17px; height: 17px; }
+::-webkit-scrollbar-corner { background: var(--face); }
+::-webkit-scrollbar-track { background: #f4f4f0; }
+::-webkit-scrollbar-thumb { border: 1px solid #fff; border-radius: 3px; box-shadow: inset 0 0 0 1px #9eb4e8; }
+::-webkit-scrollbar-thumb:vertical { background: linear-gradient(90deg, #c9d8fc, #b8cbf7 55%, #aec4f3); }
+::-webkit-scrollbar-thumb:horizontal { background: linear-gradient(180deg, #c9d8fc, #b8cbf7 55%, #aec4f3); }
+::-webkit-scrollbar-button:single-button { display: block; width: 17px; height: 17px; background-size: 17px 17px; background-repeat: no-repeat; }
+::-webkit-scrollbar-button:single-button:vertical:decrement { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Crect x='1.5' y='1.5' width='14' height='14' rx='2.5' fill='%23c4d4fb' stroke='%23fff'/%3E%3Cpath d='M5 10l3.5-3.5L12 10' fill='none' stroke='%234d6185' stroke-width='2'/%3E%3C/svg%3E"); }
+::-webkit-scrollbar-button:single-button:vertical:increment { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Crect x='1.5' y='1.5' width='14' height='14' rx='2.5' fill='%23c4d4fb' stroke='%23fff'/%3E%3Cpath d='M5 7l3.5 3.5L12 7' fill='none' stroke='%234d6185' stroke-width='2'/%3E%3C/svg%3E"); }
+::-webkit-scrollbar-button:single-button:horizontal:decrement { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Crect x='1.5' y='1.5' width='14' height='14' rx='2.5' fill='%23c4d4fb' stroke='%23fff'/%3E%3Cpath d='M10 5L6.5 8.5 10 12' fill='none' stroke='%234d6185' stroke-width='2'/%3E%3C/svg%3E"); }
+::-webkit-scrollbar-button:single-button:horizontal:increment { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Crect x='1.5' y='1.5' width='14' height='14' rx='2.5' fill='%23c4d4fb' stroke='%23fff'/%3E%3Cpath d='M7 5l3.5 3.5L7 12' fill='none' stroke='%234d6185' stroke-width='2'/%3E%3C/svg%3E"); }
+:root[data-theme="classic"] ::-webkit-scrollbar { width: 16px; height: 16px; }
+:root[data-theme="classic"] ::-webkit-scrollbar-track { background-color: #dfdfdf; background-image: linear-gradient(45deg, #c0c0c0 25%, transparent 25%, transparent 75%, #c0c0c0 75%), linear-gradient(45deg, #c0c0c0 25%, transparent 25%, transparent 75%, #c0c0c0 75%); background-size: 2px 2px; background-position: 0 0, 1px 1px; }
+:root[data-theme="classic"] ::-webkit-scrollbar-thumb { background: #c0c0c0; border: 0; border-radius: 0; box-shadow: var(--raised); }
+:root[data-theme="classic"] ::-webkit-scrollbar-button:single-button { width: 16px; height: 16px; background-color: #c0c0c0; background-size: 16px 16px; box-shadow: var(--raised); }
+:root[data-theme="classic"] ::-webkit-scrollbar-button:single-button:vertical:decrement { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 5l4 4H4z'/%3E%3C/svg%3E"); }
+:root[data-theme="classic"] ::-webkit-scrollbar-button:single-button:vertical:increment { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6h8l-4 4z'/%3E%3C/svg%3E"); }
+:root[data-theme="classic"] ::-webkit-scrollbar-button:single-button:horizontal:decrement { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 8l4-4v8z'/%3E%3C/svg%3E"); }
+:root[data-theme="classic"] ::-webkit-scrollbar-button:single-button:horizontal:increment { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 4l4 4-4 4z'/%3E%3C/svg%3E"); }
+
+/* ---------- TITLE BAR ---------- */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 10px;
+  height: 30px; padding: 0 5px 0 8px;
+  background: var(--xp-title); color: #fff; text-shadow: 1px 1px #0f1089;
+}
+:root[data-theme="classic"] .top { background: linear-gradient(90deg, #000080, #1084d0); text-shadow: none; height: 26px; padding: 0 3px 0 4px; }
+.brand { display: flex; align-items: center; gap: 6px; white-space: nowrap; font: var(--title-font); }
+.brand svg { width: 16px; height: 16px; flex: none; }
+.variant { font-weight: normal; }
+.variant::before { content: "— "; }
+.wsbtn {
+  display: flex; align-items: center; gap: 5px; min-width: 0; max-width: 46vw; height: 22px; padding: 0 6px;
+  border: 1px solid var(--field-border); background: var(--field); color: var(--ink); text-shadow: none; cursor: pointer;
+}
+:root[data-theme="classic"] .wsbtn { height: 20px; border: 0; box-shadow: var(--sunken); padding: 0 6px; }
+.wsbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; font-family: var(--mono); font-size: 12px; }
+.wsbtn svg { width: 15px; height: 15px; flex: none; fill: #f5d76e; color: #9a7417; }
+.savestate { font-size: 12px; color: #fff; text-shadow: none; white-space: nowrap; }
+.savestate.dirty { color: #ffe680; }
+.savestate.err { color: #ffc4c4; font-weight: bold; }
+.spacer { flex: 1; }
+.langsel { min-height: 0; height: 21px; padding: 0 22px 0 4px; font-size: 11px; color: var(--ink); text-shadow: none; flex: none; }
+:root[data-theme="classic"] .langsel { height: 20px; padding: 0 20px 0 4px; }
+
+/* ICON BUTTONS (IN THE TITLE BAR: LIKE WINDOW BUTTONS) */
+.iconbtn {
+  display: inline-grid; place-items: center; width: 21px; height: 21px; padding: 0; cursor: pointer; flex: none;
+  border: 1px solid #003c74; border-radius: 3px; background: var(--xp-btn); color: #1b2a4a;
+}
+.iconbtn:hover { box-shadow: var(--xp-hover); }
+.iconbtn:active { background: var(--xp-btn-down); box-shadow: none; }
+.iconbtn svg { width: 13px; height: 13px; }
+.top .iconbtn, .modal header .iconbtn {
+  border: 1px solid #fff; color: #fff; text-shadow: none;
+  background: radial-gradient(circle at 90% 90%, #0054e9 0%, #2263d5 55%, #4479e4 70%, #a3bbec 90%, #ffffff 100%);
+}
+.top .iconbtn[data-act="quit"], .modal header .iconbtn {
+  background: radial-gradient(circle at 90% 90%, #cc4600 0%, #dc6527 55%, #cd7546 70%, #ffccb2 90%, #ffffff 100%);
+}
+.top .iconbtn:hover, .modal header .iconbtn:hover { box-shadow: none; filter: brightness(1.15); }
+.top .iconbtn svg, .modal header .iconbtn svg { stroke-width: 2.6; }
+:root[data-theme="classic"] .iconbtn,
+:root[data-theme="classic"] .top .iconbtn,
+:root[data-theme="classic"] .modal header .iconbtn {
+  width: 18px; height: 16px; border: 0; border-radius: 0; background: #c0c0c0; color: #000; box-shadow: var(--raised); filter: none;
+}
+:root[data-theme="classic"] .iconbtn { width: 20px; height: 18px; }
+:root[data-theme="classic"] .iconbtn:active { box-shadow: var(--pressed); }
+:root[data-theme="classic"] .iconbtn svg { width: 11px; height: 11px; stroke-width: 2.6; }
+
+/* ---------- PROBLEM SELECTOR + TABS ---------- */
+.bar {
+  position: sticky; top: 30px; z-index: 19;
+  display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;
+  padding: 0 10px; background: var(--face); border-bottom: 1px solid #919b9c;
+}
+:root[data-theme="classic"] .bar { top: 26px; border-bottom: 1px solid #fff; }
+.probsel { display: flex; align-items: center; gap: 6px; padding: 6px 0 5px; }
+.probsel label { color: var(--ink); }
+.probsel select { min-width: 150px; font-weight: bold; }
+.tabs { display: flex; gap: 0; overflow-x: auto; align-items: flex-end; padding-top: 3px; }
+.tab {
+  position: relative; margin: 2px -1px 0 0; padding: 3px 11px 4px; cursor: pointer; white-space: nowrap; color: var(--ink);
+  border: 1px solid #919b9c; border-bottom: 0; border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f3ef 60%, #e3e1d6 100%);
+}
+.tab:hover { border-top: 2px solid #ffc83c; padding-top: 2px; }
+.tab[aria-selected="true"] {
+  z-index: 1; margin-top: 0; margin-bottom: -1px; padding: 3px 12px 7px;
+  background: var(--face); border-top: 3px solid #e68b2c; border-top-left-radius: 3px; border-top-right-radius: 3px;
+}
+:root[data-theme="classic"] .tab {
+  margin: 2px 0 0; padding: 3px 10px 3px; border: 0; border-radius: 3px 3px 0 0; background: #c0c0c0;
+  box-shadow: inset 1px 1px #ffffff, inset -1px 0 #0a0a0a, inset -2px 0 #808080, inset 2px 2px #dfdfdf;
+}
+:root[data-theme="classic"] .tab:hover { border-top: 0; padding-top: 3px; }
+:root[data-theme="classic"] .tab[aria-selected="true"] { margin: 0 -2px -1px; padding: 4px 12px 6px; border: 0; background: #c0c0c0; }
+
+main { padding: 16px 14px; max-width: 1600px; margin: 0 auto; }
+
+/* ---------- FORM CONTROLS ---------- */
+input[type=text], input[type=number], select, textarea {
+  background: var(--field); border: 1px solid var(--field-border); border-radius: 0; padding: 2px 4px; min-height: 21px;
+}
+:root[data-theme="classic"] input[type=text], :root[data-theme="classic"] input[type=number],
+:root[data-theme="classic"] select, :root[data-theme="classic"] textarea { border: 0; box-shadow: var(--sunken); padding: 3px 5px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 1px dotted #000; outline-offset: 1px; }
+input[type=number] { width: 90px; }
+input.w-s { width: 70px; } input.w-m { width: 160px; } input.w-l { width: 100%; }
+textarea { width: 100%; min-height: 120px; font-family: var(--mono); font-size: 12px; }
+select {
+  appearance: none; -webkit-appearance: none; padding-right: 22px; cursor: pointer;
+  background: var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='19' viewBox='0 0 17 19'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23e6eefc'/%3E%3Cstop offset='1' stop-color='%23b4c8f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='.5' y='.5' width='16' height='18' rx='2' fill='url(%23g)' stroke='%23b9c9ef'/%3E%3Cpath d='M5 8l3.5 3.5L12 8' fill='none' stroke='%234d6185' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 1px center / 17px calc(100% - 2px);
+}
+:root[data-theme="classic"] select {
+  background: var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='17' viewBox='0 0 16 17'%3E%3Crect width='16' height='17' fill='%23c0c0c0'/%3E%3Cpath d='M0 0h15v1H1v15H0z' fill='%23fff'/%3E%3Cpath d='M15 0h1v17H0v-1h15z' fill='%230a0a0a'/%3E%3Cpath d='M14 1h1v15H1v-1h13z' fill='%23808080'/%3E%3Cpath d='M4 7h8l-4 4z'/%3E%3C/svg%3E") no-repeat right 2px center / 16px calc(100% - 4px);
+}
+input[type=checkbox] {
+  appearance: none; -webkit-appearance: none; width: 13px; height: 13px; margin: 0; flex: none; vertical-align: -2px; cursor: pointer;
+  border: 1px solid #1c5180; background: linear-gradient(135deg, #dcdcd7, #ffffff);
+}
+input[type=checkbox]:hover { box-shadow: inset -1px -1px #f8b636, inset 1px 1px #fedf9c; }
+input[type=checkbox]:checked {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 11'%3E%3Cpath d='M2 5.5l2.3 2.3L9 3' fill='none' stroke='%2321a121' stroke-width='2.2'/%3E%3C/svg%3E") center / 11px 11px no-repeat, linear-gradient(135deg, #dcdcd7, #ffffff);
+}
+:root[data-theme="classic"] input[type=checkbox] { border: 0; background: #fff; box-shadow: var(--sunken); }
+:root[data-theme="classic"] input[type=checkbox]:checked {
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13'%3E%3Cpath d='M3 6l2.3 2.3L10 3.6' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") center / 13px 13px no-repeat;
+}
+label.chk { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+/* BUTTONS: WINDOWS XP (DEFAULT) OR WINDOWS 95/98 (CLASSIC) */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 75px; min-height: 23px; padding: 2px 12px;
+  border: 1px solid #003c74; border-radius: 3px; background: var(--xp-btn); color: #000; cursor: pointer; white-space: nowrap;
+}
+.btn:hover { box-shadow: var(--xp-hover); }
+.btn:active { background: var(--xp-btn-down); box-shadow: none; }
+.btn:focus-visible { outline: 1px dotted #000; outline-offset: -4px; box-shadow: var(--xp-default); }
+.btn svg { width: 13px; height: 13px; flex: none; }
+.btn.primary { color: var(--red); font-weight: bold; }
+.btn.danger svg, .btn[data-act="stop"] svg { color: var(--red); }
+.btn[data-act^="eval-"] svg { color: #198a1b; }
+.btn[data-act="scan"] svg, .btn[data-act="tests-detect"] svg { color: #1f4fa8; }
+.btn.small { min-width: 0; min-height: 21px; padding: 1px 8px; }
+.btn[disabled] { color: #aca899; border-color: #c9c7ba; background: #f5f4ea; box-shadow: none; cursor: default; pointer-events: none; }
+.btn[disabled] svg { color: inherit !important; }
+.modal footer .btn.primary { color: #000; font-weight: normal; box-shadow: var(--xp-default); }
+:root[data-theme="classic"] .btn { border: 0; border-radius: 0; background: #c0c0c0; box-shadow: var(--raised); padding: 3px 12px; }
+:root[data-theme="classic"] .btn:hover { box-shadow: var(--raised); }
+:root[data-theme="classic"] .btn:active { box-shadow: var(--pressed); padding: 4px 11px 2px 13px; }
+:root[data-theme="classic"] .btn:focus-visible { box-shadow: var(--raised); }
+:root[data-theme="classic"] .btn.primary, :root[data-theme="classic"] .modal footer .btn.primary { box-shadow: var(--raised), 0 0 0 1px #000; }
+:root[data-theme="classic"] .btn.small { padding: 2px 8px; }
+:root[data-theme="classic"] .btn[disabled] { color: #808080; text-shadow: 1px 1px 0 #fff; background: #c0c0c0; box-shadow: var(--raised); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--link); cursor: pointer; text-decoration: underline; }
+
+/* ---------- GROUP BOXES ---------- */
+.sheet { background: transparent; border: 1px solid var(--group); border-radius: 4px; }
+:root[data-theme="classic"] .sheet { border-radius: 0; border-color: #808080; box-shadow: inset 1px 1px #fff, 1px 1px #fff; }
+.panel { padding: 14px 12px 12px; }
+.panel + .panel { margin-top: 20px; }
+.cols > .panel + .panel { margin-top: 0; }
+.panel > h2:first-child {
+  display: block; width: fit-content; max-width: 100%; margin: -23px 0 8px -5px; padding: 0 4px;
+  background: var(--face); color: var(--caption); font-size: 12px; font-weight: normal; line-height: 16px;
+}
+.panel h2 { margin: 0 0 4px; font-size: 12px; font-weight: bold; }
+.panel h3 { margin: 14px 0 6px; font-size: 12px; font-weight: bold; }
+.panel p.hint, .hint { color: var(--muted); font-size: 12px; margin: 2px 0 10px; max-width: 80ch; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px 12px; align-items: start; }
+.form { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; align-items: center; }
+.form > label { color: var(--ink); }
+.form .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.form > select { justify-self: start; max-width: 100%; }
+.row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.sep-v { width: 2px; height: 22px; border-left: 1px solid #aca899; border-right: 1px solid #fff; margin: 0 3px; }
+:root[data-theme="classic"] .sep-v { border-left-color: #808080; }
+.seg { display: inline-flex; gap: 2px; }
+.seg button { min-height: 23px; padding: 2px 10px; border: 1px solid #003c74; border-radius: 3px; background: var(--xp-btn); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--xp-btn-down); font-weight: bold; }
+:root[data-theme="classic"] .seg button { border: 0; border-radius: 0; background: #c0c0c0; box-shadow: var(--raised); }
+:root[data-theme="classic"] .seg button[aria-pressed="true"] { box-shadow: var(--pressed); background: #dfdfdf; }
+.presets { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; margin: 6px 0 12px; }
+.preset {
+  text-align: left; padding: 7px 10px 8px; cursor: pointer; color: #000;
+  border: 1px solid #003c74; border-radius: 3px; background: var(--xp-btn);
+}
+.preset:hover { box-shadow: var(--xp-hover); }
+.preset b { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.preset b::before {
+  content: ""; flex: none; width: 13px; height: 13px; border-radius: 50%;
+  border: 1px solid #1c5180; background: linear-gradient(135deg, #dcdcd7, #ffffff);
+}
+.preset span { display: block; padding-left: 19px; color: var(--muted); font-size: 11.5px; }
+.preset[aria-pressed="true"] { background: var(--xp-btn-down); }
+.preset[aria-pressed="true"] b::before { background: radial-gradient(circle, #8ce98c 0, #21a121 3px, #1b8a1b 4px, transparent 4.5px), linear-gradient(135deg, #dcdcd7, #ffffff); }
+:root[data-theme="classic"] .preset { border: 0; border-radius: 0; background: #c0c0c0; box-shadow: var(--raised); }
+:root[data-theme="classic"] .preset:hover { box-shadow: var(--raised); }
+:root[data-theme="classic"] .preset[aria-pressed="true"] { box-shadow: var(--pressed); background: #d4d0c8; }
+:root[data-theme="classic"] .preset b::before { border: 0; background: #fff; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a; }
+:root[data-theme="classic"] .preset[aria-pressed="true"] b::before { background: radial-gradient(circle, #000 0, #000 2px, #fff 2.5px); }
+.pathfield { display: flex; gap: 5px; align-items: center; }
+.pathfield input { flex: 1; font-family: var(--mono); font-size: 12px; }
+.vars { font-size: 11.5px; color: var(--muted); }
+.vars code { background: var(--tip); border: 1px solid #c8c49c; color: #000; padding: 0 3px; }
+
+/* ---------- TABLES (DATA GRID) ---------- */
+.tablewrap { overflow: auto; border: 1px solid var(--field-border); background: var(--field); }
+:root[data-theme="classic"] .tablewrap, :root[data-theme="classic"] .matrix-wrap { border: 0; box-shadow: var(--sunken); padding: 2px; }
+table.grid { border-collapse: separate; border-spacing: 0; width: 100%; }
+table.grid th, table.grid td {
+  padding: 3px 6px; border-bottom: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  text-align: left; vertical-align: middle; white-space: nowrap;
+}
+table.grid thead th, table.matrix thead th {
+  position: sticky; top: 0; z-index: 2; font-weight: normal; color: #000;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f4ee 55%, #ebeadb 100%); border-bottom: 1px solid #aca899; border-right: 1px solid #d6d2c2;
+}
+:root[data-theme="classic"] table.grid thead th, :root[data-theme="classic"] table.matrix thead th {
+  background: #c0c0c0; border: 0; box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080;
+}
+table.grid tbody tr:hover td { background: #f1f5fb; }
+:root[data-theme="classic"] table.grid tbody tr:hover td { background: #f0f0f0; }
+table.grid td.num, table.grid th.num { text-align: right; }
+table.grid input[type=number] { width: 74px; }
+.tests-table input.f-name { width: 170px; font-family: var(--mono); font-size: 12px; }
+
+/* ---------- VERDICT MATRIX ---------- */
+.matrix-wrap { overflow: auto; border: 1px solid var(--field-border); background: var(--field); max-height: calc(100vh - 230px); }
+table.matrix { border-collapse: separate; border-spacing: 0; }
+table.matrix th, table.matrix td { padding: 3px 5px; border-bottom: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); white-space: nowrap; }
+table.matrix thead th { z-index: 3; }
+table.matrix th.tcol { text-align: center; min-width: 58px; }
+table.matrix th.tcol small { display: block; color: var(--muted); font-size: 11px; }
+table.matrix .stick { position: sticky; left: 0; z-index: 1; background: var(--field); width: 34px; min-width: 34px; max-width: 34px; text-align: center; }
+table.matrix thead .stick { z-index: 4; }
+table.matrix .stick2 { position: sticky; left: 34px; z-index: 1; background: var(--field); }
+table.matrix thead .stick2 { z-index: 4; }
+:root[data-theme="classic"] table.matrix thead .stick, :root[data-theme="classic"] table.matrix thead .stick2 { background: #c0c0c0; }
+table.matrix tr.sel td.stick, table.matrix tr.sel td.stick2 { background: var(--sel); color: var(--sel-ink); }
+table.matrix tr.sel .who small { color: var(--sel-ink); }
+.who { display: flex; flex-direction: column; line-height: 1.2; }
+.who b { font-weight: bold; }
+.who small { color: var(--muted); font-size: 11px; }
+.cell {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 54px; height: 36px; padding: 0; border: 1px solid rgba(0, 0, 0, .3); border-radius: 0; cursor: pointer; line-height: 1.1;
+}
+.cell b { font-size: 13px; font-weight: bold; }
+.cell i { font-style: normal; font-size: 10px; font-weight: bold; }
+.cell:hover { outline: 1px dotted #000; outline-offset: -4px; }
+.cell.empty { color: var(--faint); background: transparent; border: 1px dotted var(--faint); cursor: default; outline: 0; }
+.v-ok { color: var(--v-ok); background: var(--v-ok-bg); }
+.v-partial { color: var(--v-partial); background: var(--v-partial-bg); }
+.v-wa { color: var(--v-wa); background: var(--v-wa-bg); }
+.v-tle { color: var(--v-tle); background: var(--v-tle-bg); }
+.v-mle { color: var(--v-mle); background: var(--v-mle-bg); }
+.v-re { color: var(--v-re); background: var(--v-re-bg); }
+.v-noout { color: var(--v-noout); background: var(--v-noout-bg); }
+.v-chk { color: var(--v-chk); background: var(--v-chk-bg); }
+.v-skip { color: var(--v-skip); background: var(--v-skip-bg); }
+.v-ce { color: var(--v-ce); background: var(--v-ce-bg); }
+.v-nosrc { color: var(--v-skip); background: transparent; border: 1px dotted var(--faint); }
+.tag { display: inline-block; padding: 0 5px; border: 1px solid rgba(0, 0, 0, .3); font-size: 11px; font-weight: bold; }
+.grade {
+  display: inline-block; min-width: 46px; padding: 2px 5px; text-align: right; font-size: 13px; font-weight: bold;
+  background: var(--field); border: 1px solid var(--field-border); color: #000;
+}
+:root[data-theme="classic"] .grade { border: 0; box-shadow: var(--sunken); padding: 3px 6px; }
+.grade.zero { color: var(--red); }
+.grade.full { color: var(--green); }
+.grade.none { color: var(--faint); font-weight: normal; }
+.grade small { display: block; font-size: 10px; font-weight: normal; color: var(--muted); }
+.compok { color: var(--green); font-weight: bold; }
+.compbad { color: var(--red); font-weight: bold; }
+.warnmark { color: var(--amber); cursor: help; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 3px 4px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
+.legend span.tag { margin-right: 4px; }
+
+/* PROGRESS BAR: GREEN BLOCKS (XP) OR BLUE BLOCKS (CLASSIC) */
+.progress { display: flex; align-items: center; gap: 8px; min-width: 260px; flex: 1; }
+.progress .track {
+  flex: 1; min-width: 120px; height: 15px; padding: 1px; overflow: hidden;
+  border: 1px solid #686868; border-radius: 3px; background: #fff; box-shadow: inset 0 0 1px #686868;
+}
+.progress .fill {
+  height: 100%; width: 0; transition: width .25s;
+  background: repeating-linear-gradient(90deg, transparent 0 8px, #fff 8px 10px),
+              linear-gradient(180deg, #acedad 0%, #7be47d 14%, #4cda50 28%, #2ed330 42%, #42d845 57%, #76e275 71%, #8fe791 85%, #ffffff 100%);
+}
+:root[data-theme="classic"] .progress .track { height: 18px; padding: 2px; border: 0; border-radius: 0; box-shadow: var(--sunken); background: #c0c0c0; }
+:root[data-theme="classic"] .progress .fill { background: repeating-linear-gradient(90deg, #000080 0 8px, transparent 8px 10px); }
+.progress .what { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 36ch; }
+details.log { margin-top: 12px; }
+details.log summary { cursor: pointer; color: var(--ink); }
+pre.logbox {
+  margin: 6px 0 0; max-height: 260px; overflow: auto; padding: 6px 8px; white-space: pre-wrap;
+  background: var(--field); border: 1px solid var(--field-border); font: 12px/1.4 var(--mono);
+}
+:root[data-theme="classic"] pre.logbox, :root[data-theme="classic"] pre.code, :root[data-theme="classic"] .textview,
+:root[data-theme="classic"] .picker-list { border: 0; box-shadow: var(--sunken); padding: 4px 6px; }
+
+.empty-state { padding: 26px 22px; text-align: left; max-width: 640px; }
+.empty-state h2 { font-size: 14px; font-weight: bold; margin: 0 0 6px; }
+.welcome { max-width: 900px; margin: 30px auto; }
+.welcome h1 { font-size: 18px; margin: 0 0 6px; font-weight: bold; }
+.welcome .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 18px 0; }
+.welcome .choice {
+  text-align: left; padding: 10px 12px; cursor: pointer; color: #000;
+  border: 1px solid #003c74; border-radius: 3px; background: var(--xp-btn);
+}
+.welcome .choice:hover { box-shadow: var(--xp-hover); }
+.welcome .choice:active { background: var(--xp-btn-down); box-shadow: none; }
+:root[data-theme="classic"] .welcome .choice { border: 0; border-radius: 0; background: #c0c0c0; box-shadow: var(--raised); }
+:root[data-theme="classic"] .welcome .choice:active { box-shadow: var(--pressed); }
+.welcome .choice b { display: block; font-size: 13px; margin-bottom: 4px; }
+.welcome .choice span { color: var(--muted); font-size: 12px; }
+.recent { list-style: none; padding: 0; margin: 8px 0; }
+.recent li { margin: 4px 0; }
+
+/* ---------- WINDOWS (DIALOGS) ---------- */
+.modal-back { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, .18); display: grid; place-items: center; padding: 18px; }
+.modal {
+  width: min(760px, 100%); max-height: calc(100vh - 36px); display: flex; flex-direction: column;
+  background: var(--face); border: 3px solid #0054e3; border-top: 0; border-radius: 8px 8px 0 0;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, .4);
+}
+.modal.wide { width: min(1240px, 100%); }
+.modal header {
+  display: flex; align-items: center; gap: 8px; margin: 0 -3px; padding: 4px 6px 4px 9px; min-height: 30px;
+  background: var(--xp-title); color: #fff; border-radius: 7px 7px 0 0; text-shadow: 1px 1px #0f1089;
+}
+.modal header h2 { margin: 0; font: var(--title-font); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modal .body { padding: 10px 10px; overflow: auto; }
+.modal footer { display: flex; justify-content: flex-end; gap: 6px; padding: 8px 10px 10px; }
+:root[data-theme="classic"] .modal { border: 0; border-radius: 0; padding: 3px; background: #c0c0c0; box-shadow: var(--raised), 2px 2px 0 rgba(0, 0, 0, .25); }
+:root[data-theme="classic"] .modal header { margin: 0 0 2px; padding: 2px 3px 2px 5px; min-height: 22px; border-radius: 0; background: linear-gradient(90deg, #000080, #1084d0); text-shadow: none; }
+.picker-list { height: 360px; overflow: auto; border: 1px solid var(--field-border); background: var(--field); margin-top: 6px; }
+.picker-list button { display: flex; width: 100%; align-items: center; gap: 6px; padding: 2px 6px; border: 0; background: none; cursor: pointer; text-align: left; }
+.picker-list button:hover, .picker-list button.chosen { background: var(--sel); color: var(--sel-ink); }
+.picker-list button .sz { margin-left: auto; color: var(--faint); font-size: 11px; }
+.picker-list button:hover .sz, .picker-list button.chosen .sz { color: var(--sel-ink); }
+.picker-list button.file.disabled { color: var(--faint); cursor: default; background: none; }
+.picker-list svg { width: 16px; height: 16px; flex: none; fill: #f5d76e; color: #9a7417; }
+.picker-list button.file svg { fill: #fff; color: #6d6d6d; }
+.crumbs { display: flex; gap: 5px; align-items: center; }
+.crumbs input { flex: 1; font-family: var(--mono); font-size: 12px; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 4px 0 10px; }
+.metric { background: var(--field); border: 1px solid var(--field-border); padding: 4px 8px; }
+:root[data-theme="classic"] .metric { border: 0; box-shadow: var(--sunken); }
+.metric span { display: block; font-size: 11px; color: var(--muted); }
+.metric b { font-size: 13px; }
+.panes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pane h4 { margin: 0 0 4px; font-size: 12px; display: flex; gap: 8px; align-items: center; }
+.pane h4 small { color: var(--muted); font-weight: normal; }
+.textview { height: 300px; overflow: auto; border: 1px solid var(--field-border); background: var(--field); font: 12px/1.45 var(--mono); }
+.textview .ln { display: flex; white-space: pre; }
+.textview .ln em { flex: none; width: 3.6em; padding-right: 8px; text-align: right; color: var(--faint); font-style: normal; user-select: none; background: #f4f4f0; }
+.textview .ln.diff { background: var(--v-wa-bg); }
+.textview .note { padding: 8px; color: var(--muted); font-family: var(--font); }
+.msgbox { padding: 6px 9px; border: 1px solid currentColor; border-left-width: 4px; margin: 0 0 8px; }
+pre.code { margin: 0; max-height: 60vh; overflow: auto; padding: 6px 8px; background: var(--field); border: 1px solid var(--field-border); font: 12px/1.4 var(--mono); white-space: pre-wrap; }
+
+/* MESSAGES: LIKE A TOOLTIP BALLOON */
+#toasts { position: fixed; right: 16px; bottom: 16px; z-index: 80; display: flex; flex-direction: column; gap: 6px; }
+.toast { max-width: 420px; padding: 6px 10px; background: var(--tip); color: #000; border: 1px solid #000; border-radius: 3px; box-shadow: 2px 2px 4px rgba(0, 0, 0, .35); }
+.toast.err { color: var(--red); border-color: var(--red); font-weight: bold; }
+:root[data-theme="classic"] .toast { border-radius: 0; }
+
+.help { max-width: 860px; }
+.help h3 { margin-top: 18px; }
+.help li { margin: 4px 0; }
+.kbd { border: 1px solid #808080; border-bottom-width: 2px; border-radius: 2px; background: #f4f4f0; padding: 0 4px; font-size: 11px; }
+@media (max-width: 760px) {
+  .top { position: static; height: auto; min-height: 30px; flex-wrap: wrap; padding: 4px 6px; }
+  .bar { position: static; }
+  .wsbtn { max-width: 100%; }
+  .cols { grid-template-columns: 1fr; }
+  .form { grid-template-columns: 1fr; }
+  .panes { grid-template-columns: 1fr; }
+  main { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media print {
+  .top, .bar, .toolbar, #toasts { display: none !important; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+<header class="top" id="top"></header>
+<div class="bar" id="bar"></div>
+<main id="main"></main>
+<div id="modals"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+/* =====================================================================================
+ * OLYMPIAD EVALUATOR - SHARED GUI (SAME PAGE FOR THE C, C++, PYTHON AND WEB VERSIONS)
+ * TALKS ONLY TO THE /API/ ROUTES OF THE ENGINE THAT SERVED IT
+ * ===================================================================================== */
+const TOKEN = window.EVAL_TOKEN;
+const S = {
+  info: null, settings: { recent: [] }, ws: null, cur: '', tab: 'eval',
+  scan: {}, results: {}, job: { running: false }, logs: [], logNext: 0, rv: -1,
+  sel: {}, dirty: false, saveState: '', saveTimer: null, rescoreTimer: null, pollTimer: null,
+  sort: 'id', lastRender: 0
+};
+
+/* ---------------------------------------------------------------- TRANSLATIONS */
+// UI KEYS ARE THE ENGLISH TEXT; ENGINE MESSAGES ARRIVE IN ENGLISH AND GO THROUGH TM()
+const I18N = { lang: 'en', ui: {}, rules: [], exact: new Map(), cache: new Map(), langs: {}, decimal: '.', dir: '', errors: [] };
+const N_ = s => s; // MARKS A KEY FOR THE CHECKER; TRANSLATED LATER WITH T()
+function t(key, vars) {
+  let s = Object.prototype.hasOwnProperty.call(I18N.ui, key) && I18N.ui[key] ? I18N.ui[key] : key;
+  if (vars) s = s.replace(/%\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
+  return s;
+}
+function reEsc(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function compileMessages(map) {
+  // EACH TEMPLATE BECOMES AN ANCHORED REGEX; %{NAME} CAPTURES ANY TEXT
+  I18N.rules = []; I18N.exact = new Map(); I18N.cache = new Map();
+  for (const [src, dst] of Object.entries(map || {})) {
+    const key = String(src).trim();
+    if (!key || typeof dst !== 'string' || !dst.trim()) continue;
+    if (!/%\{\w+\}/.test(key)) { I18N.exact.set(key, dst.trim()); continue; }
+    const names = [];
+    const body = key.split(/(%\{\w+\})/).map(part => {
+      const m = /^%\{(\w+)\}$/.exec(part);
+      if (!m) return reEsc(part);
+      names.push(m[1]);
+      return '([\\s\\S]*?)';
+    }).join('');
+    I18N.rules.push({ re: new RegExp('^' + body + '$'), names, dst: dst.trim(), lit: key.replace(/%\{\w+\}/g, '').length });
+  }
+  I18N.rules.sort((a, b) => b.lit - a.lit); // MOST SPECIFIC TEMPLATE FIRST
+}
+function tmLine(s, depth) {
+  const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(s);
+  const core = m[2];
+  if (!core) return s;
+  if (I18N.exact.has(core)) return m[1] + I18N.exact.get(core) + m[3];
+  if (depth < 4) {
+    for (const r of I18N.rules) {
+      const x = r.re.exec(core);
+      if (!x) continue;
+      const vals = {};
+      // CAPTURES NAMED RAW... ARE DATA (STUDENT OUTPUT): KEPT AS THEY ARE
+      r.names.forEach((n, i) => { vals[n] = /^raw/i.test(n) ? x[i + 1] : tmLine(x[i + 1], depth + 1); });
+      return m[1] + r.dst.replace(/%\{(\w+)\}/g, (q, k) => (vals[k] != null ? vals[k] : q)) + m[3];
+    }
+    if (core.includes('; ')) return m[1] + core.split('; ').map(p => tmLine(p, depth + 1)).join('; ') + m[3];
+  }
+  return s;
+}
+function tm(msg) {
+  // TRANSLATES AN ENGLISH ENGINE MESSAGE (ERROR, VERDICT TEXT, LOG LINE)
+  if (msg == null) return '';
+  const s = String(msg);
+  if (!s || (!I18N.rules.length && !I18N.exact.size)) return s;
+  if (I18N.cache.has(s)) return I18N.cache.get(s);
+  const out = s.split('\n').map(l => tmLine(l, 0)).join('\n');
+  if (I18N.cache.size > 20000) I18N.cache.clear();
+  I18N.cache.set(s, out);
+  return out;
+}
+function setLanguage(code) {
+  const L = I18N.langs[code];
+  I18N.lang = L ? code : 'en';
+  I18N.ui = (L && L.ui) || {};
+  I18N.decimal = (L && L.decimal) || '.';
+  compileMessages(L && I18N.lang !== 'en' ? L.messages : null);
+  document.documentElement.lang = I18N.lang;
+}
+function pickLanguage() {
+  // SAVED CHOICE, THEN THE BROWSER LANGUAGES, THEN ENGLISH
+  const want = [S.settings.language].concat(Array.from(navigator.languages || [navigator.language || ''])).filter(Boolean);
+  for (const w of want) {
+    const c = String(w).toLowerCase();
+    if (I18N.langs[c]) return c;
+    const base = c.split('-')[0];
+    if (I18N.langs[base]) return base;
+  }
+  return 'en';
+}
+async function loadTranslations() {
+  try {
+    const r = await api('/api/translations');
+    I18N.langs = r.languages || {};
+    I18N.dir = r.dir || '';
+    I18N.errors = r.errors || [];
+  } catch (e) { I18N.langs = {}; I18N.errors = [String(e && e.message ? e.message : e)]; }
+  for (const k of Object.keys(I18N.langs)) if (!I18N.langs[k] || typeof I18N.langs[k] !== 'object') delete I18N.langs[k];
+  if (!I18N.langs.en) I18N.langs.en = { language: 'en', name: 'English', ui: {}, messages: {} };
+  setLanguage(pickLanguage());
+}
+
+/* ---------------------------------------------------------------- UTILITIES */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const isObj = o => o !== null && typeof o === 'object' && !Array.isArray(o);
+function lowerAscii(s) { return s.replace(/[A-Z]/g, c => String.fromCharCode(c.charCodeAt(0) + 32)); }
+function natcmp(a, b) {
+  // NATURAL ORDER, SAME RULES AS THE ENGINES
+  a = String(a); b = String(b);
+  let i = 0, j = 0;
+  const la = a.length, lb = b.length, dig = c => c >= '0' && c <= '9';
+  while (i < la && j < lb) {
+    const ca = a[i], cb = b[j];
+    if (dig(ca) && dig(cb)) {
+      const si = i; while (i < la && dig(a[i])) i++;
+      const sj = j; while (j < lb && dig(b[j])) j++;
+      const ra = a.slice(si, i).replace(/^0+/, ''), rb = b.slice(sj, j).replace(/^0+/, '');
+      if (ra.length !== rb.length) return ra.length < rb.length ? -1 : 1;
+      if (ra !== rb) return ra < rb ? -1 : 1;
+    } else {
+      const xa = lowerAscii(ca), xb = lowerAscii(cb);
+      if (xa !== xb) return xa < xb ? -1 : 1;
+      i++; j++;
+    }
+  }
+  const ra = la - i, rb = lb - j;
+  if (ra !== rb) return ra < rb ? -1 : 1;
+  return a === b ? 0 : (a < b ? -1 : 1);
+}
+function getPath(o, path) { return path.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o); }
+function setPath(o, path, v) {
+  const ks = path.split('.'); let x = o;
+  for (let i = 0; i < ks.length - 1; i++) { if (x[ks[i]] == null) x[ks[i]] = {}; x = x[ks[i]]; }
+  x[ks[ks.length - 1]] = v;
+}
+function dec(x, d = 2) {
+  // NUMBER WITH THE DECIMAL MARK OF THE CURRENT LANGUAGE
+  if (x == null || x === '' || isNaN(x)) return '—';
+  const v = Number(x);
+  let s = v.toFixed(d);
+  if (d > 0) s = s.replace(/\.?0+$/, '');
+  return I18N.decimal === '.' ? s : s.replace('.', I18N.decimal);
+}
+function fmtMs(x) { if (x == null) return '—'; const v = Number(x); return v >= 100 ? dec(v, 0) + ' ms' : dec(v, 1) + ' ms'; }
+function fmtKb(x) { if (x == null) return '—'; const v = Number(x); return v >= 10240 ? dec(v / 1024, 1) + ' MB' : dec(v, 0) + ' KB'; }
+function fmtBytes(b) { b = Number(b || 0); if (b < 1024) return b + ' B'; if (b < 1048576) return dec(b / 1024, 2) + ' KB'; return dec(b / 1048576, 2) + ' MB'; }
+function nowStamp() { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`; }
+function nowHuman() { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+function toast(msg, err) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (err ? ' err' : '');
+  el.textContent = msg;
+  $('#toasts').appendChild(el);
+  setTimeout(() => el.remove(), err ? 7000 : 3500);
+}
+function fail(e) { console.error(e); toast(tm(e && e.message ? e.message : String(e)), true); }
+
+const ICON = {
+  bolt: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.6.6 2.8 9.2h4.1l-1.6 6.2 7-9H8.3z" fill="#ffd400" stroke="#825400" stroke-width=".9" stroke-linejoin="round"/></svg>',
+  folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H9l2 2h8.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg>',
+  file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>',
+  stop: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>',
+  scan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
+  theme: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="4" width="18" height="12"/><path d="M8 20h8M12 16v4"/></svg>',
+  power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v9"/><path d="M6.3 6.6a8 8 0 1 0 11.4 0"/></svg>',
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>',
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+  open: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
+};
+
+// VERDICT: [NAME KEY, CSS CLASS, SHORT LABEL]
+const VERDICT = {
+  OK: [N_('Correct'), 'v-ok', 'OK'], PARTIAL: [N_('Partial'), 'v-partial', 'PAR'], WA: [N_('Wrong answer'), 'v-wa', 'WA'],
+  TLE: [N_('Time limit exceeded'), 'v-tle', 'TLE'], MLE: [N_('Memory limit exceeded'), 'v-mle', 'MLE'], RE: [N_('Runtime error'), 'v-re', 'RE'],
+  NOOUT: [N_('No output file'), 'v-noout', 'NOUT'], CHKERR: [N_('Checker error'), 'v-chk', 'CHK'],
+  SKIP: [N_('Not evaluated'), 'v-skip', '—'], CE: [N_('Compilation error'), 'v-ce', 'CE'], NOSRC: [N_('No source'), 'v-nosrc', '—'],
+  ERR: [N_('Internal error'), 'v-chk', 'ERR']
+};
+const vName = s => (VERDICT[s] ? t(VERDICT[s][0]) : s);
+const vClass = s => (VERDICT[s] || [0, 'v-skip'])[1];
+const vShort = s => (VERDICT[s] || [0, 0, s])[2];
+
+/* ---------------------------------------------------------------- DEFAULTS */
+function pyCmd() { return S.info && S.info.os === 'windows' ? 'python' : 'python3'; }
+function defaultLanguages() {
+  return [
+    { id: 'c', name: 'C', ext: '.c', compile: 'gcc -O2 -Wall -std=c11 {sources} -o {exe} {libs}', run: '{exe}', probe: true },
+    { id: 'cpp', name: 'C++', ext: '.cpp .cc .cxx', compile: 'g++ -O2 -Wall -std=c++17 {sources} -o {exe} {libs}', run: '{exe}', probe: true },
+    { id: 'py', name: 'Python', ext: '.py', compile: '', run: pyCmd() + ' {main}', probe: true }
+  ];
+}
+const DEFAULT_AUTOLIBS = [
+  ['Math', 'math.h complex.h tgmath.h fenv.h', '-lm'], ['Threads', 'pthread.h threads.h', '-pthread'],
+  ['Ncurses', 'ncurses.h curses.h', '-lncurses'], ['Readline', 'readline/readline.h', '-lreadline'],
+  ['SDL2', 'SDL2/SDL.h', '-lSDL2'], ['SDL2_image', 'SDL2/SDL_image.h', '-lSDL2_image'], ['SDL2_ttf', 'SDL2/SDL_ttf.h', '-lSDL2_ttf'],
+  ['SDL2_mixer', 'SDL2/SDL_mixer.h', '-lSDL2_mixer'], ['Raylib', 'raylib.h', '-lraylib -lGL -lm -lpthread -ldl -lrt -lX11'],
+  ['GLFW', 'GLFW/glfw3.h', '-lglfw -lGL'], ['GLEW', 'GL/glew.h', '-lGLEW'], ['OpenGL', 'GL/*', '-lGL -lGLU -lglut'],
+  ['wxWidgets', 'wx/*', '$(wx-config --cxxflags --libs)'],
+  ['X11', 'X11/Xlib.h', '-lX11'], ['Zlib', 'zlib.h', '-lz'], ['SQLite', 'sqlite3.h', '-lsqlite3'], ['Curl', 'curl/curl.h', '-lcurl'],
+  ['OpenSSL', 'openssl/*.h', '-lssl -lcrypto'], ['GMP', 'gmp.h', '-lgmp'], ['Dynamic loading', 'dlfcn.h', '-ldl'],
+  ['Realtime', 'mqueue.h aio.h', '-lrt'], ['Crypt', 'crypt.h', '-lcrypt']
+].map(([name, headers, flags]) => ({ name, headers, flags }));
+const DEFAULT_IGNORE = '.* _* cmake-build-* CMakeFiles build bin obj out release debug __MACOSX node_modules venv __pycache__';
+const DEFAULT_ROOT_RULES = ['CMakeLists.txt', '*.cbp', 'bash-scripts/compile.sh', 'bash-scripts/build.sh', 'compile.sh', 'build.sh', 'main.cpp', 'main.c', '*.cpp', '*.c', '*.py'].map(pattern => ({ pattern, up: 0 }));
+const LAYOUTS = {
+  'problem-student': { studentDir: '{root}/{problem}/{student}', testsDir: '{root}/{problem}/_tests' },
+  'student-problem': { studentDir: '{root}/{student}/{problem}', testsDir: '{root}/_tests/{problem}' },
+  'flat': { flatDir: '{root}/{problem}/sources', testsDir: '{root}/{problem}/tests' },
+  'custom': {}
+};
+const WS_FORMAT = 'olympiad-evaluator';
+const SCORING_FORMATS = ['olympiad-evaluator/scoring', 'evaluator-olimpiada/barem']; // FIRST IS WRITTEN, ALL ARE READ
+function defaultProblem(name, nr) {
+  return {
+    name, nr: nr || 1, title: '', testsDir: '', inputPattern: '{n}-{problem}.in', okPattern: '{n}-{problem}.ok', tests: [],
+    io: { input: 'file', output: 'file', inputPath: '{problem}.in', outputPath: '{problem}.out', cwd: '', runIn: 'sandbox' },
+    project: { rootRules: clone(DEFAULT_ROOT_RULES), maxDepth: 6, mainPatterns: 'main.cpp main.c {problem}.cpp {problem}.c *.cpp *.c *.py',
+      compileScope: 'main', sizeScope: 'main', sizeExt: '.c .h .cpp .hpp .cc .cxx .hh .py',
+      buildMode: 'command', buildCommand: 'auto', buildExe: 'release/program' },
+    compileExtra: '',
+    limits: { timeMs: 1000, timeMode: 'cpu', hardTimeFactor: 2, memMb: 64, hardMemFactor: 2, stackMb: 8, sourceKb: 0, outputMb: 64, calibrate: true },
+    policy: { time: { mode: 'zero', percent: 50 }, memory: { mode: 'zero', percent: 50 }, size: { mode: 'zero', percent: 50, penalty: 10 } },
+    points: { compile: 0, size: 0 },
+    compare: { mode: 'lines', ignoreCase: false, epsilon: 0.000001, checker: '', protocol: 'oji', args: '' }
+  };
+}
+function defaultWorkspace(root) {
+  return {
+    format: WS_FORMAT, version: 1, root, name: '', layout: 'problem-student',
+    studentDir: '{root}/{problem}/{student}', flatDir: '{root}/{problem}/sources', flatPattern: '{student}{nr}.{ext}',
+    testsDir: '{root}/{problem}/_tests', workDir: '{root}/_work', resultsDir: '{root}/_results',
+    students: [], problems: [], current: '', languages: defaultLanguages(),
+    autoLibs: { enabled: true, rules: clone(DEFAULT_AUTOLIBS) }, ignoreDirs: DEFAULT_IGNORE,
+    options: { keepOutputs: true, windowsStackFlag: true, compileTimeoutSec: 60, nonzeroExitIsError: true, useProbe: true }
+  };
+}
+function fillDefaults(o, d) {
+  for (const k of Object.keys(d)) {
+    if (o[k] === undefined || o[k] === null) o[k] = clone(d[k]);
+    else if (isObj(o[k]) && isObj(d[k])) fillDefaults(o[k], d[k]);
+  }
+  return o;
+}
+function normalizeProblem(p) {
+  fillDefaults(p, defaultProblem(p.name || 'problem', p.nr || 1));
+  if (!Array.isArray(p.tests)) p.tests = [];
+  p.tests.forEach(te => fillDefaults(te, { id: '', input: '', ok: '', points: 0, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 }));
+  p.tests.forEach(te => { te.id = String(te.id); });
+  if (!Array.isArray(p.project.rootRules)) p.project.rootRules = clone(DEFAULT_ROOT_RULES);
+  return p;
+}
+function normalizeWs(ws, root) {
+  fillDefaults(ws, defaultWorkspace(root));
+  ws.root = root;
+  if (!Array.isArray(ws.languages) || !ws.languages.length) ws.languages = defaultLanguages();
+  if (!Array.isArray(ws.students)) ws.students = [];
+  if (!Array.isArray(ws.problems)) ws.problems = [];
+  if (!Array.isArray(ws.autoLibs.rules)) ws.autoLibs.rules = clone(DEFAULT_AUTOLIBS);
+  ws.problems.forEach(normalizeProblem);
+  return ws;
+}
+
+/* ---------------------------------------------------------------- API */
+async function api(path, body) {
+  const opt = { method: body === undefined ? 'GET' : 'POST', headers: { 'X-Eval-Token': TOKEN } };
+  if (body !== undefined) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
+  let r;
+  try { r = await fetch(path, opt); } catch (e) { throw new Error(t('The application (local server) is not responding. Is it running?')); }
+  let j;
+  try { j = await r.json(); } catch (e) { throw new Error(t('Invalid response from the server (%{status})', { status: r.status })); }
+  if (!r.ok || (j && j.error)) throw new Error((j && j.error) || t('Error %{status}', { status: r.status }));
+  return j;
+}
+const FS = {
+  list: p => api('/api/fs/list', { path: p }),
+  read: (p, max) => api('/api/fs/read', { path: p, max: max || 2000000 }),
+  write: (p, text) => api('/api/fs/write', { path: p, text }),
+  stat: p => api('/api/fs/stat', { path: p }),
+  mkdir: p => api('/api/fs/mkdir', { path: p })
+};
+
+/* ---------------------------------------------------------------- PATHS */
+const SEP = () => (S.info && S.info.sep) || '/';
+function isAbs(p) { return /^([A-Za-z]:[\\/]|[\\/])/.test(p); }
+function normPath(p) {
+  const sep = SEP();
+  let s = String(p).replace(/[\\/]+/g, '/');
+  let prefix = '';
+  const m = s.match(/^([A-Za-z]:)?\//);
+  if (m) { prefix = m[0]; s = s.slice(m[0].length); } else if (/^[A-Za-z]:/.test(s)) { prefix = s.slice(0, 2); s = s.slice(2); }
+  const out = [];
+  for (const c of s.split('/')) {
+    if (!c || c === '.') continue;
+    if (c === '..') { if (out.length && out[out.length - 1] !== '..') out.pop(); else if (!prefix) out.push('..'); }
+    else out.push(c);
+  }
+  let r = prefix + out.join('/');
+  if (!r) r = prefix || '.';
+  return sep === '\\' ? r.replace(/\//g, '\\') : r;
+}
+function joinP(a, b) { return normPath(String(a) + '/' + String(b)); }
+function tpl(s, vars) { return String(s || '').replace(/\{(root|problem|nr|student|n)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m)); }
+function resolveP(base, p) { p = String(p || '').trim(); if (!p) return normPath(base); if (!isAbs(p)) p = base + '/' + p; return normPath(p); }
+function probVars(p) { return { root: S.ws.root, problem: p.name, nr: String(Math.round(Number(p.nr) || 1)) }; }
+function testsDirOf(p) { return resolveP(S.ws.root, tpl(p.testsDir || S.ws.testsDir, probVars(p))); }
+function resultsDirOf(p) { return resolveP(S.ws.root, tpl(S.ws.resultsDir, probVars(p))); }
+function workDirOf(p) { return resolveP(S.ws.root, tpl(S.ws.workDir, probVars(p))); }
+function testFile(p, rel) { return resolveP(testsDirOf(p), rel); }
+function baseName(p) { return String(p).split(/[\\/]/).pop(); }
+
+/* ---------------------------------------------------------------- STATE AND SAVING */
+const P = () => (S.ws ? S.ws.problems.find(x => x.name === S.cur) : null);
+const probByName = n => S.ws.problems.find(x => x.name === n);
+function studentName(id) { const s = S.ws && S.ws.students.find(x => x.id === id); return s ? (s.name || '') : ''; }
+function studentGroup(id) { const s = S.ws && S.ws.students.find(x => x.id === id); return s ? (s.group || '') : ''; }
+function maxScoreOf(p) {
+  let m = 0;
+  for (const te of p.tests) m += Number(te.points || 0) + Number(te.timePoints || 0) + Number(te.memPoints || 0);
+  return Math.round((m + Number(p.points.compile || 0) + Number(p.points.size || 0)) * 100) / 100;
+}
+
+async function loadSettings() {
+  try {
+    if (!(await FS.stat(S.info.settings)).exists) throw new Error('new');
+    const r = await FS.read(S.info.settings);
+    S.settings = Object.assign({ recent: [] }, JSON.parse(r.text.replace(/^﻿/, '')));
+  } catch (e) { S.settings = { recent: [] }; }
+  applyTheme();
+}
+async function saveSettings() { try { await FS.write(S.info.settings, JSON.stringify(S.settings, null, 2)); } catch (e) { /* NOT FATAL */ } }
+function applyTheme() {
+  // XP (DEFAULT, LIKE THE 2009 OJI EVALUATOR) OR CLASSIC (WINDOWS 95/98); OLD VALUE "CLASIC" STILL ACCEPTED
+  if (S.settings.theme === 'clasic') S.settings.theme = 'classic';
+  if (S.settings.theme === 'classic') document.documentElement.setAttribute('data-theme', 'classic');
+  else document.documentElement.removeAttribute('data-theme');
+}
+
+function markDirty(rescore) {
+  S.dirty = true; S.saveState = 'dirty'; renderSaveState();
+  clearTimeout(S.saveTimer);
+  S.saveTimer = setTimeout(() => saveWs().catch(fail), 700);
+  if (rescore) scheduleRescore();
+}
+async function saveWs() {
+  if (!S.ws) return;
+  clearTimeout(S.saveTimer);
+  S.saveState = 'saving'; renderSaveState();
+  try {
+    S.ws.current = S.cur;
+    await FS.write(joinP(S.ws.root, 'evaluator.json'), JSON.stringify(S.ws, null, 2));
+    S.dirty = false; S.saveState = 'saved';
+  } catch (e) { S.saveState = 'err'; renderSaveState(); throw e; }
+  renderSaveState();
+}
+function renderSaveState() {
+  const el = $('#savestate');
+  if (!el) return;
+  const m = { dirty: [N_('Unsaved changes'), 'dirty'], saving: [N_('Saving…'), 'dirty'], saved: [N_('Saved'), ''], err: [N_('Saving failed'), 'err'] }[S.saveState] || ['', ''];
+  el.textContent = m[0] ? t(m[0]) : '';
+  el.className = 'savestate ' + m[1];
+}
+function scheduleRescore() {
+  clearTimeout(S.rescoreTimer);
+  S.rescoreTimer = setTimeout(() => rescore(S.cur).catch(fail), 650);
+}
+async function rescore(name) {
+  const p = probByName(name);
+  if (!p || !S.results[name] || S.job.running) return;
+  const r = await api('/api/rescore', { workspace: S.ws, problem: name, results: S.results[name] });
+  S.results[name] = r.results;
+  await saveResults(name);
+  if (S.tab === 'eval' || S.tab === 'ranking') renderMain();
+}
+async function saveResults(name) {
+  const p = probByName(name);
+  if (!p || !S.results[name]) return;
+  await FS.write(joinP(joinP(resultsDirOf(p), name), 'latest.json'), JSON.stringify(S.results[name], null, 1));
+}
+async function loadResults() {
+  S.results = {};
+  for (const p of S.ws.problems) {
+    try {
+      const f = joinP(joinP(resultsDirOf(p), p.name), 'latest.json');
+      if (!(await FS.stat(f)).exists) continue;
+      const r = await FS.read(f, 50000000);
+      S.results[p.name] = JSON.parse(r.text.replace(/^﻿/, ''));
+    } catch (e) { /* NO RESULTS YET */ }
+  }
+}
+
+async function openWorkspace(root, allowCreate) {
+  root = normPath(root);
+  const file = joinP(root, 'evaluator.json');
+  let ws;
+  const st = await FS.stat(file);
+  if (st.exists) {
+    const r = await FS.read(file, 50000000);
+    try { ws = JSON.parse(r.text.replace(/^﻿/, '')); } catch (e) { throw new Error(t('evaluator.json is not valid JSON: %{error}', { error: e.message })); }
+  } else {
+    if (!allowCreate) throw new Error(t('There is no evaluator.json in %{folder}', { folder: root }));
+    ws = defaultWorkspace(root);
+  }
+  S.ws = normalizeWs(ws, root);
+  S.cur = S.ws.problems.some(p => p.name === S.ws.current) ? S.ws.current : (S.ws.problems[0] ? S.ws.problems[0].name : '');
+  S.scan = {}; S.sel = {};
+  await loadResults();
+  if (!st.exists) await saveWs();
+  S.settings.lastWorkspace = root;
+  S.settings.recent = [root].concat((S.settings.recent || []).filter(x => x !== root)).slice(0, 8);
+  saveSettings();
+  S.saveState = 'saved';
+  if (!S.ws.problems.length) S.tab = 'workspace';
+  render();
+  if (S.cur) scanProblem(S.cur, true).catch(() => {});
+}
+
+/* ---------------------------------------------------------------- PAGE FRAME */
+const TABS = [['eval', N_('Evaluation')], ['tests', N_('Tests and scoring')], ['problem', N_('Problem')], ['workspace', N_('Workspace')],
+  ['ranking', N_('Ranking and reports')], ['settings', N_('Settings')], ['help', N_('Help')]];
+function render() { renderTop(); renderBar(); renderMain(); }
+function renderTop() {
+  const v = S.info ? S.info.variant : '';
+  const codes = Object.keys(I18N.langs).sort((a, b) => (a === 'en' ? -1 : (b === 'en' ? 1 : a.localeCompare(b))));
+  const lname = c => (I18N.langs[c] && I18N.langs[c].name) || c;
+  $('#top').innerHTML = `
+    <div class="brand">${ICON.bolt}<span>${esc(t('Olympiad Evaluator'))}</span>${v ? `<span class="variant" title="${esc(t('The engine that runs the evaluation'))}">${esc(v)}</span>` : ''}</div>
+    ${S.ws ? `<button class="wsbtn" data-act="ws-open" title="${esc(t('Change the workspace'))}">${ICON.folder}<span>&lrm;${esc(S.ws.root)}&lrm;</span></button><span id="savestate" class="savestate"></span>` : ''}
+    <div class="spacer"></div>
+    ${codes.length > 1 ? `<select class="langsel" id="langsel" title="${esc(t('Interface language'))}" aria-label="${esc(t('Interface language'))}">${codes.map(c => `<option value="${esc(c)}" ${c === I18N.lang ? 'selected' : ''}>${esc(lname(c))}</option>`).join('')}</select>` : ''}
+    <button class="iconbtn" data-act="theme" title="${esc(t('Look: XP (2009) or Classic (Windows 95/98)'))}">${ICON.theme}</button>
+    <button class="iconbtn" data-act="quit" title="${esc(t('Close the application'))}">${ICON.x}</button>`;
+  renderSaveState();
+}
+function renderBar() {
+  if (!S.ws) { $('#bar').innerHTML = ''; $('#bar').style.display = 'none'; return; }
+  $('#bar').style.display = '';
+  const opts = S.ws.problems.map(p => `<option value="${esc(p.name)}" ${p.name === S.cur ? 'selected' : ''}>${esc(p.name)}</option>`).join('');
+  $('#bar').innerHTML = `
+    <div class="probsel"><label for="probsel">${esc(t('Problem'))}</label>
+      <select id="probsel">${opts || `<option value="">${esc(t('(no problem)'))}</option>`}</select>
+      <button class="btn small" data-act="problem-add" title="${esc(t('Add a problem'))}">${esc(t('Add'))}</button></div>
+    <nav class="tabs" role="tablist">${TABS.map(([k, n]) => `<button class="tab" role="tab" aria-selected="${S.tab === k}" data-act="tab" data-v="${k}">${esc(t(n))}</button>`).join('')}</nav>`;
+}
+function renderMain() {
+  const m = $('#main');
+  if (!S.info) { m.innerHTML = ''; return; }
+  if (!S.ws) { m.innerHTML = viewWelcome(); return; }
+  const scrollY = window.scrollY;
+  const views = { eval: viewEval, tests: viewTests, problem: viewProblem, workspace: viewWorkspace, ranking: viewRanking, settings: viewSettings, help: viewHelp };
+  const needP = ['eval', 'tests', 'problem'];
+  if (needP.includes(S.tab) && !P()) m.innerHTML = viewNoProblem();
+  else m.innerHTML = (views[S.tab] || viewEval)();
+  window.scrollTo(0, scrollY);
+  if (S.tab === 'eval') { const lb = $('#logbox'); if (lb) lb.scrollTop = lb.scrollHeight; }
+}
+function viewNoProblem() {
+  return `<div class="sheet empty-state"><h2>${t('Add the first problem')}</h2>
+    <p class="hint">${t('A problem has its own tests folder, scoring scheme and run rules. Its name appears in file names (for example <code>sum.in</code>).')}</p>
+    <button class="btn primary" data-act="problem-add">${t('Add a problem')}</button></div>`;
+}
+function viewWelcome() {
+  const rec = (S.settings.recent || []).map(r => `<li><button class="linkbtn mono" data-act="ws-recent" data-v="${esc(r)}">${esc(r)}</button></li>`).join('');
+  const ex = S.info && S.info.example;
+  return `<div class="welcome">
+    <h1>${t('Olympiad Evaluator')}</h1>
+    <p class="hint">${t('Compiles and runs the students’ sources on the tests of a problem, measures time, memory and stack, then computes the score from your scoring scheme. Everything runs locally, on this computer.')}</p>
+    <div class="choices">
+      <button class="choice" data-act="ws-open"><b>${t('Open a workspace')}</b><span>${t('Choose the contest folder (the one with <code>evaluator.json</code>) or an empty folder for a new one.')}</span></button>
+      <button class="choice" data-act="import-oji"><b>${t('Import from the OJI Evaluator')}</b><span>${t('The old evaluator’s folder: <code>rounds.xml</code>, <code>probleme/…/teste</code>, <code>teste.txt</code>.')}</span></button>
+      ${ex ? `<button class="choice" data-act="ws-recent" data-v="${esc(ex)}"><b>${t('Open the example')}</b><span>${t('A contest with 4 problems and 16 students, covering every verdict.')}</span></button>` : ''}
+    </div>
+    ${rec ? `<h3>${t('Recently opened')}</h3><ul class="recent">${rec}</ul>` : ''}
+  </div>`;
+}
+
+/* ---------------------------------------------------------------- FIELD BINDING */
+function bind(path, type) { return `data-bind="${esc(path)}" data-type="${type || 'str'}"`; }
+function fld(path) {
+  const v = resolveBindPath(path).get();
+  return v == null ? '' : v;
+}
+function resolveBindPath(path) {
+  const [scope, rest] = path.split(':');
+  const root = scope === 'ws' ? S.ws : P();
+  return { get: () => getPath(root, rest), set: v => setPath(root, rest, v), scope, rest };
+}
+function inp(path, type, attrs = '') {
+  const v = fld(path);
+  if (type === 'bool') return `<input type="checkbox" ${bind(path, 'bool')} ${v ? 'checked' : ''} ${attrs}>`;
+  if (type === 'num') return `<input type="number" step="any" ${bind(path, 'num')} value="${esc(v)}" ${attrs}>`;
+  return `<input type="text" ${bind(path, 'str')} value="${esc(v)}" ${attrs}>`;
+}
+function sel(path, options, attrs = '') {
+  const v = String(fld(path) ?? '');
+  return `<select ${bind(path, 'str')} ${attrs}>${options.map(([k, n]) => `<option value="${esc(k)}" ${String(k) === v ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+}
+const SCORING_PATHS = /^(tests|limits|policy|points|compare\.mode|compare\.protocol)/;
+function onBind(el) {
+  const path = el.dataset.bind, type = el.dataset.type;
+  const b = resolveBindPath(path);
+  let v;
+  if (type === 'bool') v = el.checked;
+  else if (type === 'num') { v = el.value === '' ? 0 : Number(String(el.value).replace(',', '.')); if (isNaN(v)) v = 0; }
+  else v = el.value;
+  b.set(v);
+  markDirty(b.scope === 'p' && SCORING_PATHS.test(b.rest));
+  if (el.dataset.rerender) renderMain();
+  else if (b.scope === 'p' && /^(tests|points)/.test(b.rest)) { const mx = $('#maxscore'); if (mx) mx.textContent = dec(maxScoreOf(P())); }
+}
+
+/* ================================================================ EVALUATION */
+function evalRows(p) {
+  const scan = S.scan[p.name], res = S.results[p.name];
+  const map = new Map();
+  if (scan) for (const s of scan.students) map.set(s.id, { id: s.id, scan: s, res: null });
+  if (res) for (const r of res.students || []) { const x = map.get(r.id) || { id: r.id, scan: null, res: null }; x.res = r; map.set(r.id, x); }
+  const rows = Array.from(map.values());
+  if (S.sort === 'score') rows.sort((a, b) => (Number(b.res ? b.res.score : -1) - Number(a.res ? a.res.score : -1)) || natcmp(a.id, b.id));
+  else rows.sort((a, b) => natcmp(a.id, b.id));
+  return rows;
+}
+function selSet(p) { if (!S.sel[p.name]) S.sel[p.name] = new Set(); return S.sel[p.name]; }
+const PHASES = { preparing: N_('Preparing'), compiling: N_('Compiling'), running: N_('Running'), done: N_('Done'), stopped: N_('Stopped'), starting: N_('Starting') };
+function phaseName(ph) { return PHASES[ph] ? t(PHASES[ph]) : (ph || ''); }
+function viewEval() {
+  const p = P(), rows = evalRows(p), sel = selSet(p), job = S.job;
+  const running = !!job.running;
+  const pct = job.total ? Math.round(100 * job.done / job.total) : (running ? 3 : 0);
+  let what = '';
+  if (running) what = [job.problem, job.student, job.test ? t('test %{id}', { id: job.test }) : ''].filter(Boolean).join(' / ') || phaseName(job.phase);
+  else if (job.phase === 'done' || job.phase === 'stopped') what = phaseName(job.phase);
+  const res = S.results[p.name];
+  const maxS = maxScoreOf(p);
+  let body = '';
+  if (!rows.length) {
+    const pattern = `<code>${esc(S.ws.layout === 'flat' ? S.ws.flatDir + ' / ' + S.ws.flatPattern : S.ws.studentDir)}</code>`;
+    body = `<div class="sheet empty-state"><h2>${t('No students found yet')}</h2>
+      <p class="hint">${t('Press “Detect” to look for the student folders with the template from Workspace (now: %{pattern}). You can create the folders from the Workspace tab.', { pattern })}</p>
+      <button class="btn primary" data-act="scan">${ICON.scan} ${t('Detect')}</button></div>`;
+  } else {
+    const head = `<tr><th class="stick"><input type="checkbox" data-act="sel-all" aria-label="${esc(t('Select all'))}" ${rows.length && rows.every(r => sel.has(r.id)) ? 'checked' : ''}></th>
+      <th class="stick2"><button class="linkbtn" data-act="sort" data-v="id">${t('Student')}</button></th><th>${t('Source')}</th><th class="num">${t('Size')}</th><th>${t('Compilation')}</th>
+      ${p.tests.map(te => `<th class="tcol" title="${esc(t('Input: %{file}', { file: te.input }))}">${esc(te.id)}<small>${dec(Number(te.points || 0) + Number(te.timePoints || 0) + Number(te.memPoints || 0))} p</small></th>`).join('')}
+      <th class="num"><button class="linkbtn" data-act="sort" data-v="score">${t('Total')}</button><small style="display:block;font-weight:500">${t('of %{max}', { max: dec(maxS) })}</small></th></tr>`;
+    const lines = rows.map(r => rowHtml(p, r, sel.has(r.id))).join('');
+    body = `<div class="matrix-wrap" id="matrix"><table class="matrix"><thead>${head}</thead><tbody>${lines}</tbody></table></div>
+      <div class="legend">${['OK', 'PARTIAL', 'WA', 'TLE', 'MLE', 'RE', 'NOOUT', 'CHKERR'].map(k => `<span><span class="tag ${vClass(k)}">${vShort(k)}</span>${esc(vName(k))}</span>`).join('')}</div>`;
+  }
+  const nsel = sel.size;
+  const base = res && res.baseline && Object.keys(res.baseline).length
+    ? ' · ' + t('calibrated memory (empty program: %{list})', { list: Object.entries(res.baseline).map(([k, v]) => esc(k) + ' ' + fmtKb(v)).join(', ') }) : '';
+  const testsLink = `<button class="linkbtn" data-act="tab" data-v="tests">${t('Tests and scoring')}</button>`;
+  return `
+  <div class="toolbar">
+    <button class="btn" data-act="scan" ${running ? 'disabled' : ''}>${ICON.scan} ${t('Detect')}</button>
+    <button class="btn primary" data-act="eval-problem" ${running || !p.tests.length ? 'disabled' : ''}>${ICON.play} ${t('Evaluate problem')}</button>
+    <button class="btn" data-act="eval-selected" ${running || !nsel ? 'disabled' : ''}>${ICON.play} ${t('Evaluate selection')}${nsel ? ' (' + nsel + ')' : ''}</button>
+    <button class="btn" data-act="eval-all" ${running ? 'disabled' : ''} title="${esc(t('All problems, all students'))}">${ICON.play} ${t('All problems')}</button>
+    <button class="btn danger" data-act="stop" ${running ? '' : 'disabled'}>${ICON.stop} ${t('Stop')}</button>
+    <div class="sep-v"></div>
+    <div class="progress" id="progress"><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="what">${esc(what)}${job.total ? ` · ${job.done}/${job.total}` : ''}</span></div>
+  </div>
+  ${!p.tests.length ? `<p class="hint">${t('The problem has no tests in its scoring scheme yet. Open %{tab} and press “Detect tests”.', { tab: testsLink })}</p>` : ''}
+  ${res && res.updated ? `<p class="hint">${t('Results from %{date}', { date: esc(res.updated) })} · ${t('engine %{name}', { name: esc(res.variant || '') })}${base}</p>` : ''}
+  ${body}
+  <details class="log" ${running ? 'open' : ''}><summary>${t('Log (%{n} lines)', { n: S.logs.length })}</summary><pre class="logbox" id="logbox">${esc(logText())}</pre></details>`;
+}
+function tmLog(line) {
+  // LOG LINES START WITH THE TIME (HH:MM:SS); ONLY THE MESSAGE AFTER IT IS TRANSLATED
+  const m = /^(\d\d:\d\d:\d\d )([\s\S]*)$/.exec(line);
+  return m ? m[1] + tm(m[2]) : tm(line);
+}
+function logText() { return S.logs.slice(-600).map(tmLog).join('\n'); }
+function rowHtml(p, r, checked) {
+  const sc = r.scan, rs = r.res;
+  const name = studentName(r.id);
+  const main = rs ? rs.main : (sc ? sc.main : '');
+  const lang = rs ? rs.lang : (sc ? sc.lang : '');
+  const size = rs ? rs.sizeJudged : (sc ? sc.sizeJudged : null);
+  const warns = [].concat(sc ? sc.warnings || [] : [], rs ? rs.notes || [] : []).map(tm);
+  const exists = sc ? sc.exists : true;
+  let comp = '<span class="hint">—</span>';
+  if (rs) {
+    if (rs.status === 'NOSRC') comp = `<span class="tag v-nosrc">${t('no source')}</span>`;
+    else if (rs.status === 'ERR') comp = `<span class="tag v-chk">${t('error')}</span>`;
+    else if (rs.compile && rs.compile.ok && !rs.compile.cmd) comp = `<span class="hint">${t('not needed')}</span>`;
+    else if (rs.compile && rs.compile.ok) comp = `<button class="linkbtn compok" data-act="compile-log" data-s="${esc(r.id)}" title="${esc(tm(rs.compile.cmd || ''))}">${t('yes')}</button> <small class="hint">${dec(rs.compile.ms / 1000, 1)} s</small>`;
+    else if (rs.compile && rs.compile.cmd) comp = `<button class="linkbtn compbad" data-act="compile-log" data-s="${esc(r.id)}">${t('error')}</button>`;
+  }
+  const bytid = new Map(((rs && rs.tests) || []).map(x => [String(x.id), x]));
+  const cells = p.tests.map(te => {
+    const tr = bytid.get(String(te.id));
+    if (!tr || !rs || rs.status !== 'DONE') {
+      if (rs && (rs.status === 'CE' || rs.status === 'NOSRC')) return `<td><span class="cell ${vClass(rs.status)}"><i>${vShort(rs.status)}</i></span></td>`;
+      return '<td><span class="cell empty"><i>·</i></span></td>';
+    }
+    const tip = `${vName(tr.status)}: ${tm(tr.msg || '')}\n${t('Time')}: ${fmtMs(tr.timeMs)}   ${t('Memory')}: ${fmtKb(tr.memKb)}${tr.stackKb != null ? '   ' + t('Stack') + ': ' + fmtKb(tr.stackKb) : ''}`;
+    return `<td><button class="cell ${vClass(tr.status)}" data-act="cell" data-s="${esc(r.id)}" data-t="${esc(te.id)}" title="${esc(tip)}"><b>${dec(tr.score)}</b><i>${vShort(tr.status)}</i></button></td>`;
+  }).join('');
+  let grade = '<span class="grade none">—</span>';
+  if (rs && rs.status === 'NOSRC') grade = `<span class="grade none" title="${esc(t('No source'))}">0</span>`;
+  else if (rs && rs.status !== undefined) {
+    const s = Number(rs.score || 0), mx = Number(rs.max || maxScoreOf(p));
+    grade = `<span class="grade ${s <= 0 ? 'zero' : (s >= mx ? 'full' : '')}" title="${esc((rs.notes || []).map(tm).join('\n'))}">${dec(s)}</span>`;
+  }
+  return `<tr class="${checked ? 'sel' : ''}">
+    <td class="stick"><input type="checkbox" data-act="sel-row" data-s="${esc(r.id)}" ${checked ? 'checked' : ''} aria-label="${esc(t('Select %{id}', { id: r.id }))}"></td>
+    <td class="stick2"><div class="who"><b><button class="linkbtn" style="text-decoration:none;color:inherit" data-act="student" data-s="${esc(r.id)}">${esc(r.id)}</button>${warns.length ? ` <span class="warnmark" title="${esc(warns.join('\n'))}">⚠</span>` : ''}</b>${name ? `<small>${esc(name)}</small>` : ''}</div></td>
+    <td>${exists ? (main ? `<span class="mono">${esc(main)}</span> <small class="hint">${esc(lang)}</small>` : `<span class="hint">${t('not found')}</span>`) : `<span class="hint">${t('folder missing')}</span>`}</td>
+    <td class="num">${size != null && exists ? fmtBytes(size) : ''}${rs && rs.sizeOk === false ? ` <span class="warnmark" title="${esc(t('Over the size limit'))}">⚠</span>` : ''}</td>
+    <td>${comp}</td>${cells}
+    <td class="num">${grade}</td></tr>`;
+}
+function updateEvalLive() {
+  if (S.tab !== 'eval' || !S.ws) return;
+  const now = Date.now();
+  if (now - S.lastRender > 700 || !S.job.running) { S.lastRender = now; renderMain(); return; }
+  const lb = $('#logbox');
+  if (lb) { lb.textContent = logText(); lb.scrollTop = lb.scrollHeight; }
+}
+
+async function scanProblem(name, quiet) {
+  const r = await api('/api/scan', { workspace: S.ws, problem: name });
+  S.scan[name] = r;
+  if (!quiet) toast(t('Found: %{students} students with a folder, %{tests} tests on disk', { students: r.students.filter(s => s.exists).length, tests: r.tests.length }));
+  if (S.tab === 'eval' || S.tab === 'problem') renderMain();
+  return r;
+}
+async function startEval(problems, students, tests) {
+  if (S.dirty) await saveWs();
+  await api('/api/eval/start', { workspace: S.ws, problems, students: students || null, tests: tests || null });
+  S.job = { running: true, done: 0, total: 0, phase: 'starting' };
+  S.logs = []; S.logNext = 0; S.rv = -1;
+  renderMain();
+  poll();
+}
+async function poll() {
+  clearTimeout(S.pollTimer);
+  try {
+    const st = await api(`/api/eval/status?log=${S.logNext}&rv=${S.rv}`);
+    if (st.log && st.log.length) S.logs.push(...st.log);
+    if (S.logs.length > 5000) S.logs = S.logs.slice(-3000);
+    S.logNext = st.logNext;
+    if (st.results) { S.rv = st.rv; for (const k of Object.keys(st.results)) S.results[k] = st.results[k]; }
+    const was = S.job.running;
+    S.job = st;
+    if (st.running) { updateEvalLive(); S.pollTimer = setTimeout(poll, 450); }
+    else {
+      S.pollTimer = null;
+      if (was) toast(st.phase === 'stopped' ? t('Evaluation stopped') : t('Evaluation finished'));
+      renderMain();
+    }
+  } catch (e) { S.pollTimer = setTimeout(poll, 1500); }
+}
+
+/* ---------------------------------------------------------------- TEST DETAILS */
+function findRes(pname, sid) { const r = S.results[pname]; return r ? (r.students || []).find(x => x.id === sid) : null; }
+async function openCell(sid, tid) {
+  const p = P(), sr = findRes(p.name, sid);
+  if (!sr) return;
+  const tr = (sr.tests || []).find(x => String(x.id) === String(tid));
+  const te = p.tests.find(x => String(x.id) === String(tid));
+  if (!tr || !te) return;
+  const Lt = Number(te.timeMs) || Number(p.limits.timeMs), Lm = Number(te.memMb) || Number(p.limits.memMb);
+  const outLabel = p.io.output === 'stdout' ? t('The program’s standard output') : t('The file written by the program');
+  const loading = `<div class="note">${t('Loading…')}</div>`;
+  const html = `
+    <div class="msgbox ${vClass(tr.status)}"><b>${esc(vName(tr.status))}</b> — ${t('%{score} of %{max} points', { score: dec(tr.score), max: dec(tr.max) })}<br>${esc(tm(tr.msg || ''))}${tr.detail ? '<br>' + esc(tm(tr.detail)) : ''}</div>
+    <div class="metrics">
+      <div class="metric"><span>${t('CPU time')}</span><b>${fmtMs(tr.cpuMs)}</b></div>
+      <div class="metric"><span>${t('Wall time')}</span><b>${fmtMs(tr.wallMs)}</b></div>
+      <div class="metric"><span>${t('Time limit')}</span><b>${Lt ? Lt + ' ms' : '—'}</b></div>
+      <div class="metric"><span>${t('Memory (RAM)')}</span><b>${fmtKb(tr.memKb)}</b>${tr.memRawKb != null && tr.memRawKb !== tr.memKb ? `<span>${t('measured %{value}', { value: fmtKb(tr.memRawKb) })}</span>` : ''}</div>
+      <div class="metric"><span>${t('Memory limit')}</span><b>${Lm ? dec(Lm) + ' MB' : '—'}</b></div>
+      <div class="metric"><span>${t('Stack')}</span><b>${fmtKb(tr.stackKb)}</b><span>${t('limit %{value}', { value: p.limits.stackMb ? dec(p.limits.stackMb) + ' MB' : '—' })}</span></div>
+      <div class="metric"><span>${t('Exit code')}</span><b>${tr.signal ? t('signal %{n}', { n: tr.signal }) : esc(tr.exit)}</b></div>
+    </div>
+    ${tr.stderr ? `<h4 style="margin:6px 0">${t('Error messages (stderr)')}</h4><pre class="code" style="max-height:140px">${esc(tr.stderr)}</pre>` : ''}
+    <div class="panes" style="margin-top:12px">
+      <div class="pane"><h4>${t('Input')} <small class="mono">${esc(te.input)}</small></h4><div class="textview" id="pv-in">${loading}</div></div>
+      <div class="pane"><h4>${t('Correct output')} <small class="mono">${esc(te.ok)}</small></h4><div class="textview" id="pv-ok">${loading}</div></div>
+      <div class="pane"><h4>${outLabel}</h4><div class="textview" id="pv-out">${loading}</div></div>
+    </div>`;
+  openModal(`${esc(sid)} · ${esc(t('test %{id}', { id: tid }))} · ${esc(p.name)}`, html, [
+    tr.out ? [t('Open the outputs folder'), () => api('/api/open', { path: tr.out.replace(/[\\/][^\\/]*$/, '') }).catch(fail)] : null,
+    [t('Re-evaluate this test'), () => { closeModal(); startEval([p.name], [sid], [String(tid)]).catch(fail); }, S.job.running],
+    [t('Close'), closeModal, false, true]
+  ].filter(Boolean), true);
+  const load = async (path, max) => { if (!path) return null; try { return (await FS.read(path, max || 300000)).text; } catch (e) { return null; } };
+  const [tin, tok, tout] = await Promise.all([load(testFile(p, te.input)), load(testFile(p, te.ok)), load(tr.out)]);
+  const diffLine = firstDiffLine(tout, tok, p.compare.mode);
+  fillText('#pv-in', tin, -1, t('File unavailable'));
+  fillText('#pv-ok', tok, diffLine, t('File unavailable'));
+  fillText('#pv-out', tout, diffLine, tr.status === 'NOOUT' ? t('The program did not create the output file') : t('The output was not kept (see Settings → keep the outputs)'));
+  if (diffLine >= 0) { const el = $('#pv-out .ln.diff'); if (el) el.scrollIntoView({ block: 'center' }); const e2 = $('#pv-ok .ln.diff'); if (e2) e2.scrollIntoView({ block: 'center' }); }
+}
+function splitLines(s) { return String(s).replace(/\r/g, '').split('\n').map(l => l.replace(/[ \t]+$/, '')); }
+function firstDiffLine(out, ok, mode) {
+  if (out == null || ok == null || mode === 'checker') return -1;
+  const a = splitLines(out), b = splitLines(ok);
+  while (a.length && a[a.length - 1] === '') a.pop();
+  while (b.length && b[b.length - 1] === '') b.pop();
+  const n = Math.max(a.length, b.length);
+  for (let i = 0; i < n; i++) if ((a[i] ?? null) !== (b[i] ?? null)) {
+    if (mode === 'tokens' || mode === 'real') { if ((a[i] || '').trim().split(/\s+/).join(' ') === (b[i] || '').trim().split(/\s+/).join(' ')) continue; }
+    return i;
+  }
+  return -1;
+}
+function fillText(selector, text, diffLine, missing) {
+  const el = $(selector);
+  if (!el) return;
+  if (text == null) { el.innerHTML = `<div class="note">${esc(missing)}</div>`; return; }
+  const lines = String(text).replace(/\r/g, '').split('\n');
+  if (lines.length > 1 && lines[lines.length - 1] === '') lines.pop();
+  const max = 3000;
+  el.innerHTML = lines.slice(0, max).map((l, i) => `<div class="ln${i === diffLine ? ' diff' : ''}"><em>${i + 1}</em>${esc(l.length > 2000 ? l.slice(0, 2000) + '…' : l)}</div>`).join('')
+    + (lines.length > max ? `<div class="note">${t('… %{n} more lines', { n: lines.length - max })}</div>` : '');
+}
+function showCompileLog(sid) {
+  const sr = findRes(S.cur, sid);
+  if (!sr) return;
+  openModal(esc(t('Compilation · %{id}', { id: sid })), `<p class="hint">${t('Command:')}</p><pre class="code">${esc(tm(sr.compile.cmd || ''))}</pre>
+    <p class="hint" style="margin-top:12px">${t('Compiler messages:')}</p><pre class="code">${esc(sr.compile.log ? tm(sr.compile.log) : t('(no messages)'))}</pre>`, [[t('Close'), closeModal, false, true]], true);
+}
+async function showStudent(sid) {
+  const p = P(), sr = findRes(p.name, sid), sc = S.scan[p.name] ? S.scan[p.name].students.find(x => x.id === sid) : null;
+  const root = sr ? sr.root : (sc ? sc.root : ''), dir = sr ? sr.dir : (sc ? sc.dir : '');
+  const main = sr ? sr.main : (sc ? sc.main : '');
+  const srcs = sr ? sr.sources : (sc ? sc.sources : []);
+  const notes = [].concat(sc ? sc.warnings || [] : [], sr ? sr.notes || [] : []).map(tm);
+  const any = sr || sc;
+  openModal(`${esc(sid)}${studentName(sid) ? ' · ' + esc(studentName(sid)) : ''}`, `
+    <div class="form">
+      <label>${t('Student folder')}</label><span class="mono">${esc(dir || '—')}</span>
+      <label>${t('Project root')}</label><span class="mono">${esc(root || '—')}</span>
+      <label>${t('Main file')}</label><span class="mono">${esc(main || '—')}</span>
+      <label>${t('Compiled sources')}</label><span class="mono">${esc((srcs || []).join(', ') || '—')}</span>
+      <label>${t('Source size')}</label><span>${any ? t('main %{main}, all %{all}', { main: fmtBytes(any.sizeMain), all: fmtBytes(any.sizeAll) }) : '—'}</span>
+      ${sr ? `<label>${t('Score')}</label><span>${t('%{score} of %{max}', { score: `<b>${dec(sr.score)}</b>`, max: dec(sr.max) })}</span>` : ''}
+    </div>
+    ${notes.length ? `<h3>${t('Notes')}</h3><ul>${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+    <h3>${t('Source')}</h3><pre class="code" id="srcview">${t('Loading…')}</pre>`, [
+    dir ? [t('Open the folder'), () => api('/api/open', { path: root || dir }).catch(fail)] : null,
+    [t('Evaluate only this student'), () => { closeModal(); startEval([p.name], [sid]).catch(fail); }, S.job.running || !p.tests.length],
+    [t('Close'), closeModal, false, true]
+  ].filter(Boolean), true);
+  if (root && main) {
+    try { const r = await FS.read(joinP(root, main), 300000); $('#srcview').textContent = r.text; }
+    catch (e) { $('#srcview').textContent = t('Cannot read the source: %{error}', { error: tm(e.message) }); }
+  } else if ($('#srcview')) $('#srcview').textContent = t('No source detected.');
+}
+
+/* ================================================================ TESTS AND SCORING */
+function viewTests() {
+  const p = P(), tdir = testsDirOf(p);
+  const rows = p.tests.map((te, i) => `<tr>
+    <td>${i + 1}</td>
+    <td><input type="text" class="w-s" ${bind(`p:tests.${i}.id`)} value="${esc(te.id)}" aria-label="${esc(t('Test id'))}"></td>
+    <td><input type="text" class="f-name" ${bind(`p:tests.${i}.input`)} value="${esc(te.input)}" aria-label="${esc(t('Input file'))}"></td>
+    <td><input type="text" class="f-name" ${bind(`p:tests.${i}.ok`)} value="${esc(te.ok)}" aria-label="${esc(t('Answer file'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.points`, 'num')} value="${esc(te.points)}" aria-label="${esc(t('Points'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.timePoints`, 'num')} value="${esc(te.timePoints)}" aria-label="${esc(t('Time points'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.memPoints`, 'num')} value="${esc(te.memPoints)}" aria-label="${esc(t('Memory points'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.timeMs`, 'num')} value="${esc(te.timeMs || '')}" placeholder="${esc(p.limits.timeMs)}" aria-label="${esc(t('Time limit'))}"></td>
+    <td class="num"><input type="number" step="any" ${bind(`p:tests.${i}.memMb`, 'num')} value="${esc(te.memMb || '')}" placeholder="${esc(p.limits.memMb)}" aria-label="${esc(t('Memory limit'))}"></td>
+    <td><button class="btn small" data-act="test-view" data-i="${i}">${t('View')}</button> <button class="iconbtn" data-act="test-del" data-i="${i}" title="${esc(t('Delete the test'))}">${ICON.x}</button></td></tr>`).join('');
+  const pol = (k, modes) => `${sel(`p:policy.${k}.mode`, modes, 'data-rerender="1"')}
+     ${p.policy[k].mode === 'percent' ? `<span class="row">${t('keep %{input} %', { input: inp(`p:policy.${k}.percent`, 'num', 'class="w-s"') })}</span>` : ''}
+     ${p.policy[k].mode === 'penalty' ? `<span class="row">${t('subtract %{input} points', { input: inp(`p:policy.${k}.penalty`, 'num', 'class="w-s"') })}</span>` : ''}`;
+  const tmodes = [['zero', t('0 points for the test')], ['percent', t('percentage of the points')], ['linear', t('linear decrease up to the hard limit')], ['ignore', t('report only')]];
+  const smodes = [['zero', t('0 points for the problem')], ['percent', t('percentage of the total')], ['penalty', t('fixed penalty')], ['ignore', t('report only')]];
+  const argHint = p.compare.protocol === 'oji' ? t('(none)') : (p.compare.protocol === 'fraction' ? '{input} {ok} {output}' : '{input} {output} {ok}');
+  const name = esc(p.name);
+  return `
+  <section class="sheet panel">
+    <h2>${t('Tests')}</h2>
+    <p class="hint">${t('One tests folder for all students. Patterns use <code>{n}</code> for the test number and <code>{problem}</code> for the problem name.')}</p>
+    <div class="form">
+      <label>${t('Tests folder')}</label>
+      <div class="pathfield"><input type="text" ${bind('p:testsDir')} value="${esc(p.testsDir)}" placeholder="${esc(S.ws.testsDir)}"><button class="btn small" data-act="pick-testsdir">${t('Choose…')}</button><button class="btn small" data-act="open-path" data-v="${esc(tdir)}">${t('Open')}</button></div>
+      <label></label><span class="vars mono">${esc(tdir)}</span>
+      <label>${t('Input / answer pattern')}</label>
+      <div class="row">${inp('p:inputPattern', 'str', 'class="w-m"')} ${inp('p:okPattern', 'str', 'class="w-m"')}</div>
+    </div>
+    <div class="toolbar" style="margin-top:14px">
+      <button class="btn primary" data-act="tests-detect">${ICON.scan} ${t('Detect tests')}</button>
+      <button class="btn" data-act="tests-add">${t('Add a test')}</button>
+      <div class="sep-v"></div>
+      <button class="btn" data-act="tests-split">${t('Split 100 points equally')}</button>
+      <button class="btn" data-act="tests-all" data-v="10">${t('All tests: 10 points')}</button>
+      <div class="sep-v"></div>
+      <button class="btn" data-act="scoring-import">${t('Import scoring…')}</button>
+      <button class="btn" data-act="scoring-export">${t('Export scoring…')}</button>
+    </div>
+    ${p.tests.length ? `<div class="tablewrap tests-table"><table class="grid"><thead><tr><th>#</th><th>Id</th><th>${t('Input')}</th><th>${t('Correct output')}</th><th class="num">${t('Points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the time limit'))}">${t('Time points')}</th><th class="num" title="${esc(t('Awarded if the test is correct and within the memory limit'))}">${t('Memory points')}</th><th class="num">${t('Time (ms)')}</th><th class="num">${t('Memory (MB)')}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+      : `<p class="hint">${t('The scoring scheme has no tests. Put the files in the tests folder and press “Detect tests”.')}</p>`}
+    <p style="margin:12px 0 0">${t('Maximum score: %{score} points', { score: `<b id="maxscore">${dec(maxScoreOf(p))}</b>` })}</p>
+  </section>
+  <div class="cols" style="margin-top:16px">
+    <section class="sheet panel">
+      <h2>${t('Limits')}</h2>
+      <p class="hint">${t('Values set on a test (the Time and Memory columns) take priority. 0 means no limit.')}</p>
+      <div class="form">
+        <label>${t('Time')}</label><div class="row">${t('%{input} ms, measured as %{mode}', { input: inp('p:limits.timeMs', 'num'), mode: sel('p:limits.timeMode', [['cpu', t('processor time')], ['wall', t('real time')]]) })}</div>
+        <label>${t('Hard time limit')}</label><div class="row">${t('%{input} × the limit (the program is stopped after that)', { input: inp('p:limits.hardTimeFactor', 'num', 'class="w-s"') })}</div>
+        <label>${t('Total memory')}</label><div class="row">${inp('p:limits.memMb', 'num')} MB</div>
+        <label>${t('Hard memory limit')}</label><div class="row">${t('%{input} × the limit', { input: inp('p:limits.hardMemFactor', 'num', 'class="w-s"') })}</div>
+        <label>${t('Stack')}</label><div class="row">${inp('p:limits.stackMb', 'num')} MB</div>
+        <label>${t('Source size')}</label><div class="row">${inp('p:limits.sourceKb', 'num')} KB</div>
+        <label>${t('Maximum output')}</label><div class="row">${inp('p:limits.outputMb', 'num')} MB</div>
+        <label>${t('Memory calibration')}</label><label class="chk">${inp('p:limits.calibrate', 'bool')} ${t('subtract the memory of an empty program (like at OJI)')}</label>
+      </div>
+    </section>
+    <section class="sheet panel">
+      <h2>${t('What happens when a limit is exceeded')}</h2>
+      <p class="hint">${t('A test that finished but went over a limit can get 0, a percentage or a linear decrease. A program stopped at the hard limit gets 0.')}</p>
+      <div class="form">
+        <label>${t('Time limit exceeded')}</label><div class="row">${pol('time', tmodes)}</div>
+        <label>${t('Memory limit exceeded')}</label><div class="row">${pol('memory', tmodes)}</div>
+        <label>${t('Source too large')}</label><div class="row">${pol('size', smodes)}</div>
+      </div>
+      <h3>${t('Extra points')}</h3>
+      <div class="form">
+        <label>${t('For compiling')}</label><div class="row">${t('%{input} points if the source compiles', { input: inp('p:points.compile', 'num') })}</div>
+        <label>${t('For size')}</label><div class="row">${t('%{input} points if the source is within the limit', { input: inp('p:points.size', 'num') })}</div>
+      </div>
+    </section>
+  </div>
+  <section class="sheet panel" style="margin-top:16px">
+    <h2>${t('Output comparison')}</h2>
+    <div class="form">
+      <label>${t('Mode')}</label>${sel('p:compare.mode', [['lines', t('line by line, ignoring trailing spaces (like at OJI)')], ['tokens', t('word by word (ignores spaces)')], ['exact', t('identical')], ['real', t('real numbers with tolerance')], ['checker', t('external checker (verif)')]], 'data-rerender="1"')}
+      <label>${t('Letter case')}</label><label class="chk">${inp('p:compare.ignoreCase', 'bool')} ${t('does not matter')}</label>
+      ${p.compare.mode === 'real' ? `<label>${t('Tolerance')}</label><div class="row">${inp('p:compare.epsilon', 'num', 'class="w-m"')} <span class="hint">|a − b| ≤ ε · max(1, |b|)</span></div>` : ''}
+      ${p.compare.mode === 'checker' ? `
+      <label>${t('Checker')}</label><div class="pathfield"><input type="text" ${bind('p:compare.checker')} value="${esc(p.compare.checker)}" placeholder="${esc(t('verif.cpp (from the tests folder)'))}"><button class="btn small" data-act="pick-checker">${t('Choose…')}</button></div>
+      <label>${t('Protocol')}</label>${sel('p:compare.protocol', [['oji', t('OJI: prints “score message”')], ['fraction', t('prints a fraction between 0 and 1')], ['exitcode', t('exit code 0 = correct (testlib)')]], 'data-rerender="1"')}
+      <label>${t('Arguments')}</label><div class="row">${inp('p:compare.args', 'str', 'class="w-m" placeholder="' + esc(argHint) + '"')} <span class="vars">${t('variables:')} <code>{input}</code> <code>{ok}</code> <code>{output}</code></span></div>` : ''}
+    </div>
+    ${p.compare.mode === 'checker' ? `<p class="hint" style="margin-top:10px">${t('A .c or .cpp checker is compiled automatically. With the OJI protocol the checker finds %{in}, %{ok} and %{out} in its current folder, and the printed score is capped at the points of the test.', { in: `<code>${name}.in</code>`, ok: `<code>${name}.ok</code>`, out: `<code>${name}.out</code>` })}</p>` : ''}
+  </section>`;
+}
+async function detectTests() {
+  const p = P();
+  const sc = await scanProblem(p.name, true);
+  if (!sc.testsDirExists) throw new Error(t('The tests folder does not exist: %{path}', { path: sc.testsDir }));
+  let pts = null;
+  try { const tf = joinP(sc.testsDir, 'teste.txt'); if ((await FS.stat(tf)).exists) pts = parseTesteTxt((await FS.read(tf)).text); } catch (e) { /* NO TESTE.TXT */ }
+  const old = new Map(p.tests.map(te => [String(te.id), te]));
+  const out = sc.tests.map(d => {
+    const o = old.get(d.id);
+    if (o) return Object.assign(o, { input: d.input, ok: d.ok });
+    const fromTxt = pts ? pts.find(x => x.id === d.id) : null;
+    return { id: d.id, input: d.input, ok: d.ok, points: fromTxt ? fromTxt.points : 10, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 };
+  });
+  const gone = p.tests.filter(te => !sc.tests.some(d => d.id === String(te.id))).length;
+  p.tests = out;
+  markDirty(true);
+  renderMain();
+  const miss = sc.tests.filter(d => !d.okExists).length;
+  toast(t('%{n} tests', { n: out.length }) + (gone ? t(', %{n} removed (no longer on disk)', { n: gone }) : '')
+    + (miss ? t(', %{n} without an answer file', { n: miss }) : '') + (pts ? t(', points from teste.txt') : ''));
+  if (sc.checker && p.compare.mode !== 'checker') toast(t('Found the checker %{name}. You can enable it under “Output comparison”.', { name: sc.checker }));
+}
+function parseTesteTxt(text) {
+  // OJI TESTE.TXT: "TEST POINTS" ON EACH LINE
+  const out = [];
+  for (const line of String(text).replace(/^﻿/, '').split(/\r?\n/)) {
+    const m = line.trim().split(/[\s;,\t]+/).filter(Boolean);
+    if (!m.length || m[0].startsWith('#')) continue;
+    if (!/^[\w.-]+$/.test(m[0])) continue;
+    out.push({ id: m[0], points: m.length > 1 && !isNaN(Number(m[1])) ? Number(m[1]) : 10 });
+  }
+  return out;
+}
+async function viewTestFiles(i) {
+  const p = P(), te = p.tests[i];
+  const loading = `<div class="note">${t('Loading…')}</div>`;
+  openModal(`${esc(t('Test %{id}', { id: te.id }))} · ${esc(p.name)}`, `<div class="panes" style="grid-template-columns:1fr 1fr">
+    <div class="pane"><h4>${t('Input')} <small class="mono">${esc(te.input)}</small></h4><div class="textview" id="pv-in">${loading}</div></div>
+    <div class="pane"><h4>${t('Correct output')} <small class="mono">${esc(te.ok)}</small></h4><div class="textview" id="pv-ok">${loading}</div></div></div>`,
+    [[t('Close'), closeModal, false, true]], true);
+  const load = async path => { try { return (await FS.read(path, 300000)).text; } catch (e) { return null; } };
+  fillText('#pv-in', await load(testFile(p, te.input)), -1, t('The file does not exist'));
+  fillText('#pv-ok', await load(testFile(p, te.ok)), -1, t('The file does not exist'));
+}
+
+/* ---------------------------------------------------------------- SCORING IMPORT / EXPORT */
+function scoringFileName(p) { return `${p.name}.scoring.json`; }
+function exportScoring() {
+  const p = P();
+  openModal(esc(t('Export the scoring scheme')), `<p class="hint">${t('The scoring scheme holds the tests, points, limits, policies, comparison mode and run rules of problem %{name}. You can import it into any version of the evaluator.', { name: `<b>${esc(p.name)}</b>` })}</p>`, [
+    [t('Download the JSON file'), () => { download(scoringFileName(p), scoringJson(p), 'application/json'); closeModal(); }, false, true],
+    [t('Save in the tests folder'), async () => { const f = joinP(testsDirOf(p), scoringFileName(p)); await FS.write(f, scoringJson(p)); toast(t('Saved: %{path}', { path: f })); closeModal(); }],
+    [t('Save in another folder…'), async () => { const d = await pickPath('folder', testsDirOf(p)); if (!d) return; const f = joinP(d, scoringFileName(p)); await FS.write(f, scoringJson(p)); toast(t('Saved: %{path}', { path: f })); closeModal(); }],
+    [t('Download teste.txt (OJI)'), () => { download('teste.txt', p.tests.map(te => `${te.id} ${te.points}`).join('\r\n') + '\r\n', 'text/plain'); }],
+    [t('Cancel'), closeModal]
+  ]);
+}
+function scoringJson(p) { return JSON.stringify({ format: SCORING_FORMATS[0], version: 1, exported: nowHuman(), problem: clone(p) }, null, 2); }
+function download(name, text, type) {
+  const blob = new Blob([text], { type: (type || 'text/plain') + ';charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+function importScoring() {
+  openModal(esc(t('Import a scoring scheme')), `
+    <p class="hint">${t('Accepted formats: a scoring scheme exported by the evaluator (<code>.scoring.json</code>), an <code>evaluator.json</code> file (you pick the problem), OJI <code>teste.txt</code> (test number and points on each line) and OJI <code>rounds.xml</code> (problem limits).')}</p>
+    <div class="row"><input type="file" id="imp-file" accept=".json,.txt,.xml,.csv"></div>`, [
+    [t('Choose a file from a folder…'), async () => { const f = await pickPath('file', testsDirOf(P())); if (!f) return; const r = await FS.read(f, 50000000); closeModal(); await applyImport(r.text, f); }],
+    [t('Cancel'), closeModal]
+  ]);
+  $('#imp-file').addEventListener('change', async e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const text = await f.text();
+    closeModal();
+    applyImport(text, f.name).catch(fail);
+  });
+}
+async function applyImport(text, name) {
+  const txt = String(text).replace(/^﻿/, '');
+  const p = P();
+  if (/^\s*[{[]/.test(txt)) {
+    let j;
+    try { j = JSON.parse(txt); } catch (e) { throw new Error(t('Invalid JSON: %{error}', { error: e.message })); }
+    let src = null;
+    if (j && SCORING_FORMATS.includes(j.format) && j.problem) src = j.problem;
+    else if (j && Array.isArray(j.problems)) {
+      if (!j.problems.length) throw new Error(t('The file contains no problems'));
+      src = j.problems.length === 1 ? j.problems[0] : await choose(t('Choose the problem'), j.problems.map(x => [x, t('%{name} (%{n} tests)', { name: x.name, n: (x.tests || []).length })]));
+      if (!src) return;
+    } else if (j && j.tests && j.limits) src = j;
+    if (!src) throw new Error(t('Unknown JSON file format'));
+    const nt = (src.tests || []).length;
+    if (!await confirmBox(t('Replace the scoring scheme of problem “%{name}” with the imported one (%{tests} tests, %{points} points)? The problem name stays “%{name}”.', { name: p.name, tests: nt, points: dec(maxScoreOf(normalizeProblem(clone(src)))) }))) return;
+    const keep = p.name;
+    const np = normalizeProblem(clone(src));
+    np.name = keep;
+    const i = S.ws.problems.indexOf(p);
+    S.ws.problems[i] = np;
+    markDirty(true); render();
+    toast(t('Scoring scheme imported'));
+    return;
+  }
+  if (/<oji|<problema/i.test(txt)) {
+    const n = applyRoundsXml(txt);
+    markDirty(true); render();
+    toast(n ? t('Limits imported for %{n} problems', { n }) : t('No problem in rounds.xml has the same name'));
+    return;
+  }
+  const rows = parseTesteTxt(txt);
+  if (!rows.length) throw new Error(t('No “test points” line found in %{file}', { file: name }));
+  if (!await confirmBox(t('Set the points of %{n} tests from %{file}? Tests missing from the scoring scheme are added using the patterns.', { n: rows.length, file: baseName(name) }))) return;
+  for (const r of rows) {
+    let t0 = p.tests.find(x => String(x.id) === r.id);
+    if (!t0) { t0 = { id: r.id, input: tpl(p.inputPattern, { problem: p.name, nr: p.nr, n: r.id }), ok: tpl(p.okPattern, { problem: p.name, nr: p.nr, n: r.id }), points: 0, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 }; p.tests.push(t0); }
+    t0.points = r.points;
+  }
+  p.tests.sort((a, b) => natcmp(a.id, b.id));
+  markDirty(true); renderMain();
+  toast(t('Points imported'));
+}
+function parseRoundsXml(xml) {
+  // OJI ROUNDS.XML: <PROBLEMA> WITH NUME AND LIMITA_* FIELDS
+  const out = [];
+  let doc = null;
+  try { doc = new DOMParser().parseFromString(xml, 'application/xml'); } catch (e) { doc = null; }
+  if (!doc || doc.getElementsByTagName('parsererror').length) return out;
+  for (const el of Array.from(doc.getElementsByTagName('problema'))) {
+    const val = k => { const c = el.getElementsByTagName(k)[0]; return c ? c.textContent.trim() : (el.getAttribute(k) || ''); };
+    const name = val('nume');
+    if (!name) continue;
+    out.push({ name, timeMs: parseFloat(val('limita_timp').replace(',', '.')) || 0, memMb: parseFloat(val('limita_memorie').replace(',', '.')) || 0,
+      stackMb: parseFloat(val('limita_stiva').replace(',', '.')) || 0, sourceKb: parseFloat(val('limita_dimens_sursa').replace(',', '.')) || 0 });
+  }
+  return out;
+}
+function applyRoundsXml(xml) {
+  let n = 0;
+  for (const r of parseRoundsXml(xml)) {
+    const p = probByName(r.name);
+    if (!p) continue;
+    Object.assign(p.limits, { timeMs: r.timeMs || p.limits.timeMs, memMb: r.memMb || p.limits.memMb, stackMb: r.stackMb || p.limits.stackMb, sourceKb: r.sourceKb });
+    n++;
+  }
+  return n;
+}
+async function importOji() {
+  // BUILDS A WORKSPACE FROM AN OJI EVALUATOR FOLDER (ROUNDS.XML, PROBLEME/, CONTESTANTS.TXT)
+  const root = await pickPath('folder', S.ws ? S.ws.root : '', t('Choose the OJI Evaluator folder (the one with rounds.xml)'));
+  if (!root) return;
+  let xml = '';
+  try { xml = (await FS.read(joinP(root, 'rounds.xml'))).text; } catch (e) { throw new Error(t('rounds.xml not found in %{folder}', { folder: root })); }
+  const probs = parseRoundsXml(xml);
+  let names = probs.map(x => x.name);
+  if (!names.length) {
+    try { names = (await FS.list(joinP(root, 'probleme'))).entries.filter(e => e.dir).map(e => e.name); } catch (e) { names = []; }
+  }
+  if (!names.length) throw new Error(t('No problem found in rounds.xml or in the probleme folder'));
+  const ws = defaultWorkspace(root);
+  Object.assign(ws, { name: t('OJI import'), layout: 'flat', flatDir: '{root}/probleme/{problem}/surse_concurenti', flatPattern: '{student}{nr}.{ext}', testsDir: '{root}/probleme/{problem}/teste', workDir: '{root}/_work', resultsDir: '{root}/_results' });
+  ws.languages = defaultLanguages();
+  let k = 0;
+  for (const name of names) {
+    k++;
+    const p = defaultProblem(name, k);
+    const lim = probs.find(x => x.name === name);
+    if (lim) Object.assign(p.limits, { timeMs: lim.timeMs || 1000, memMb: lim.memMb || 64, stackMb: lim.stackMb || 8, sourceKb: lim.sourceKb || 0 });
+    const tdir = joinP(joinP(joinP(root, 'probleme'), name), 'teste');
+    let files = [];
+    try { files = (await FS.list(tdir)).entries.filter(e => !e.dir).map(e => e.name); } catch (e) { files = []; }
+    let pts = [];
+    try { pts = parseTesteTxt((await FS.read(joinP(tdir, 'teste.txt'))).text); } catch (e) { pts = []; }
+    const ids = pts.length ? pts.map(x => x.id) : files.map(f => (f.match(new RegExp('^(\\d+)-' + reEsc(name) + '\\.in$', 'i')) || [])[1]).filter(Boolean).sort(natcmp);
+    p.tests = ids.map(id => ({ id, input: `${id}-${name}.in`, ok: `${id}-${name}.ok`, points: (pts.find(x => x.id === id) || { points: 10 }).points, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 }));
+    const verif = ['verif.exe', 'verif.cpp', 'verif.c', 'verif'].find(v => files.includes(v));
+    if (verif) Object.assign(p.compare, { mode: 'checker', checker: verif, protocol: 'oji' });
+    ws.problems.push(p);
+  }
+  try {
+    const txt = (await FS.read(joinP(root, 'contestants.txt'))).text;
+    for (const line of txt.split(/\r?\n/).slice(1)) {
+      const c = line.split('\t').map(x => x.trim());
+      if (c[0]) ws.students.push({ id: c[0], name: [c[1], c[2]].filter(Boolean).join(' '), group: c[3] || '' });
+    }
+  } catch (e) { /* NO CONTESTANTS FILE */ }
+  if (!await confirmBox(t('Found %{n} problems (%{names}) and %{m} contestants. Create the workspace in %{folder}?', { n: ws.problems.length, names: ws.problems.map(p => p.name).join(', '), m: ws.students.length, folder: root }))) return;
+  await FS.write(joinP(root, 'evaluator.json'), JSON.stringify(ws, null, 2));
+  await openWorkspace(root, false);
+  toast(t('OJI import finished'));
+}
+
+/* ================================================================ PROBLEM */
+function ioPreset(p) {
+  const io = p.io;
+  if (io.input === 'stdin' && io.output === 'stdout') return 'console';
+  if (io.runIn === 'project' || /[\\/]/.test(io.inputPath) || /[\\/]/.test(io.outputPath) || io.cwd) return 'project';
+  if (io.input === 'file' && io.output === 'file') return 'files';
+  return 'custom';
+}
+function viewProblem() {
+  const p = P(), pr = ioPreset(p), name = esc(p.name);
+  const rules = p.project.rootRules.map((r, i) => `<tr><td>${i + 1}</td>
+    <td><input type="text" class="w-m" ${bind(`p:project.rootRules.${i}.pattern`)} value="${esc(r.pattern)}" aria-label="${esc(t('Pattern'))}"></td>
+    <td><input type="number" class="w-s" ${bind(`p:project.rootRules.${i}.up`, 'num')} value="${esc(r.up)}" aria-label="${esc(t('Levels up'))}"></td>
+    <td><button class="iconbtn" data-act="rule-move" data-i="${i}" data-v="-1" title="${esc(t('Move up'))}">${ICON.up}</button><button class="iconbtn" data-act="rule-del" data-i="${i}" title="${esc(t('Delete the rule'))}">${ICON.x}</button></td></tr>`).join('');
+  const sc = S.scan[p.name];
+  const preview = sc ? `<div class="tablewrap" style="margin-top:10px"><table class="grid"><thead><tr><th>${t('Student')}</th><th>${t('Project root')}</th><th>${t('Main file')}</th><th>${t('Language')}</th><th>${t('Compiled sources')}</th><th class="num">${t('Size')}</th><th>${t('Notes')}</th></tr></thead><tbody>
+    ${sc.students.map(s => `<tr><td>${esc(s.id)}</td><td class="mono">${esc(s.root ? s.root.slice((s.dir || '').length) || t('(the student folder)') : '—')}</td><td class="mono">${esc(s.main || '—')}</td><td>${esc(s.lang)}</td><td class="mono" style="white-space:normal;max-width:300px">${esc((s.sources || []).join(', '))}</td><td class="num">${fmtBytes(s.sizeJudged)}</td><td style="white-space:normal">${esc((s.warnings || []).map(tm).join('; '))}</td></tr>`).join('')}
+    </tbody></table></div>` : '';
+  const settingsLink = `<button class="linkbtn" data-act="tab" data-v="settings">${t('Settings')}</button>`;
+  return `
+  <section class="sheet panel">
+    <h2>${t('Problem %{name}', { name })}</h2>
+    <div class="form">
+      <label>${t('Name')}</label><div class="row"><input type="text" class="w-m" value="${name}" disabled> <button class="btn small" data-act="problem-rename">${t('Rename')}</button> <button class="btn small" data-act="problem-dup">${t('Duplicate')}</button> <button class="btn small danger" data-act="problem-del">${t('Delete')}</button></div>
+      <label>${t('Number (OJI style)')}</label><div class="row">${inp('p:nr', 'num', 'class="w-s"')} <span class="hint">${t('used in the <code>{nr}</code> pattern, for example <code>BN_C_15<b>2</b>.cpp</code>')}</span></div>
+      <label>${t('Title')}</label>${inp('p:title', 'str', `class="w-l" placeholder="${esc(t('optional'))}"`)}
+    </div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('How the program gets its data')}</h2>
+    <div class="presets">
+      <button class="preset" data-act="io-preset" data-v="files" aria-pressed="${pr === 'files'}"><b>${t('Local files (olympiad)')}</b><span>${t('Reads %{in} and writes %{out} in the current folder.', { in: `<code>${name}.in</code>`, out: `<code>${name}.out</code>` })}</span></button>
+      <button class="preset" data-act="io-preset" data-v="console" aria-pressed="${pr === 'console'}"><b>${t('Console')}</b><span>${t('Reads from the keyboard (stdin) and prints on screen (stdout).')}</span></button>
+      <button class="preset" data-act="io-preset" data-v="project" aria-pressed="${pr === 'project'}"><b>${t('Project folder')}</b><span>${t('The files are in a folder relative to the root of the student’s project, e.g. <code>data/</code>.')}</span></button>
+    </div>
+    <div class="form">
+      <label>${t('Input')}</label><div class="row">${sel('p:io.input', [['file', t('from a file')], ['stdin', t('from the keyboard (stdin)')]], 'data-rerender="1"')} ${p.io.input === 'file' ? inp('p:io.inputPath', 'str', 'class="w-m mono"') : ''}</div>
+      <label>${t('Output')}</label><div class="row">${sel('p:io.output', [['file', t('to a file')], ['stdout', t('on screen (stdout)')]], 'data-rerender="1"')} ${p.io.output === 'file' ? inp('p:io.outputPath', 'str', 'class="w-m mono"') : ''}</div>
+      <label>${t('Where it runs')}</label>${sel('p:io.runIn', [['sandbox', t('in an empty temporary folder (recommended)')], ['project', t('directly in the student’s project folder')]], 'data-rerender="1"')}
+      <label>${t('Current folder')}</label><div class="row">${inp('p:io.cwd', 'str', `class="w-m mono" placeholder="${esc(t('(the root)'))}"`)} <span class="hint">${t('relative to the run root, e.g. <code>cmake-build-debug</code>')}</span></div>
+    </div>
+    <p class="hint" style="margin-top:10px">${p.io.runIn === 'project' ? t('Warning: in this mode the evaluator writes the input file directly into the student’s project and deletes the old output file before every test.') : t('The temporary folder mirrors the relative layout (e.g. %{path}), so the program finds its files just like in the project.', { path: `<code>data/${name}.in</code>` })}</p>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Building the project')}</h2>
+    <div class="presets">
+      <button class="preset" data-act="build-mode" data-v="command" aria-pressed="${p.project.buildMode === 'command'}"><b>${t('A single command')}</b><span>${t('gcc / g++ with the options from Settings, on the main file or on all sources.')}</span></button>
+      <button class="preset" data-act="build-mode" data-v="objects" aria-pressed="${p.project.buildMode === 'objects'}"><b>${t('Like the course scripts')}</b><span>${t('<code>compile.sh</code> + <code>build.sh</code> redone inside the evaluator: each .c/.cpp into an object, linked with g++ if there is any .cpp. Works on Windows too.')}</span></button>
+      <button class="preset" data-act="build-mode" data-v="scripts" aria-pressed="${p.project.buildMode === 'scripts'}"><b>${t('The student’s scripts')}</b><span>${t('Runs <code>bash-scripts/compile.sh</code> and <code>build.sh</code> from the project, then tests <code>release/program</code>. Needs bash.')}</span></button>
+    </div>
+    <div class="form">
+      ${p.project.buildMode === 'command' ? `<label>${t('Compiled sources')}</label>${sel('p:project.compileScope', [['main', t('only the main file')], ['all', t('all sources of the language in the project')]])}` : ''}
+      ${p.project.buildMode === 'objects' ? `<label>${t('Compiled sources')}</label><span class="hint" style="margin:0">${t('all .c files (with the C compiler) and .cpp files (with the C++ compiler) in the project, outside the ignored folders; the objects go to the work folder, not into the student’s project')}</span>` : ''}
+      ${p.project.buildMode === 'scripts' ? `<label>${t('Build command')}</label><div class="row">${inp('p:project.buildCommand', 'str', 'class="w-l mono"')} <span class="hint" style="margin:0">${t('<code>auto</code> = <code>bash bash-scripts/compile.sh &amp;&amp; bash bash-scripts/build.sh</code> (or the scripts in <code>scripts/</code> or in the root)')}</span></div>
+      <label>${t('Produced executable')}</label><div class="row">${inp('p:project.buildExe', 'str', 'class="w-m mono"')} <span class="hint" style="margin:0">${t('relative to the project root')}</span></div>` : ''}
+      <label>${t('Extra compile options')}</label>${inp('p:compileExtra', 'str', `class="w-l mono" placeholder="${esc(t('e.g. -DONLINE_JUDGE'))}"`)}
+    </div>
+    ${p.project.buildMode === 'scripts' ? `<p class="hint" style="margin-top:10px">${t('The scripts run in the student’s folder and write to <code>build/</code> and <code>release/</code>, exactly like <code>cbr.sh</code>. Since the evaluator does not control the build, the stack cannot be measured in this mode.')}</p>` : ''}
+    <p class="hint" style="margin-top:8px">${t('Libraries (<code>-lm</code>, <code>-pthread</code>, OpenGL, wxWidgets…) are added automatically from <code>#include</code>, like in <code>build.sh</code>. The rules are in %{settings}.', { settings: settingsLink })}</p>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Finding the student’s project')}</h2>
+    <p class="hint">${t('The rules are tried in order; the first match sets the project root (the folder of the file found, moved up by “levels”). Ignored folders are set in Settings.')}</p>
+    <div class="cols">
+      <div>
+        <div class="tablewrap"><table class="grid"><thead><tr><th>#</th><th>${t('Pattern')}</th><th>${t('Levels up')}</th><th></th></tr></thead><tbody>${rules}</tbody></table></div>
+        <div class="row" style="margin-top:8px"><button class="btn small" data-act="rule-add">${t('Add a rule')}</button> <button class="btn small" data-act="rule-reset">${t('Default rules')}</button></div>
+      </div>
+      <div class="form">
+        <label>${t('Maximum depth')}</label>${inp('p:project.maxDepth', 'num', 'class="w-s"')}
+        <label>${t('Main file')}</label>${inp('p:project.mainPatterns', 'str', 'class="w-l mono"')}
+        <label>${t('Source size')}</label>${sel('p:project.sizeScope', [['main', t('the main file')], ['all', t('all the files below')]])}
+        <label>${t('Extensions counted in the size')}</label>${inp('p:project.sizeExt', 'str', 'class="w-l mono"')}
+      </div>
+    </div>
+    <div class="toolbar" style="margin-top:14px;margin-bottom:0"><button class="btn" data-act="scan">${ICON.scan} ${t('Check the detection')}</button></div>
+    ${preview}
+  </section>`;
+}
+
+/* ================================================================ WORKSPACE */
+function viewWorkspace() {
+  const ws = S.ws, lay = ws.layout;
+  const studs = ws.students.map((s, i) => `<tr><td>${i + 1}</td>
+    <td><input type="text" class="w-m" ${bind(`ws:students.${i}.id`)} value="${esc(s.id)}" aria-label="Id"></td>
+    <td><input type="text" style="width:220px" ${bind(`ws:students.${i}.name`)} value="${esc(s.name || '')}" aria-label="${esc(t('Name'))}"></td>
+    <td><input type="text" class="w-s" ${bind(`ws:students.${i}.group`)} value="${esc(s.group || '')}" aria-label="${esc(t('Group'))}"></td>
+    <td><button class="iconbtn" data-act="student-del" data-i="${i}" title="${esc(t('Delete'))}">${ICON.x}</button></td></tr>`).join('');
+  const lcard = (k, title, desc) => `<button class="preset" data-act="layout" data-v="${k}" aria-pressed="${lay === k}"><b>${title}</b><span>${desc}</span></button>`;
+  return `
+  <section class="sheet panel">
+    <h2>${t('Workspace')}</h2>
+    <div class="form">
+      <label>${t('Folder')}</label><div class="row"><span class="mono">${esc(ws.root)}</span> <button class="btn small" data-act="open-path" data-v="${esc(ws.root)}">${t('Open')}</button> <button class="btn small" data-act="ws-open">${t('Change…')}</button></div>
+      <label>${t('Name')}</label>${inp('ws:name', 'str', `class="w-l" placeholder="${esc(t('e.g. Computer club, grade 7'))}"`)}
+    </div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Folder layout')}</h2>
+    <div class="presets">
+      ${lcard('problem-student', t('Problem, then students'), t('<code>sum/ana/</code>, <code>sum/bogdan/</code>, tests in <code>sum/_tests/</code>'))}
+      ${lcard('student-problem', t('Student, then problems'), t('<code>ana/sum/</code>, <code>ana/max/</code>, tests in <code>_tests/sum/</code>'))}
+      ${lcard('flat', t('Shared folder (OJI style)'), t('all sources in one folder: <code>BN_C_152.cpp</code> = student BN_C_15, problem 2'))}
+      ${lcard('custom', t('Custom'), t('any template that contains <code>{student}</code>'))}
+    </div>
+    <div class="form">
+      ${lay === 'flat' ? `<label>${t('Sources folder')}</label>${inp('ws:flatDir', 'str', 'class="w-l mono"')}
+      <label>${t('File name')}</label>${inp('ws:flatPattern', 'str', 'class="w-l mono"')}` : `<label>${t('Student folder')}</label>${inp('ws:studentDir', 'str', 'class="w-l mono"')}`}
+      <label>${t('Tests folder (default)')}</label>${inp('ws:testsDir', 'str', 'class="w-l mono"')}
+      <label>${t('Work folder')}</label>${inp('ws:workDir', 'str', 'class="w-l mono"')}
+      <label>${t('Results folder')}</label>${inp('ws:resultsDir', 'str', 'class="w-l mono"')}
+      <label></label><span class="vars">${t('variables:')} <code>{root}</code> <code>{problem}</code> <code>{nr}</code> <code>{student}</code>${lay === 'flat' ? ' <code>{ext}</code>' : ''}</span>
+    </div>
+    <div class="toolbar" style="margin:14px 0 0">
+      <button class="btn" data-act="structure" data-v="0">${t('Show the layout')}</button>
+      <button class="btn primary" data-act="structure" data-v="1">${t('Create the folders')}</button>
+      <span class="hint" style="margin:0">${t('Creates the tests folder of every problem and one folder for each student in the list.')}</span>
+    </div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Students')}</h2>
+    <p class="hint">${t('The list is optional: if it is empty, the students are taken from the folder names. Students in the list appear in the ranking even if they did not submit a source.')}</p>
+    <div class="toolbar">
+      <button class="btn" data-act="student-add">${t('Add a student')}</button>
+      <button class="btn" data-act="students-paste">${t('Add from text…')}</button>
+      <button class="btn" data-act="students-found">${t('Add the students found in folders')}</button>
+      ${ws.students.length ? `<button class="btn danger" data-act="students-clear">${t('Clear the list')}</button>` : ''}
+    </div>
+    ${ws.students.length ? `<div class="tablewrap"><table class="grid"><thead><tr><th>#</th><th>${t('Id (folder name)')}</th><th>${t('Name')}</th><th>${t('Group')}</th><th></th></tr></thead><tbody>${studs}</tbody></table></div>` : `<p class="hint">${t('No students in the list.')}</p>`}
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Problems')}</h2>
+    <div class="toolbar"><button class="btn" data-act="problem-add">${t('Add a problem')}</button><button class="btn" data-act="import-oji">${t('Import from the OJI Evaluator…')}</button></div>
+    <div class="tablewrap"><table class="grid"><thead><tr><th>${t('Name')}</th><th>${t('No.')}</th><th class="num">${t('Tests')}</th><th class="num">${t('Maximum score')}</th><th>${t('Tests folder')}</th></tr></thead><tbody>
+    ${ws.problems.map(p => `<tr><td><button class="linkbtn" data-act="goto-problem" data-v="${esc(p.name)}">${esc(p.name)}</button></td><td>${esc(p.nr)}</td><td class="num">${p.tests.length}</td><td class="num">${dec(maxScoreOf(p))}</td><td class="mono">${esc(testsDirOf(p))}</td></tr>`).join('') || `<tr><td colspan="5" class="hint">${t('No problems.')}</td></tr>`}
+    </tbody></table></div>
+  </section>`;
+}
+const KINDS = { tests: N_('tests'), student: N_('student'), work: N_('work'), results: N_('results'), sources: N_('sources') };
+async function showStructure(create) {
+  if (S.dirty) await saveWs();
+  const r = await api('/api/structure', { workspace: S.ws, create });
+  const errs = (r.errors || []).map(tm);
+  openModal(esc(create ? t('Folders created') : t('Workspace layout')), `
+    ${create ? `<p>${t('Created %{n} folders.', { n: r.created })}${errs.length ? ' ' + esc(t('Errors: %{list}', { list: errs.join('; ') })) : ''}</p>` : `<p class="hint">${t('Folders marked “missing” are created with the “Create the folders” button.')}</p>`}
+    <div class="tablewrap"><table class="grid"><thead><tr><th>${t('Kind')}</th><th>${t('Folder')}</th><th>${t('State')}</th></tr></thead><tbody>
+    ${r.items.map(it => `<tr><td>${esc(KINDS[it.kind] ? t(KINDS[it.kind]) : it.kind)}</td><td class="mono">${esc(it.path)}</td><td>${it.exists ? `<span class="compok">${t('exists')}</span>` : `<span class="compbad">${t('missing')}</span>`}</td></tr>`).join('')}
+    </tbody></table></div>`, [
+    !create ? [t('Create the folders'), () => { closeModal(); showStructure(true).catch(fail); }, false, true] : null,
+    [t('Close'), closeModal, false, !!create]
+  ].filter(Boolean), true);
+}
+function pasteStudents() {
+  openModal(esc(t('Add students from text')), `
+    <p class="hint">${t('One student per line: <code>id; name; group</code>. The OJI <code>contestants.txt</code> format also works (Tab-separated columns: ID, Last name, First name, School), and so does a column copied from Excel.')}</p>
+    <textarea id="stud-text" placeholder="ana; Ana Popescu; 7A&#10;bogdan; Bogdan Ionescu; 7A"></textarea>`, [
+    [t('Add'), () => {
+      const text = $('#stud-text').value;
+      let n = 0;
+      for (const line of text.split(/\r?\n/)) {
+        if (!line.trim()) continue;
+        let c = line.includes('\t') ? line.split('\t') : line.split(/[;,]/);
+        c = c.map(x => x.trim());
+        if (!c[0] || /^id$/i.test(c[0])) continue;
+        const id = c[0].replace(/[\\/:*?"<>|]/g, '_');
+        if (S.ws.students.some(s => s.id === id)) continue;
+        const name = line.includes('\t') ? [c[1], c[2]].filter(Boolean).join(' ') : (c[1] || '');
+        const group = line.includes('\t') ? (c[3] || '') : (c[2] || '');
+        S.ws.students.push({ id, name, group });
+        n++;
+      }
+      closeModal(); markDirty(); renderMain(); toast(t('Added %{n} students', { n }));
+    }, false, true],
+    [t('Cancel'), closeModal]
+  ]);
+}
+async function addFoundStudents() {
+  const ids = new Set();
+  for (const p of S.ws.problems) {
+    const r = await scanProblem(p.name, true);
+    r.students.filter(s => s.exists).forEach(s => ids.add(s.id));
+  }
+  let n = 0;
+  for (const id of Array.from(ids).sort(natcmp)) if (!S.ws.students.some(s => s.id === id)) { S.ws.students.push({ id, name: '', group: '' }); n++; }
+  markDirty(); renderMain();
+  toast(n ? t('Added %{n} students', { n }) : t('All students found are already in the list'));
+}
+
+/* ================================================================ RANKING */
+function rankingData() {
+  const probs = S.ws.problems;
+  const map = new Map();
+  const ensure = id => { if (!map.has(id)) map.set(id, { id, name: studentName(id), group: studentGroup(id), scores: {}, total: 0 }); return map.get(id); };
+  S.ws.students.forEach(s => ensure(s.id));
+  for (const p of probs) {
+    const r = S.results[p.name];
+    if (!r) continue;
+    for (const s of r.students || []) { const x = ensure(s.id); x.scores[p.name] = Number(s.score || 0); }
+  }
+  const rows = Array.from(map.values());
+  rows.forEach(x => { x.total = Math.round(Object.values(x.scores).reduce((a, b) => a + b, 0) * 100) / 100; });
+  rows.sort((a, b) => b.total - a.total || natcmp(a.id, b.id));
+  let rank = 0, prev = null;
+  rows.forEach((x, i) => { if (prev === null || x.total !== prev) { rank = i + 1; prev = x.total; } x.rank = rank; });
+  return rows;
+}
+function viewRanking() {
+  const probs = S.ws.problems, rows = rankingData();
+  const maxT = probs.reduce((a, p) => a + maxScoreOf(p), 0);
+  const missing = probs.filter(p => !S.results[p.name]);
+  const small = s => `<small style="display:block;font-weight:500">${s}</small>`;
+  return `
+  <section class="sheet panel">
+    <h2>${t('Ranking')}</h2>
+    <p class="hint">${t('Sum of the scores over all evaluated problems.')} ${missing.length ? t('Some problems have no results yet: %{list}.', { list: missing.map(p => esc(p.name)).join(', ') }) : ''}</p>
+    <div class="toolbar">
+      <button class="btn primary" data-act="report-html">${t('Full report (printable)')}</button>
+      <button class="btn" data-act="report-csv">${t('Export the ranking (CSV for Excel)')}</button>
+      <button class="btn" data-act="report-txt">${t('TXT score sheets (OJI style)')}</button>
+      <button class="btn" data-act="report-json">${t('Export the results (JSON)')}</button>
+      <div class="sep-v"></div>
+      <button class="btn" data-act="rescore-all" title="${esc(t('Applies the current scoring scheme to the existing results, without running the programs again'))}">${t('Recompute the scores')}</button>
+      <button class="btn" data-act="results-reload">${t('Reload from disk')}</button>
+    </div>
+    ${rows.length ? `<div class="tablewrap"><table class="grid"><thead><tr><th class="num">${t('Place')}</th><th>${t('Student')}</th><th>${t('Name')}</th><th>${t('Group')}</th>${probs.map(p => `<th class="num">${esc(p.name)}${small(t('of %{max}', { max: dec(maxScoreOf(p)) }))}</th>`).join('')}<th class="num">${t('Total')}${small(t('of %{max}', { max: dec(maxT) }))}</th></tr></thead><tbody>
+      ${rows.map(x => `<tr><td class="num"><b>${x.rank}</b></td><td>${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.group)}</td>${probs.map(p => `<td class="num">${x.scores[p.name] != null ? dec(x.scores[p.name]) : '<span class="hint">—</span>'}</td>`).join('')}<td class="num"><b>${dec(x.total)}</b></td></tr>`).join('')}
+    </tbody></table></div>` : `<p class="hint">${t('No results yet.')}</p>`}
+  </section>`;
+}
+const CMP_NAMES = { lines: N_('lines'), tokens: N_('words'), exact: N_('identical'), real: N_('real numbers'), checker: N_('checker') };
+function reportHtml() {
+  // PRINTABLE REPORT: RANKING, PROBLEMS AND ONE SCORE SHEET PER STUDENT
+  const probs = S.ws.problems, rows = rankingData();
+  const title = S.ws.name || t('Evaluation');
+  const tr = (cells, tag = 'td') => '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+  let html = `<!doctype html><html lang="${esc(I18N.lang)}"><head><meta charset="utf-8"><title>${esc(t('%{title} — results', { title }))}</title><style>
+    body{font:12px/1.4 Tahoma,Arial,sans-serif;color:#000;margin:24px}
+    h1{font-size:18px;margin:0 0 4px} h2{font-size:14px;margin:22px 0 6px} h3{font-size:12px;margin:14px 0 4px}
+    table{border-collapse:collapse;margin:6px 0 12px} th,td{border:1px solid #808080;padding:2px 6px;text-align:left} th{background:#ece9d8}
+    td.n,th.n{text-align:right} .meta{color:#404040} .student{page-break-inside:avoid;margin-bottom:18px}
+    @media print{.student{page-break-before:always}}
+  </style></head><body><h1>${esc(title)}</h1><p class="meta">${esc(t('Generated on %{date}', { date: nowHuman() }))} · ${esc(S.info.variant)}</p>`;
+  html += `<h2>${esc(t('Ranking'))}</h2><table>` + tr([t('Place'), t('Student'), t('Name'), t('Group')].map(esc).concat(probs.map(p => esc(p.name))).concat([esc(t('Total'))]), 'th');
+  for (const x of rows) html += tr([x.rank, esc(x.id), esc(x.name), esc(x.group)].concat(probs.map(p => x.scores[p.name] != null ? dec(x.scores[p.name]) : '—')).concat([`<b>${dec(x.total)}</b>`]));
+  html += `</table><h2>${esc(t('Problems'))}</h2><table>` + tr([t('Problem'), t('Tests'), t('Time'), t('Memory'), t('Stack'), t('Source'), t('Comparison')].map(esc), 'th');
+  for (const p of probs) html += tr([esc(p.name), p.tests.length, p.limits.timeMs + ' ms', dec(p.limits.memMb) + ' MB', dec(p.limits.stackMb) + ' MB', p.limits.sourceKb ? dec(p.limits.sourceKb) + ' KB' : '—', esc(CMP_NAMES[p.compare.mode] ? t(CMP_NAMES[p.compare.mode]) : p.compare.mode)]);
+  html += '</table>';
+  for (const x of rows) {
+    html += `<div class="student"><h2>${esc(t('Score sheet: %{student}', { student: x.id + (x.name ? ' — ' + x.name : '') }))}</h2>`;
+    for (const p of probs) {
+      const sr = findRes(p.name, x.id);
+      if (!sr) continue;
+      html += `<h3>${esc(t('Problem %{name}', { name: p.name }))}${sr.main ? ' · ' + esc(t('source %{file}', { file: sr.main })) : ''}</h3>`;
+      if (sr.status === 'CE') { html += `<p>${esc(t('Compilation error.'))}</p><pre style="white-space:pre-wrap;font-size:11px">${esc(tm((sr.compile.log || '').slice(0, 3000)))}</pre>`; continue; }
+      if (sr.status === 'NOSRC') { html += `<p>${esc(t('No source.'))}</p>`; continue; }
+      html += '<table>' + tr([t('Test'), t('Score'), t('Time (ms)'), t('Memory (KB)'), t('Stack (KB)'), t('Message')].map(esc), 'th');
+      for (const r of sr.tests || []) html += tr([esc(r.id), `${dec(r.score)} / ${dec(r.max)}`, r.timeMs != null ? dec(r.timeMs, 1) : '—', r.memKb != null ? dec(r.memKb, 0) : '—', r.stackKb != null ? dec(r.stackKb, 0) : '—', esc(tm(r.msg || ''))]);
+      html += `</table><p><b>${esc(t('Total: %{score} of %{max} points', { score: dec(sr.score), max: dec(sr.max) }))}</b>${(sr.notes || []).length ? '<br><span class="meta">' + esc(sr.notes.map(tm).join('; ')) + '</span>' : ''}</p>`;
+    }
+    html += '</div>';
+  }
+  return html + '</body></html>';
+}
+function reportCsv() {
+  // SEMICOLON + DECIMAL COMMA WHEN THE LANGUAGE USES A COMMA (EXCEL IN THAT LOCALE)
+  const probs = S.ws.problems, rows = rankingData();
+  const sep = I18N.decimal === ',' ? ';' : ',';
+  const q = s => { s = String(s ?? ''); return (s.includes(sep) || /["\n]/.test(s)) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const num = v => (v == null ? '' : String(v).replace('.', I18N.decimal));
+  const lines = [[t('Place'), 'ID', t('Name'), t('Group')].concat(probs.map(p => p.name)).concat([t('Total')]).map(q).join(sep)];
+  for (const x of rows) lines.push([x.rank, x.id, x.name, x.group].map(q).concat(probs.map(p => q(num(x.scores[p.name])))).concat([q(num(x.total))]).join(sep));
+  return '﻿' + lines.join('\r\n') + '\r\n';
+}
+function scoreSheetTxt(id) {
+  // OJI-STYLE TEXT SCORE SHEET (ONE PER STUDENT)
+  const pad = (s, n) => String(s).padEnd(n);
+  const head = t('SCORE SHEET');
+  let out = ' '.repeat(Math.max(0, Math.floor((72 - head.length) / 2))) + head + '\r\n\r\n';
+  out += `${pad('ID', 12)}${pad(t('Name'), 30)}${t('Group')}\r\n${pad(id, 12)}${pad(studentName(id), 30)}${studentGroup(id)}\r\n`;
+  let total = 0;
+  for (const p of S.ws.problems) {
+    const sr = findRes(p.name, id);
+    if (!sr) continue;
+    out += `\r\n${pad(t('Problem:'), 10)}${p.name}\r\n${pad(t('Source:'), 10)}${sr.main || '-'}\r\n\r\n`;
+    if (sr.status === 'CE') out += t('Compilation error.') + '\r\n';
+    else if (sr.status === 'NOSRC') out += t('No source.') + '\r\n';
+    else {
+      out += `${pad(t('Test'), 7)}${pad(t('Score'), 9)}${pad(t('Time'), 10)}${pad(t('Memory'), 10)}${t('Message')}:\r\n${pad('', 16)}${pad('(ms)', 10)}${pad('(KB)', 10)}\r\n`;
+      for (const x of sr.tests || []) out += `${pad(x.id, 7)}${pad(dec(x.score), 9)}${pad(x.timeMs != null ? Number(x.timeMs).toFixed(1) : '-', 10)}${pad(x.memKb != null ? Math.round(x.memKb) : '-', 10)}${tm(x.msg || '')}\r\n`;
+    }
+    out += `${t('TOTAL: %{score} points', { score: dec(sr.score) })}\r\n${'='.repeat(60)}\r\n`;
+    total += Number(sr.score || 0);
+  }
+  out += `\r\n${t('GRAND TOTAL: %{score} points', { score: dec(total) })}\r\n`;
+  return out;
+}
+function globalResultsDir() { return resolveP(S.ws.root, tpl(S.ws.resultsDir, { root: S.ws.root, problem: '', nr: '' })); }
+async function saveReport(kind) {
+  const dir = globalResultsDir(), stamp = nowStamp();
+  if (kind === 'html') {
+    const html = reportHtml(), f = joinP(dir, `report-${stamp}.html`);
+    await FS.write(f, html);
+    const w = window.open(URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' })), '_blank');
+    toast(w ? t('Report saved: %{path}', { path: f }) : t('Report saved (open it from the folder): %{path}', { path: f }));
+  } else if (kind === 'csv') {
+    const csv = reportCsv(), f = joinP(dir, `ranking-${stamp}.csv`);
+    await FS.write(f, csv); download(`ranking-${stamp}.csv`, csv, 'text/csv'); toast(t('Saved: %{path}', { path: f }));
+  } else if (kind === 'txt') {
+    const ids = rankingData().map(x => x.id), d = joinP(dir, 'score-sheets');
+    let all = '';
+    for (const id of ids) { const txt = scoreSheetTxt(id); all += txt + '\r\n\r\n'; await FS.write(joinP(d, `${id}-res.txt`), txt); }
+    await FS.write(joinP(d, 'All_Results-res.txt'), all);
+    toast(t('%{n} score sheets saved in %{folder}', { n: ids.length, folder: d }));
+    api('/api/open', { path: d }).catch(() => {});
+  } else if (kind === 'json') {
+    download(`results-${stamp}.json`, JSON.stringify({ workspace: S.ws.name, generated: nowHuman(), results: S.results }, null, 1), 'application/json');
+  }
+}
+
+/* ================================================================ SETTINGS */
+function viewSettings() {
+  const ws = S.ws, info = S.info;
+  const langs = ws.languages.map((l, i) => `<tr>
+    <td><input type="text" class="w-s" ${bind(`ws:languages.${i}.id`)} value="${esc(l.id)}" aria-label="Id"></td>
+    <td><input type="text" class="w-s" ${bind(`ws:languages.${i}.name`)} value="${esc(l.name)}" aria-label="${esc(t('Name'))}"></td>
+    <td><input type="text" style="width:110px" class="mono" ${bind(`ws:languages.${i}.ext`)} value="${esc(l.ext)}" aria-label="${esc(t('Extensions'))}"></td>
+    <td><input type="text" style="width:380px" class="mono" ${bind(`ws:languages.${i}.compile`)} value="${esc(l.compile)}" aria-label="${esc(t('Compile command'))}"></td>
+    <td><input type="text" style="width:150px" class="mono" ${bind(`ws:languages.${i}.run`)} value="${esc(l.run)}" aria-label="${esc(t('Run command'))}"></td>
+    <td><input type="checkbox" ${bind(`ws:languages.${i}.probe`, 'bool')} ${l.probe ? 'checked' : ''} aria-label="${esc(t('Probe'))}"></td>
+    <td><button class="iconbtn" data-act="lang-del" data-i="${i}" title="${esc(t('Delete'))}">${ICON.x}</button></td></tr>`).join('');
+  const libs = ws.autoLibs.rules.map((r, i) => `<tr>
+    <td><input type="text" style="width:130px" ${bind(`ws:autoLibs.rules.${i}.name`)} value="${esc(r.name)}" aria-label="${esc(t('Name'))}"></td>
+    <td><input type="text" style="width:300px" class="mono" ${bind(`ws:autoLibs.rules.${i}.headers`)} value="${esc(r.headers)}" aria-label="${esc(t('Headers'))}"></td>
+    <td><input type="text" style="width:300px" class="mono" ${bind(`ws:autoLibs.rules.${i}.flags`)} value="${esc(r.flags)}" aria-label="${esc(t('Options'))}"></td>
+    <td><button class="iconbtn" data-act="lib-del" data-i="${i}" title="${esc(t('Delete'))}">${ICON.x}</button></td></tr>`).join('');
+  const comp = info.compilers || {};
+  const found = k => (comp[k] ? `<code>${esc(comp[k])}</code>` : `<b>${t('not installed')}</b>`);
+  return `
+  <section class="sheet panel">
+    <h2>${t('Compilers and languages')}</h2>
+    <p class="hint">${t('Variables: <code>{sources}</code> the sources, <code>{exe}</code> the executable, <code>{libs}</code> the detected libraries + the stack limit on Windows + the options of the problem, <code>{main}</code> the main file, <code>{stack}</code> the stack in bytes. The probe measures stack and memory (it is compiled together with the source and does not count towards the size).')}</p>
+    <div class="tablewrap"><table class="grid"><thead><tr><th>Id</th><th>${t('Name')}</th><th>${t('Extensions')}</th><th>${t('Compile command')}</th><th>${t('Run command')}</th><th>${t('Probe')}</th><th></th></tr></thead><tbody>${langs}</tbody></table></div>
+    <div class="toolbar" style="margin:10px 0 0"><button class="btn small" data-act="lang-add">${t('Add a language')}</button><button class="btn small" data-act="lang-reset">${t('Default values')}</button>
+      <span class="hint" style="margin:0">${t('Found on this computer: gcc %{gcc}, g++ %{gpp}, python %{python}', { gcc: found('gcc'), gpp: found('g++'), python: found('python') })}</span></div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Automatically detected libraries')}</h2>
+    <p class="hint">${t('Like in <code>build.sh</code>: if a source contains <code>#include &lt;header&gt;</code>, the link options are added. Headers accept <code>*</code>.')}</p>
+    <label class="chk">${inp('ws:autoLibs.enabled', 'bool')} ${t('enabled')}</label>
+    <div class="tablewrap" style="margin-top:8px"><table class="grid"><thead><tr><th>${t('Name')}</th><th>${t('Headers')}</th><th>${t('Options')}</th><th></th></tr></thead><tbody>${libs}</tbody></table></div>
+    <div class="row" style="margin-top:8px"><button class="btn small" data-act="lib-add">${t('Add a rule')}</button><button class="btn small" data-act="lib-reset">${t('Default rules')}</button></div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('Options')}</h2>
+    <div class="form">
+      <label>${t('Ignored folders')}</label>${inp('ws:ignoreDirs', 'str', 'class="w-l mono"')}
+      <label>${t('Maximum compile time')}</label><div class="row">${t('%{input} seconds', { input: inp('ws:options.compileTimeoutSec', 'num', 'class="w-s"') })}</div>
+      <label>${t('Outputs')}</label><label class="chk">${inp('ws:options.keepOutputs', 'bool')} ${t('keep the output of every test (for visual comparison)')}</label>
+      <label>${t('Exit code')}</label><label class="chk">${inp('ws:options.nonzeroExitIsError', 'bool')} ${t('a non-zero exit code means a runtime error')}</label>
+      <label>${t('Stack on Windows')}</label><label class="chk">${inp('ws:options.windowsStackFlag', 'bool')} ${t('add <code>-Wl,--stack=…</code> when compiling')}</label>
+      <label>${t('Measuring probe')}</label><label class="chk">${inp('ws:options.useProbe', 'bool')} ${t('measure the stack and the exact memory')}</label>
+    </div>
+  </section>
+  <section class="sheet panel">
+    <h2>${t('About')}</h2>
+    <div class="form">
+      <label>${t('Application')}</label><span>${esc(info.app)} ${esc(info.version)}</span>
+      <label>${t('Engine')}</label><span><b>${esc(info.variant)}</b>${info.features && info.features.runner ? ' · ' + esc(t('runner: %{name}', { name: tm(info.features.runner) })) : ''}</span>
+      <label>${t('System')}</label><span>${esc(info.os)}</span>
+      <label>${t('Settings saved in')}</label><span class="mono">${esc(info.settings)}</span>
+      <label>${t('Translations folder')}</label><span class="mono">${esc(I18N.dir || '—')}${I18N.errors.length ? `<br><span class="compbad">${esc(I18N.errors.map(tm).join('; '))}</span>` : ''}</span>
+    </div>
+  </section>`;
+}
+
+/* ================================================================ HELP */
+function viewHelp() {
+  return `<section class="sheet panel help">
+  <h2>${t('How to work with the evaluator')}</h2>
+  <ol>
+    <li>${t('<b>Workspace.</b> Choose a folder for the contest. It holds <code>evaluator.json</code> with all the settings, plus the work and results folders.')}</li>
+    <li>${t('<b>Problems and students.</b> Add the problems and (optionally) the student list, choose the folder layout and press “Create the folders”.')}</li>
+    <li>${t('<b>Tests.</b> Copy the tests into the tests folder of the problem (e.g. <code>0-sum.in</code>, <code>0-sum.ok</code>) and press “Detect tests”. The points come from <code>teste.txt</code> if it exists, otherwise 10 per test.')}</li>
+    <li>${t('<b>Sources.</b> Copy the students’ projects into their folders. Projects can sit in subfolders (CLion, Code::Blocks): the root is found with the rules from the Problem tab.')}</li>
+    <li>${t('<b>Evaluation.</b> “Detect”, then “Evaluate problem”. Clicking a cell shows the time, memory, stack and the difference from the correct output.')}</li>
+    <li>${t('<b>Reports.</b> “Ranking and reports” has the printable report, the CSV for Excel and the OJI-style score sheets.')}</li>
+  </ol>
+  <h3>${t('Verdicts')}</h3>
+  <ul>${['OK', 'PARTIAL', 'WA', 'TLE', 'MLE', 'RE', 'NOOUT', 'CHKERR', 'CE'].map(k => `<li><span class="tag ${vClass(k)}">${vShort(k)}</span> ${esc(vName(k))}</li>`).join('')}</ul>
+  <h3>${t('Measurements')}</h3>
+  <ul>
+    <li>${t('<b>Time</b> is the processor time (or the real time, if you choose so). The program is stopped at the hard limit (limit × hard factor + 0.5 s).')}</li>
+    <li>${t('<b>Memory</b> is the peak RAM. With “Memory calibration” the memory of an empty program is subtracted, like in the OJI Evaluator.')}</li>
+    <li>${t('<b>Stack</b> is measured by a small probe compiled together with the source. The stack limit is enforced by the system (Linux) or by <code>-Wl,--stack</code> (Windows).')}</li>
+    <li>${t('For a program that was killed or got stuck, the memory may show “—” (it cannot be measured exactly).')}</li>
+  </ul>
+  <h3>${t('Scoring scheme')}</h3>
+  <ul>
+    <li>${t('Each test has points for correctness and, optionally, separate points for staying within the time and memory limits.')}</li>
+    <li>${t('When a limit is exceeded you can give 0, a percentage or a linear decrease; a source that is too large can get 0, a percentage or a penalty.')}</li>
+    <li>${t('Changes to the scoring scheme recompute the existing scores automatically, without running the programs again.')}</li>
+    <li>${t('The scoring scheme is imported and exported from “Tests and scoring” (JSON, <code>teste.txt</code>, <code>rounds.xml</code>).')}</li>
+  </ul>
+  <h3>${t('Interface language')}</h3>
+  <p>${t('The interface language is chosen in the title bar. Messages from the engines are always in English; the interface translates them with the files in the <code>translations/</code> folder.')}</p>
+  <h3>${t('Shortcuts')}</h3>
+  <p>${t('<span class="kbd">Ctrl</span> + <span class="kbd">S</span> saves. Settings are also saved automatically.')}</p>
+  <h3>${t('Versions')}</h3>
+  <p class="hint">${t('The same interface is used by all four versions (C, C++, Python, Web). The version running now: %{variant}.', { variant: `<b>${esc(S.info.variant)}</b>` })}</p>
+  </section>`;
+}
+
+/* ================================================================ DIALOGS */
+let modalStack = [];
+function openModal(title, bodyHtml, buttons, wide) {
+  // TITLE IS HTML; BUTTONS: [LABEL, HANDLER, DISABLED, PRIMARY]
+  const id = 'm' + Date.now() + Math.random().toString(36).slice(2, 6);
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.id = id;
+  back.innerHTML = `<div class="modal ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(String(title).replace(/<[^>]+>/g, ''))}">
+    <header><h2>${title}</h2><button class="iconbtn" data-modal-close title="${esc(t('Close'))}">${ICON.x}</button></header>
+    <div class="body">${bodyHtml}</div>
+    <footer>${(buttons || []).map((b, i) => `<button class="btn ${b[3] ? 'primary' : ''}" data-mbtn="${i}" ${b[2] ? 'disabled' : ''}>${esc(b[0])}</button>`).join('')}</footer></div>`;
+  back.addEventListener('click', e => {
+    if (e.target === back || e.target.closest('[data-modal-close]')) { closeModal(); return; }
+    const b = e.target.closest('[data-mbtn]');
+    if (b) { const fn = buttons[Number(b.dataset.mbtn)][1]; Promise.resolve(fn()).catch(fail); }
+  });
+  $('#modals').appendChild(back);
+  modalStack.push(id);
+  const f = back.querySelector('input, select, textarea, footer .btn.primary, footer .btn');
+  if (f) setTimeout(() => f.focus(), 30);
+  return back;
+}
+function closeModal() {
+  const id = modalStack.pop();
+  if (id) { const el = document.getElementById(id); if (el) el.remove(); }
+  if (modalStack.length === 0 && pickResolve) { const r = pickResolve; pickResolve = null; r(null); }
+}
+function confirmBox(msg) {
+  return new Promise(res => {
+    openModal(esc(t('Confirmation')), `<p>${esc(msg)}</p>`, [[t('Yes'), () => { closeModal(); res(true); }, false, true], [t('No'), () => { closeModal(); res(false); }]]);
+  });
+}
+function promptBox(title, label, value) {
+  return new Promise(res => {
+    openModal(esc(title), `<label class="hint" for="pb-in">${esc(label)}</label><input type="text" id="pb-in" class="w-l" value="${esc(value || '')}">`,
+      [[t('OK'), () => { const v = $('#pb-in').value.trim(); closeModal(); res(v); }, false, true], [t('Cancel'), () => { closeModal(); res(null); }]]);
+    setTimeout(() => { const i = $('#pb-in'); if (i) { i.select(); i.addEventListener('keydown', e => { if (e.key === 'Enter') { const v = i.value.trim(); closeModal(); res(v); } }); } }, 40);
+  });
+}
+function choose(title, items) {
+  return new Promise(res => {
+    openModal(esc(title), `<div class="picker-list" style="height:auto;max-height:360px">${items.map((it, i) => `<button data-choose="${i}">${esc(it[1])}</button>`).join('')}</div>`, [[t('Cancel'), () => { closeModal(); res(null); }]]);
+    $$('[data-choose]').forEach(b => b.addEventListener('click', () => { closeModal(); res(items[Number(b.dataset.choose)][0]); }));
+  });
+}
+
+/* ---------- FOLDER / FILE PICKER ---------- */
+let pickResolve = null;
+function pickPath(mode, start, title) {
+  return new Promise(res => {
+    pickResolve = res;
+    const st = { mode, path: start || (S.ws ? S.ws.root : ''), chosen: '', data: null };
+    const body = `<div class="crumbs"><button class="iconbtn" id="pk-up" title="${esc(t('Parent folder'))}">${ICON.up}</button><button class="iconbtn" id="pk-home" title="${esc(t('Home'))}">${ICON.home}</button>
+      <select id="pk-roots" aria-label="${esc(t('Drive'))}" style="display:none"></select><input type="text" id="pk-path" aria-label="${esc(t('Path'))}"><button class="btn small" id="pk-go">${t('Go')}</button></div>
+      <div class="picker-list" id="pk-list"></div>
+      <div class="row" style="margin-top:8px"><label class="chk"><input type="checkbox" id="pk-hidden"> ${t('show hidden files')}</label>${mode === 'folder' ? `<span class="spacer"></span><button class="btn small" id="pk-new">${t('New folder…')}</button>` : ''}</div>`;
+    const done = v => { const r = pickResolve; pickResolve = null; closeModal(); if (r) r(v); };
+    openModal(esc(title || (mode === 'folder' ? t('Choose a folder') : t('Choose a file'))), body, [
+      [mode === 'folder' ? t('Choose this folder') : t('Choose the file'), () => { if (mode === 'folder') done(st.data ? st.data.path : null); else if (st.chosen) done(st.chosen); else toast(t('Choose a file from the list'), true); }, false, true],
+      [t('Cancel'), () => done(null)]
+    ], true);
+    const load = async p => {
+      try {
+        const d = await FS.list(p);
+        st.data = d; st.chosen = '';
+        $('#pk-path').value = d.path;
+        const roots = $('#pk-roots');
+        if (d.roots && d.roots.length > 1) { roots.style.display = ''; roots.innerHTML = d.roots.map(r => `<option ${d.path.toUpperCase().startsWith(r.toUpperCase()) ? 'selected' : ''}>${esc(r)}</option>`).join(''); }
+        const hidden = $('#pk-hidden').checked;
+        const ents = d.entries.filter(e => hidden || !e.name.startsWith('.'));
+        $('#pk-list').innerHTML = ents.map(e => e.dir
+          ? `<button data-dir="${esc(e.name)}">${ICON.folder}<span>${esc(e.name)}</span></button>`
+          : `<button class="file ${mode === 'folder' ? 'disabled' : ''}" data-file="${esc(e.name)}">${ICON.file}<span>${esc(e.name)}</span><span class="sz">${fmtBytes(e.size)}</span></button>`).join('') || `<div class="note hint" style="padding:10px">${t('Empty folder')}</div>`;
+      } catch (e) { fail(e); }
+    };
+    $('#pk-list').addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b || !st.data) return;
+      if (b.dataset.dir != null) load(joinP(st.data.path, b.dataset.dir));
+      else if (b.dataset.file != null && mode === 'file') { $$('#pk-list button').forEach(x => x.classList.remove('chosen')); b.classList.add('chosen'); st.chosen = joinP(st.data.path, b.dataset.file); }
+    });
+    $('#pk-list').addEventListener('dblclick', e => { const b = e.target.closest('button[data-file]'); if (b && mode === 'file') done(joinP(st.data.path, b.dataset.file)); });
+    $('#pk-up').addEventListener('click', () => { if (st.data && st.data.parent) load(st.data.parent); });
+    $('#pk-home').addEventListener('click', () => load(S.info.home));
+    $('#pk-go').addEventListener('click', () => load($('#pk-path').value));
+    $('#pk-path').addEventListener('keydown', e => { if (e.key === 'Enter') load($('#pk-path').value); });
+    $('#pk-roots').addEventListener('change', e => load(e.target.value));
+    $('#pk-hidden').addEventListener('change', () => st.data && load(st.data.path));
+    const nb = $('#pk-new');
+    if (nb) nb.addEventListener('click', async () => {
+      const n = await promptBox(t('New folder'), t('Folder name'), '');
+      if (n && st.data) { const p2 = joinP(st.data.path, n); await FS.mkdir(p2).catch(fail); load(p2); }
+    });
+    load(st.path).then(() => { if (!st.data) load(S.info.home); });
+  });
+}
+
+/* ================================================================ ACTIONS */
+const ACT = {
+  tab: a => { S.tab = a.dataset.v; renderBar(); renderMain(); },
+  theme: () => {
+    S.settings.theme = S.settings.theme === 'classic' ? 'xp' : 'classic';
+    applyTheme(); saveSettings();
+    toast(S.settings.theme === 'classic' ? t('Classic look (Windows 95/98)') : t('XP look (2009)'));
+  },
+  quit: async () => {
+    if (!await confirmBox(t('Close the application? A running evaluation (if any) stops.'))) return;
+    if (S.dirty) await saveWs().catch(() => {});
+    try { await api('/api/quit', {}); } catch (e) { /* SERVER ALREADY GONE */ }
+    document.body.innerHTML = `<div class="welcome"><h1>${t('The application has closed')}</h1><p class="hint">${t('You can close this window.')}</p></div>`;
+    setTimeout(() => window.close(), 300);
+  },
+  'ws-open': async () => {
+    const d = await pickPath('folder', S.ws ? S.ws.root : (S.settings.lastWorkspace || ''), t('Choose the workspace folder'));
+    if (!d) return;
+    const st = await FS.stat(joinP(d, 'evaluator.json'));
+    if (!st.exists && !await confirmBox(t('There is no evaluator.json in %{folder}. Create a new workspace here?', { folder: d }))) return;
+    await openWorkspace(d, true);
+  },
+  'ws-recent': a => openWorkspace(a.dataset.v, false),
+  'import-oji': () => importOji(),
+  'problem-add': async () => {
+    const n = await promptBox(t('New problem'), t('Problem name (letters, digits, - or _), e.g. sum'), '');
+    if (!n) return;
+    if (!/^[\w.-]+$/.test(n)) throw new Error(t('The name may contain only letters without diacritics, digits, dot, - and _'));
+    if (probByName(n)) throw new Error(t('A problem with this name already exists'));
+    S.ws.problems.push(defaultProblem(n, S.ws.problems.length + 1));
+    S.cur = n; S.tab = 'tests';
+    markDirty(); render();
+    toast(t('Problem added. Put the tests in %{folder}', { folder: testsDirOf(P()) }));
+  },
+  'problem-rename': async () => {
+    const p = P(), n = await promptBox(t('Rename the problem'), t('New name'), p.name);
+    if (!n || n === p.name) return;
+    if (!/^[\w.-]+$/.test(n)) throw new Error(t('Invalid name'));
+    if (probByName(n)) throw new Error(t('A problem with this name already exists'));
+    if (S.results[p.name]) { S.results[n] = S.results[p.name]; delete S.results[p.name]; }
+    p.name = n; S.cur = n; markDirty(); render();
+    toast(t('Renamed. The folders on disk were not renamed.'));
+  },
+  'problem-dup': async () => {
+    const p = P(), n = await promptBox(t('Duplicate the problem'), t('Name of the copy'), p.name + '2');
+    if (!n) return;
+    if (!/^[\w.-]+$/.test(n)) throw new Error(t('Invalid name'));
+    if (probByName(n)) throw new Error(t('A problem with this name already exists'));
+    const q = clone(p); q.name = n; q.nr = S.ws.problems.length + 1;
+    S.ws.problems.push(q); S.cur = n; markDirty(); render();
+  },
+  'problem-del': async () => {
+    const p = P();
+    if (!await confirmBox(t('Delete problem “%{name}” from the configuration? The files on disk stay.', { name: p.name }))) return;
+    S.ws.problems = S.ws.problems.filter(x => x !== p);
+    S.cur = S.ws.problems[0] ? S.ws.problems[0].name : '';
+    markDirty(); render();
+  },
+  'goto-problem': a => { S.cur = a.dataset.v; S.tab = 'tests'; render(); },
+  scan: () => scanProblem(S.cur),
+  'eval-problem': () => startEval([S.cur]),
+  'eval-selected': () => startEval([S.cur], Array.from(selSet(P()))),
+  'eval-all': () => startEval(S.ws.problems.map(p => p.name)),
+  stop: () => api('/api/eval/stop', {}),
+  'sel-all': a => { const p = P(), s = selSet(p); if (a.checked) evalRows(p).forEach(r => s.add(r.id)); else s.clear(); renderMain(); },
+  'sel-row': a => { const s = selSet(P()); if (a.checked) s.add(a.dataset.s); else s.delete(a.dataset.s); renderMain(); },
+  sort: a => { S.sort = a.dataset.v; renderMain(); },
+  cell: a => openCell(a.dataset.s, a.dataset.t),
+  'compile-log': a => showCompileLog(a.dataset.s),
+  student: a => showStudent(a.dataset.s),
+  'open-path': a => api('/api/open', { path: a.dataset.v }),
+  'tests-detect': () => detectTests(),
+  'tests-add': () => {
+    const p = P(), ids = p.tests.map(te => Number(te.id)).filter(x => !isNaN(x));
+    const id = String(ids.length ? Math.max(...ids) + 1 : 0);
+    p.tests.push({ id, input: tpl(p.inputPattern, { problem: p.name, nr: p.nr, n: id }), ok: tpl(p.okPattern, { problem: p.name, nr: p.nr, n: id }), points: 10, timePoints: 0, memPoints: 0, timeMs: 0, memMb: 0 });
+    markDirty(true); renderMain();
+  },
+  'test-del': a => { P().tests.splice(Number(a.dataset.i), 1); markDirty(true); renderMain(); },
+  'test-view': a => viewTestFiles(Number(a.dataset.i)),
+  'tests-split': () => {
+    const p = P(), n = p.tests.length;
+    if (!n) return;
+    const base = Math.floor(100 / n), extra = 100 - base * n;
+    p.tests.forEach((te, i) => { te.points = base + (i >= n - extra ? 1 : 0); });
+    markDirty(true); renderMain();
+  },
+  'tests-all': a => { P().tests.forEach(te => { te.points = Number(a.dataset.v); }); markDirty(true); renderMain(); },
+  'scoring-import': () => importScoring(),
+  'scoring-export': () => exportScoring(),
+  'pick-testsdir': async () => { const p = P(), d = await pickPath('folder', testsDirOf(p), t('Choose the tests folder')); if (!d) return; p.testsDir = d; markDirty(); renderMain(); },
+  'pick-checker': async () => { const p = P(), f = await pickPath('file', testsDirOf(p), t('Choose the checker')); if (!f) return; p.compare.checker = f; markDirty(); renderMain(); },
+  'io-preset': a => {
+    const p = P(), v = a.dataset.v;
+    if (v === 'files') Object.assign(p.io, { input: 'file', output: 'file', inputPath: '{problem}.in', outputPath: '{problem}.out', cwd: '', runIn: 'sandbox' });
+    if (v === 'console') Object.assign(p.io, { input: 'stdin', output: 'stdout', cwd: '', runIn: 'sandbox' });
+    if (v === 'project') Object.assign(p.io, { input: 'file', output: 'file', inputPath: 'data/{problem}.in', outputPath: 'data/{problem}.out', cwd: '', runIn: 'project' });
+    markDirty(); renderMain();
+  },
+  'build-mode': a => { P().project.buildMode = a.dataset.v; markDirty(); renderMain(); },
+  'rule-add': () => { P().project.rootRules.push({ pattern: '*.cpp', up: 0 }); markDirty(); renderMain(); },
+  'rule-del': a => { P().project.rootRules.splice(Number(a.dataset.i), 1); markDirty(); renderMain(); },
+  'rule-move': a => { const r = P().project.rootRules, i = Number(a.dataset.i); if (i > 0) { [r[i - 1], r[i]] = [r[i], r[i - 1]]; markDirty(); renderMain(); } },
+  'rule-reset': () => { P().project.rootRules = clone(DEFAULT_ROOT_RULES); markDirty(); renderMain(); },
+  layout: a => { const v = a.dataset.v; S.ws.layout = v; Object.assign(S.ws, LAYOUTS[v] || {}); markDirty(); renderMain(); },
+  structure: a => showStructure(a.dataset.v === '1'),
+  'student-add': async () => {
+    const id = await promptBox(t('New student'), t('Id (folder name), e.g. popescu_ana'), '');
+    if (!id) return;
+    if (S.ws.students.some(s => s.id === id)) throw new Error(t('Already exists'));
+    S.ws.students.push({ id, name: '', group: '' }); markDirty(); renderMain();
+  },
+  'student-del': a => { S.ws.students.splice(Number(a.dataset.i), 1); markDirty(); renderMain(); },
+  'students-paste': () => pasteStudents(),
+  'students-found': () => addFoundStudents(),
+  'students-clear': async () => { if (await confirmBox(t('Clear the student list? The folders stay on disk.'))) { S.ws.students = []; markDirty(); renderMain(); } },
+  'report-html': () => saveReport('html'),
+  'report-csv': () => saveReport('csv'),
+  'report-txt': () => saveReport('txt'),
+  'report-json': () => saveReport('json'),
+  'rescore-all': async () => { for (const p of S.ws.problems) await rescore(p.name); renderMain(); toast(t('Scores recomputed')); },
+  'results-reload': async () => { await loadResults(); renderMain(); toast(t('Results reloaded')); },
+  'lang-add': () => { S.ws.languages.push({ id: 'new', name: t('New'), ext: '.ext', compile: '', run: '{exe}', probe: false }); markDirty(); renderMain(); },
+  'lang-del': a => { S.ws.languages.splice(Number(a.dataset.i), 1); markDirty(); renderMain(); },
+  'lang-reset': async () => { if (await confirmBox(t('Go back to the default compilers?'))) { S.ws.languages = defaultLanguages(); markDirty(); renderMain(); } },
+  'lib-add': () => { S.ws.autoLibs.rules.push({ name: t('New'), headers: '', flags: '' }); markDirty(); renderMain(); },
+  'lib-del': a => { S.ws.autoLibs.rules.splice(Number(a.dataset.i), 1); markDirty(); renderMain(); },
+  'lib-reset': async () => { if (await confirmBox(t('Go back to the default rules from build.sh?'))) { S.ws.autoLibs.rules = clone(DEFAULT_AUTOLIBS); markDirty(); renderMain(); } }
+};
+
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-act]');
+  if (!a || a.closest('.modal-back')) return;
+  const fn = ACT[a.dataset.act];
+  if (!fn) return;
+  if (a.tagName !== 'INPUT') e.preventDefault();
+  Promise.resolve().then(() => fn(a, e)).catch(fail);
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.closest('.modal-back')) return;
+  if (el.id === 'langsel') {
+    // NEW INTERFACE LANGUAGE: REMEMBER IT AND REDRAW EVERYTHING
+    S.settings.language = el.value; saveSettings();
+    setLanguage(el.value);
+    document.title = S.info ? `${t('Olympiad Evaluator')} (${S.info.variant})` : t('Olympiad Evaluator');
+    render();
+    return;
+  }
+  if (el.id === 'probsel') { S.cur = el.value; S.ws.current = el.value; markDirty(); renderMain(); if (!S.scan[S.cur]) scanProblem(S.cur, true).catch(() => {}); return; }
+  if (el.dataset && el.dataset.bind) { try { onBind(el); } catch (err) { fail(err); } }
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (S.ws) saveWs().then(() => toast(t('Saved'))).catch(fail); }
+  if (e.key === 'Escape' && modalStack.length) closeModal();
+});
+window.addEventListener('beforeunload', () => { if (S.dirty) saveWs().catch(() => {}); });
+
+/* ================================================================ STARTUP */
+async function start() {
+  if (!TOKEN || TOKEN.indexOf('EVAL_TOKEN') >= 0) {
+    $('#main').innerHTML = `<div class="welcome"><h1>${t('Olympiad Evaluator')}</h1><p>${t('This page must be opened through the application. Start one of the versions (C, C++, Python or Web): it opens the interface automatically at <code>http://127.0.0.1:8765/</code>.')}</p></div>`;
+    return;
+  }
+  try {
+    S.info = await api('/api/info');
+  } catch (e) {
+    $('#main').innerHTML = `<div class="welcome"><h1>${t('Cannot connect to the application')}</h1><p class="hint">${esc(tm(e.message))}</p></div>`;
+    return;
+  }
+  await loadSettings();
+  await loadTranslations();
+  document.title = `${t('Olympiad Evaluator')} (${S.info.variant})`;
+  render();
+  const last = S.settings.lastWorkspace;
+  if (last) {
+    try { const st = await FS.stat(joinP(last, 'evaluator.json')); if (st.exists) await openWorkspace(last, false); } catch (e) { /* STAY ON THE START SCREEN */ }
+  }
+  try {
+    const st = await api('/api/eval/status?log=0&rv=-1');
+    if (st.running) { S.job = st; S.logs = st.log || []; S.logNext = st.logNext; poll(); }
+    else if (st.results) for (const k of Object.keys(st.results)) if (!S.results[k]) S.results[k] = st.results[k];
+  } catch (e) { /* NOTHING TO RESTORE */ }
+}
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "olympiad-evaluator-web",
+  "version": "1.0.0",
+  "description": "Olympiad problem evaluator - Web version (offline app: local Node.js server + browser interface, no npm dependencies)",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

@@ -1,0 +1,17 @@
+# SENTENCES PRINTED BY THE BUILD, START AND INSTALL SCRIPTS (ALWAYS ENGLISH)
+# FORMAT: KEY=TEXT; {0} IS REPLACED BY A VALUE; DO NOT USE THE CHARACTERS ! ^ % IN A TEXT
+BUILDING=Building {0}...
+BUILD_FAILED=Compilation failed.
+BUILD_FAILED_GCC=Compilation failed. Check that gcc (MinGW-w64) is in PATH.
+BUILD_FAILED_GPP=Compilation failed. Check that g++ (MinGW-w64, C++17) is in PATH.
+BUILD_DONE=Done: {0}
+BUILD_DONE_STATIC=Done: {0} (statically linked)
+START_WITH=Start it with: {0}
+REBUILDING=The executable does not run on this system; building it again.
+NEED_PYTHON=Python 3.7 or newer is not installed. Download it from https://www.python.org/downloads/
+NEED_PYTHON_PATH=When installing, tick the option "Add python.exe to PATH".
+NEED_NODE=Node.js 16 or newer is not installed. Download it from https://nodejs.org/ (the LTS version).
+INSTALL_TITLE=Installing the translations from {0}
+INSTALL_COPY=Copied to {0}
+INSTALL_MISSING=Folder not found: {0}
+INSTALL_DONE=Done. Restart the evaluator to load the new translations.

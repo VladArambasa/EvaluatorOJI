@@ -1,225 +1,249 @@
-# Evaluator Olimpiadă
+# Olympiad Evaluator
 
-Evaluator pentru probleme de olimpiadă, în **patru variante cu aceeași interfață**: **C**, **C++**,
-**Python** și **Web** (aplicație offline). Compilează și rulează sursele elevilor pe testele fiecărei
-probleme, măsoară timpul, memoria (RAM și stivă) și dimensiunea sursei, compară ieșirea și calculează
-punctajul după baremul tău. Totul rulează local: aplicația pornește un mic server pe `127.0.0.1` și
-deschide interfața într-o fereastră de browser (Chrome/Edge, fără bară de adrese).
+An evaluator for olympiad problems in **four versions with the same interface**: **C**, **C++**,
+**Python** and **Web** (offline app). It compiles and runs the students' sources on the tests of each
+problem, measures time, memory (RAM and stack) and source size, compares the output and computes the
+score from your scoring scheme. Everything runs locally: the application starts a small server on
+`127.0.0.1` and opens the interface in a browser window (Chrome/Edge, without an address bar).
 
-Interfața are aspectul programelor din anii '90–2009, cu două variante, schimbate din butonul cu
-monitor din bara de titlu:
+The interface looks like the programs of 1995–2009, with two looks switched from the monitor button
+in the title bar:
 
-- **XP (2009)**, implicit, ca Evaluatorul OJI: fereastră bej, butoane XP, „Evaluează” cu roșu;
-- **Clasic (Windows 95/98)**: gri, butoane în relief.
+- **XP (2009)**, the default, like the OJI Evaluator: beige window, XP buttons, a red "Evaluate";
+- **Classic (Windows 95/98)**: grey, raised buttons.
 
-## Pornire rapidă
+The interface language is chosen in the title bar (English and Romanian are included). Messages
+coming from the engines are always English; the interface translates them (see
+[Translations](#translations)).
 
-| Variantă | Windows | Linux / macOS | Ai nevoie de |
-|----------|---------|---------------|--------------|
-| **C**    | `c\bin\evaluator-c.exe` (sau `c\porneste.bat`) | `c/porneste.sh` (sau `c/bin/evaluator-c`) | nimic în plus |
-| **C++**  | `cpp\bin\evaluator-cpp.exe` (sau `cpp\porneste.bat`) | `cpp/porneste.sh` (sau `cpp/bin/evaluator-cpp`) | nimic în plus |
-| **Python** | `python\porneste.bat` | `python/porneste.sh` | Python 3.7 sau mai nou (doar biblioteca standard) |
-| **Web**  | `web\porneste.bat` | `web/porneste.sh` (sau `npm start` în `web/`) | Node.js 16 sau mai nou (fără pachete npm) |
-
-Executabilele din `c/bin` și `cpp/bin` sunt gata compilate pentru **Windows x64** și **Linux x64**
-(legate static, merg pe orice distribuție). Pe macOS (sau dacă vrei să le recompilezi) vezi
-[Compilarea din surse](#compilarea-din-surse).
-
-Pentru a evalua surse C/C++ trebuie să existe `gcc`/`g++` pe calculator. Pe Windows, evaluatorul îl
-caută în `PATH` și în locurile obișnuite: MinGW din Code::Blocks (inclusiv `C:\OJI\Codeblocks\MinGW`),
-`C:\MinGW`, `C:\mingw64`, MSYS2, TDM-GCC, Dev-C++. Pentru surse Python, `python`/`python3`.
-
-Opțiuni în linia de comandă (la toate variantele):
+## Folders
 
 ```
---port 8765      portul (implicit 8765; dacă e ocupat, se ia următorul liber)
---no-browser     nu deschide fereastra; deschide manual adresa afișată în consolă
---gui fișier     (C, C++) folosește alt index.html decât cel încorporat
---no-helper      (Web) rulează fără utilitarul olieval-run (mod de rezervă, vezi mai jos)
+versions/c/           C version (C11): src/, bin/, build.sh, build.bat, Makefile, start.sh, start.bat, translations/
+versions/c++/         C++ version (C++17): same layout
+versions/python/      Python version: evaluator.py (+ copies of the interface and probes), start.*, translations/
+versions/web/         Web version: server.js, public/, helper/ (olieval-run sources), bin/, package.json, start.*, translations/
+common/               shared sources: gui/index.html (the interface), probe/, runner/, sync.py
+master-translations/  the language files and the per-OS scripts that copy them into every version
+tutorial/             step-by-step tutorial, example workspaces, make_examples.py, the course scripts
+tests/                run_all.py (all versions on all examples), api_client.py, compare_summaries.py,
+                      check_translations.py, gui_smoke.py
+docs/SPECIFICATION.md technical specification: file formats, algorithms, HTTP API, translations
 ```
 
-Închide aplicația din butonul roșu din bara de titlu a interfeței sau închizând fereastra consolei.
+## Quick start
 
-### Exemplul
+| Version | Windows | Linux / macOS | You need |
+|---------|---------|---------------|----------|
+| **C**   | double-click `versions\c\start.bat` (or `versions\c\bin\evaluator-c.exe`) | `versions/c/start.sh` | nothing else |
+| **C++** | double-click `versions\c++\start.bat` (or `versions\c++\bin\evaluator-cpp.exe`) | `versions/c++/start.sh` | nothing else |
+| **Python** | double-click `versions\python\start.bat` | `versions/python/start.sh` | Python 3.7 or newer (standard library only) |
+| **Web** | double-click `versions\web\start.bat` | `versions/web/start.sh` (or `npm start` in `versions/web`) | Node.js 16 or newer (no npm packages) |
 
-La prima pornire alege **Deschide exemplul**: un concurs cu 4 probleme și 16 elevi care acoperă toate
-situațiile (corect, greșit, parțial, timp depășit, memorie depășită, eroare la execuție, stivă depășită,
-fără fișier de ieșire, eroare de compilare, sursă prea mare, proiecte CLion/Code::Blocks în subfoldere,
-proiecte cu mai multe fișiere, scripturile `compile.sh`/`build.sh` ale cursului). Apasă
-**Evaluează problema** și deschide orice celulă din tabel pentru detalii.
+From a Windows console, run the scripts as `.\start.bat` (a plain `start` is the built-in command of
+the console). The executables in `versions/c/bin` and `versions/c++/bin` are prebuilt for
+**Windows x64** and **Linux x64** (statically linked, they run on any distribution). On macOS (or to
+rebuild them) see [Building from source](#building-from-source).
 
-| problemă | ce arată |
-|----------|----------|
-| `suma`   | fișiere `suma.in`/`suma.out`, toate tipurile de verdict, limită de dimensiune a sursei cu penalizare |
-| `maxim`  | consolă (stdin/stdout), verificator extern în stil OJI (`verif.cpp`), punctaj parțial, `teste.txt` |
-| `medie`  | fișiere într-un folder al proiectului (`date/medie.in`), comparare de numere reale cu toleranță |
-| `cifre`  | proiecte cu mai multe fișiere compilate „ca scripturile cursului” (obiecte în `build/`, executabil în `release/program`) |
+To evaluate C/C++ sources, `gcc`/`g++` must be installed. On Windows the evaluator looks in `PATH`
+and in the usual places: MinGW from Code::Blocks (including `C:\OJI\Codeblocks\MinGW`), `C:\MinGW`,
+`C:\mingw64`, MSYS2, TDM-GCC, Dev-C++. For Python sources: `python`/`python3`.
 
-Exemplul se poate regenera oricând: `python3 tools/make_example.py` (scrie în `exemplu/`).
+Command-line options (all versions):
 
-## Cum lucrezi
+```
+--port 8765      the port (default 8765; when it is busy the next free one is used)
+--no-browser     do not open the window; open the address printed in the console yourself
+--gui FILE       (C, C++) use another index.html than the embedded one
+--no-helper      (Web) run without the olieval-run helper (fallback mode, see below)
+```
 
-1. **Spațiu de lucru** — alege folderul concursului. Aici se salvează `evaluator.json` (toată
-   configurația și baremul). Alegi organizarea folderelor și apeși **Creează folderele** ca să
-   pregătești structura pentru toți elevii din listă (lista se poate lipi din text sau lua din foldere).
-2. **Problemă** — numele (apare în numele fișierelor: `suma.in`), cum primește programul datele,
-   cum se compilează proiectul și cum se găsește proiectul elevului în folderul lui.
-3. **Teste și barem** — pune testele în folderul de teste al problemei (ex. `0-suma.in` + `0-suma.ok`)
-   și apasă **Detectează testele**. Fiecare test are puncte de corectitudine, puncte pentru timp și
-   puncte pentru memorie, plus limite proprii (opțional). Setezi limitele (timp, memorie, stivă,
-   dimensiunea sursei), ce se întâmplă la depășire și modul de comparare. **Importă/Exportă barem**.
-4. **Evaluare** — **Evaluează problema**, **Evaluează selecția** (elevii bifați) sau **Toate
-   problemele**. Tabelul arată, pentru fiecare elev și test, punctajul și verdictul; un clic pe celulă
-   deschide intrarea, ieșirea corectă și ieșirea programului (cu linia diferită marcată), timpul,
-   memoria, stiva, codul de ieșire și mesajele de eroare.
-5. **Clasament și rapoarte** — clasamentul pe toate problemele și exporturile: raport complet de
-   tipărit (HTML), CSV pentru Excel, **borderouri TXT în stil OJI** (câte un fișier pe elev plus
-   `All_Results`), rezultate JSON.
+Close the application with the red button in the title bar of the interface or by closing the
+console window.
 
-Modificarea baremului (puncte, limite, politici) recalculează imediat punctajele, fără să mai rulezi
-programele. Totul se salvează automat.
+## Tutorial and examples
 
-## Organizarea folderelor
+[tutorial/README.md](tutorial/README.md) walks through a whole contest, step by step. On the first
+start choose **Open the example**: a contest with 4 problems and 16 students that covers every case
+(correct, wrong, partial, time limit, memory limit, runtime error, stack overflow, no output file,
+compilation error, source too large, CLion/Code::Blocks projects in subfolders, multi-file projects,
+the course scripts `compile.sh`/`build.sh`). Press **Evaluate problem** and click any cell of the
+table for details.
 
-| organizare | sursele elevilor | teste |
-|------------|------------------|-------|
-| problemă, apoi elevi (implicit) | `{root}/{problem}/{student}/…` | `{root}/{problem}/_teste` |
-| elev, apoi probleme | `{root}/{student}/{problem}/…` | `{root}/_teste/{problem}` |
-| folder comun (stil OJI) | `{root}/{problem}/surse/{student}{nr}.{ext}` (ex. `BN_C_152.cpp` = elevul `BN_C_15`, problema 2) | `{root}/{problem}/teste` |
-| personalizat | orice șablon cu `{root}` `{problem}` `{nr}` `{student}` | oriunde |
+| problem   | what it shows |
+|-----------|---------------|
+| `sum`     | `sum.in`/`sum.out` files, every verdict, a source size limit with a penalty |
+| `max`     | console (stdin/stdout), an OJI-style external checker (`verif.cpp`), partial scores, `teste.txt` |
+| `average` | files inside a project folder (`data/average.in`), real numbers compared with a tolerance |
+| `digits`  | multi-file projects built "like the course scripts" (objects in `build/`, executable `release/program`) |
 
-Folderul de teste e **unul singur pe problemă**, comun tuturor elevilor, și poate fi mutat oriunde
-(câmpul „Folder teste” al problemei). Tiparele numelor sunt configurabile (`{n}-{problem}.in` /
-`{n}-{problem}.ok` implicit). Dacă în folder există `teste.txt` (formatul OJI: „număr punctaj” pe
-fiecare linie), punctele se iau de acolo.
+`tutorial/examples/` also holds the same students in the two other folder layouts
+(`student-problem`, `oji-flat`). Regenerate everything with `python3 tutorial/make_examples.py`.
 
-**Importă din Evaluatorul OJI** citește folderul vechiului evaluator (`rounds.xml`, `probleme/…/teste`,
-`teste.txt`, surse în `surse_concurenti`) și creează spațiul de lucru echivalent.
+## How you work
 
-## Cum primește programul datele
+1. **Workspace**: choose the contest folder. `evaluator.json` (the whole configuration and the
+   scoring scheme) is saved there. Choose the folder layout and press **Create the folders** to
+   prepare the structure for every student of the list (paste the list as text or take it from the
+   folders).
+2. **Problem**: the name (it appears in file names: `sum.in`), how the program gets its data, how
+   the project is built and how the student's project is found inside the student folder.
+3. **Tests and scoring**: put the tests in the tests folder of the problem (e.g. `0-sum.in` +
+   `0-sum.ok`) and press **Detect tests**. Each test has points for correctness, points for time and
+   points for memory, plus its own limits (optional). Set the limits (time, memory, stack, source
+   size), what happens when they are exceeded and the comparison mode. **Import/Export scoring**.
+4. **Evaluation**: **Evaluate problem**, **Evaluate selection** (the ticked students) or **All
+   problems**. The table shows the score and verdict of every student on every test; a click on a
+   cell opens the input, the correct output and the program's output (with the differing line
+   marked), the time, memory, stack, exit code and error messages.
+5. **Ranking and reports**: the ranking over all problems and the exports: a printable report
+   (HTML), CSV for Excel, **OJI-style TXT score sheets** (one file per student plus `All_Results`),
+   JSON results.
 
-- **Fișiere locale (olimpiadă)**: programul citește `problema.in` și scrie `problema.out` în folderul
-  curent (numele se pot schimba, ex. `date.in` / `date.out`).
-- **Consolă**: intrarea vine pe stdin, ieșirea se ia de pe stdout.
-- **Folder din proiect**: fișierele sunt într-un folder relativ la rădăcina proiectului elevului
-  (ex. `date/{problem}.in`); poți alege și folderul curent al programului (ex. `cmake-build-debug`).
+Changing the scoring scheme (points, limits, policies) recomputes the scores at once, without running
+the programs again. Everything is saved automatically.
 
-Implicit fiecare test rulează într-un folder temporar gol care reproduce structura relativă (programul
-nu poate citi accidental testele altui elev); opțional, poate rula direct în proiectul elevului.
+## Folder layouts
 
-## Găsirea proiectului elevului
+| layout | student sources | tests |
+|--------|-----------------|-------|
+| problem, then students (default) | `{root}/{problem}/{student}/…` | `{root}/{problem}/_tests` |
+| student, then problems | `{root}/{student}/{problem}/…` | `{root}/_tests/{problem}` |
+| shared folder (OJI style) | `{root}/{problem}/sources/{student}{nr}.{ext}` (e.g. `BN_C_152.cpp` = student `BN_C_15`, problem 2) | `{root}/{problem}/tests` |
+| custom | any template with `{root}` `{problem}` `{nr}` `{student}` | anywhere |
 
-Elevii predau proiecte întregi (CLion, Code::Blocks, VS Code, foldere cu scripturile cursului). Regulile
-de rădăcină se încearcă în ordine; prima potrivire stabilește rădăcina proiectului, opțional urcând
-câteva niveluri. Implicit: `CMakeLists.txt`, `*.cbp`, `bash-scripts/compile.sh`, `bash-scripts/build.sh`,
-`compile.sh`, `build.sh`, `main.cpp`, `main.c`, `*.cpp`, `*.c`, `*.py`. Folderele ignorate (implicit
+There is **one tests folder per problem**, shared by all students, and it can live anywhere (the
+"Tests folder" field of the problem). The file name patterns are configurable (`{n}-{problem}.in` /
+`{n}-{problem}.ok` by default). When the folder has a `teste.txt` (the OJI format: "number points"
+on each line), the points are taken from it.
+
+**Import from the OJI Evaluator** reads the old evaluator's folder (`rounds.xml`, `probleme/…/teste`,
+`teste.txt`, sources in `surse_concurenti`) and creates the equivalent workspace.
+
+## How the program gets its data
+
+- **Local files (olympiad)**: the program reads `problem.in` and writes `problem.out` in the current
+  folder (the names can change, e.g. `data.in` / `data.out`).
+- **Console**: the input comes on stdin, the output is taken from stdout.
+- **Project folder**: the files are in a folder relative to the root of the student's project
+  (e.g. `data/{problem}.in`); the program's current folder can be chosen too (e.g. `cmake-build-debug`).
+
+By default every test runs in an empty temporary folder that mirrors the relative layout (a program
+cannot read another student's tests by accident); optionally it runs directly in the student's project.
+
+## Finding the student's project
+
+Students hand in whole projects (CLion, Code::Blocks, VS Code, folders with the course scripts). The
+root rules are tried in order; the first match sets the project root, optionally moving up a few
+levels. Default: `CMakeLists.txt`, `*.cbp`, `bash-scripts/compile.sh`, `bash-scripts/build.sh`,
+`compile.sh`, `build.sh`, `main.cpp`, `main.c`, `*.cpp`, `*.c`, `*.py`. The ignored folders (default
 `.* _* cmake-build-* CMakeFiles build bin obj out release debug __MACOSX node_modules venv __pycache__`)
-și fișierul principal (`main.cpp main.c {problem}.cpp …`) se configurează la fel.
+and the main file (`main.cpp main.c {problem}.cpp …`) are configurable the same way.
 
-## Compilare
+## Building the students' projects
 
-Trei moduri, pe problemă:
+Three modes, per problem:
 
-| mod | ce face |
-|-----|---------|
-| **O singură comandă** | `gcc`/`g++` cu opțiunile din Setări, pe fișierul principal sau pe toate sursele proiectului |
-| **Ca scripturile cursului** | refăcut în evaluator după `compile.sh` + `build.sh`: fiecare `.c`/`.cpp` devine obiect, apoi legare cu `g++` dacă există `.cpp` (altfel `gcc`); merge și pe Windows |
-| **Scripturile elevului** | rulează chiar `bash-scripts/compile.sh && bash-scripts/build.sh` din proiect (sau `compile.sh`/`build.sh` din rădăcină, structura veche) și testează `release/program` |
+| mode | what it does |
+|------|--------------|
+| **A single command** | `gcc`/`g++` with the options from Settings, on the main file or on all sources of the project |
+| **Like the course scripts** | `compile.sh` + `build.sh` redone inside the evaluator: each `.c`/`.cpp` becomes an object, then linked with `g++` when there is any `.cpp` (otherwise `gcc`); works on Windows too |
+| **The student's scripts** | runs `bash-scripts/compile.sh && bash-scripts/build.sh` from the project (or `compile.sh`/`build.sh` in the root, the old layout) and tests `release/program` |
 
-**Bibliotecile se adaugă automat** după `#include`, ca în `build.sh` (`check_library`): `math.h` → `-lm`,
-`pthread.h` → `-pthread`, `ncurses.h`, SDL2, raylib, OpenGL/GLFW/GLEW, `wx/*` →
-`$(wx-config --cxxflags --libs)`, zlib, sqlite3, curl, OpenSSL, GMP etc. Regulile sunt editabile în
-Setări (opțiunile pot conține comenzi `$(…)`). Comenzile de compilare și rulare ale fiecărui limbaj se
-editează tot acolo (variabile: `{sources}` `{exe}` `{libs}` `{main}` `{stack}` `{problem}`).
+**Libraries are added automatically** from `#include`, like in `build.sh` (`check_library`): `math.h` →
+`-lm`, `pthread.h` → `-pthread`, `ncurses.h`, SDL2, raylib, OpenGL/GLFW/GLEW, `wx/*` →
+`$(wx-config --cxxflags --libs)`, zlib, sqlite3, curl, OpenSSL, GMP and more. The rules are editable in
+Settings (the options may contain `$(…)` commands). The compile and run commands of every language
+are edited there too (variables: `{sources}` `{exe}` `{libs}` `{main}` `{stack}` `{problem}`).
 
-## Ce se măsoară
+## What is measured
 
-- **Timpul** procesorului (sau timpul real, la alegere), pe fiecare test. Programul este oprit la
-  limita dură (implicit 2 × limita).
-- **Memoria RAM** maximă. Implicit se scade memoria unui program gol (calibrare, ca la OJI), ca să
-  conteze doar ce folosește elevul.
-- **Stiva** folosită (prin sonda de măsurare compilată alături de sursă; nu se numără la dimensiune).
-- **Dimensiunea sursei**: doar fișierul principal sau toate fișierele `.c .h .cpp .hpp …` ale
-  proiectului.
+- **Time**: processor time (or wall time, as you choose) on every test. The program is stopped at
+  the hard limit (2 × the limit by default).
+- **Memory**: peak RAM. By default the memory of an empty program is subtracted (calibration, like
+  OJI), so only what the student uses counts.
+- **Stack**: the stack used (through the measuring probe compiled with the source; it does not count
+  towards the size).
+- **Source size**: only the main file or every `.c .h .cpp .hpp …` file of the project.
 
-Limitele se aplică la rulare: pe Linux prin `setrlimit` (timp, memorie, stivă, dimensiunea ieșirii),
-pe Windows prin Job Object (memorie, timp, un singur proces) și `-Wl,--stack=…` la compilare. Pe macOS
-sistemul nu impune limita de memorie; memoria se măsoară, iar depășirea se punctează la fel.
+The limits are enforced while running: on Linux through `setrlimit` (time, memory, stack, output
+size), on Windows through a Job Object (memory, time, one process) and `-Wl,--stack=…` when compiling.
+On macOS the system does not enforce the memory limit; memory is measured and an overrun is scored
+the same way.
 
-## Punctaj
+## Scoring
 
-Pentru fiecare test: punctele de corectitudine (sau punctajul dat de verificator, ori o fracțiune),
-plus punctele pentru timp și pentru memorie, dacă testul s-a încadrat. La depășirea limitei de timp
-sau de memorie, poți alege: **0 puncte**, **un procent**, **scădere liniară** până la limita dură
-sau **ignoră**. La depășirea dimensiunii sursei: 0, procent, penalizare fixă sau ignoră. Pe problemă
-se pot da și puncte pentru compilare și pentru încadrarea în dimensiune.
+For every test: the correctness points (or the score given by the checker, or a fraction), plus the
+points for time and for memory when the test stayed within them. When the time or memory limit is
+exceeded you choose: **0 points**, **a percentage**, **a linear decrease** up to the hard limit or
+**report only**. When the source size is exceeded: 0, a percentage, a fixed penalty or report only. A
+problem can also give points for compiling and for staying within the size.
 
-Verdicte: OK, Parțial, Greșit, Timp depășit, Memorie depășită, Eroare la execuție (cu motivul:
-împărțire la zero, acces invalid, stivă depășită…), Fără fișier de ieșire, Eroare de compilare,
-Lipsă sursă, Eroare verificator.
+Verdicts: OK, Partial, Wrong answer, Time limit exceeded, Memory limit exceeded, Runtime error (with
+the reason: division by zero, invalid access, stack overflow…), No output file, Compilation error,
+No source, Checker error.
 
-Comparare: pe linii (ignoră spațiile de la final și liniile goale de la sfârșit), pe cuvinte, exactă,
-numere reale cu toleranță, sau **verificator extern** (`verif.cpp`/`verif.c`/`verif.py`/executabil,
-compilat automat): protocolul OJI (fișierele `problema.in/.ok/.out`, afișează „punctaj mesaj”),
-fracțiune (0…1) sau cod de ieșire.
+Comparison: by lines (ignores spaces at the end of lines and empty lines at the end), by words,
+exact, real numbers with a tolerance, or an **external checker** (`verif.cpp`/`verif.c`/`verif.py`/an
+executable, compiled automatically): the OJI protocol (files `problem.in/.ok/.out`, prints "score
+message"), a fraction (0…1) or the exit code.
 
-## Fișierele
-
-```
-concurs/
-  evaluator.json                  configurația și baremul
-  suma/_teste/0-suma.in, 0-suma.ok, …, teste.txt, verif.cpp
-  suma/ana/…                      proiectul elevului
-  _rezultate/suma/ultimele.json   rezultatele (plus câte o copie datată la fiecare evaluare)
-  _lucru/                         compilări, rulări, ieșirile păstrate (_lucru/iesiri/suma/ana/0.out)
-```
-
-Baremul exportat (`.barem.json`) conține o singură problemă și se poate importa în alt spațiu de
-lucru. La import se acceptă și `evaluator.json` (alegi problema), `teste.txt` și `rounds.xml` (OJI).
-Setările aplicației (ultimul spațiu de lucru, aspectul) sunt în `~/.evaluator-olimpiada/setari.json`.
-
-## Compilarea din surse
+## Files
 
 ```
-cd c   && ./build.sh           # Linux/macOS: bin/evaluator-c          (sau: make)
-cd c   && ./build.sh static    # legat static (orice distribuție Linux)
-cd c   && ./build.sh windows   # de pe Linux, cu MinGW-w64: bin/evaluator-c.exe   (sau: make windows)
-c\build.bat                    # pe Windows, cu gcc (MinGW-w64) în PATH
+contest/
+  evaluator.json                  the configuration and the scoring scheme
+  sum/_tests/0-sum.in, 0-sum.ok, …, teste.txt, verif.cpp
+  sum/ana/…                       the student's project
+  _results/sum/latest.json        the results (plus a dated copy after every evaluation)
+  _results/report-….html, ranking-….csv, score-sheets/…   the exports
+  _work/                          builds, runs, kept outputs (_work/outputs/sum/ana/0.out)
 ```
 
-La fel pentru `cpp/` (`build.sh`, `build.bat`, `Makefile`; necesită C++17). Pe Windows folosește un
-MinGW-w64 (Code::Blocks 20.03 sau mai nou, MSYS2, w64devkit). Dacă modifici interfața
-(`gui/index.html`) sau fișierele din `common/`, rulează întâi `python3 tools/embed.py`: copiază
-resursele în toate variantele și regenerează antetele încorporate pentru C și C++.
+An exported scoring scheme (`<problem>.scoring.json`) holds one problem and can be imported into
+another workspace. Import also accepts `evaluator.json` (you pick the problem), `teste.txt` and
+`rounds.xml` (OJI). The application settings (last workspace, look, language) are in
+`~/.olympiad-evaluator/settings.json`.
 
-Varianta Web folosește utilitarul `olieval-run` (din `common/runner/`) pentru limite și măsurători
-exacte. Este precompilat în `web/bin/` pentru Windows și Linux; altfel îl compilează singură la prima
-pornire, dacă găsește `gcc`. Fără el merge în **mod de rezervă** (fără limită de memorie, timpul
-procesor doar prin sondă).
+## Translations
 
-## Structura
+- `master-translations/` holds one file per language (`en.json`, `ro.json`) and `messages.txt` (the
+  sentences of the `.bat`/`.sh` scripts, always English). After editing them, run the script for your
+  system there (`install-windows.bat`, `install-linux.sh`, `install-macos.command`): it copies them
+  into the `translations/` folder of every version. Restart the evaluator to load the changes.
+- A language file maps the English interface texts (`ui`) and the English engine messages
+  (`messages`, templates with `%{name}` placeholders) to the language. See
+  [master-translations/README.md](master-translations/README.md) to add a language and
+  `python3 tests/check_translations.py` to find missing texts.
+
+## Building from source
 
 ```
-gui/index.html        interfața (una singură, servită identic de toate variantele)
-c/                    varianta C (C11):   src/, bin/, build.sh, build.bat, Makefile, porneste.*
-cpp/                  varianta C++ (C++17): src/, bin/, build.sh, build.bat, Makefile, porneste.*
-python/               varianta Python: evaluator.py (+ copii ale interfeței și sondelor), porneste.*
-web/                  varianta Web: server.js, public/, helper/ (sursele olieval-run), bin/, package.json, porneste.*
-common/               sonda de măsurare (C și Python) și utilitarul de rulare cu limite (runner.c)
-docs/SPECIFICATIE.md  specificația tehnică: formatul fișierelor, algoritmii, API-ul HTTP
-exemplu/              spațiul de lucru exemplu
-tools/                embed.py (sincronizarea resurselor), make_example.py, scripturile cursului folosite în exemplu
-tests/                api_client.py, compare_summaries.py, make_layouts.py, gui_smoke.py
+versions/c/build.sh            # Linux/macOS: bin/evaluator-c          (or: make)
+versions/c/build.sh static     # statically linked (any Linux distribution)
+versions/c/build.sh windows    # from Linux with MinGW-w64: bin/evaluator-c.exe   (or: make windows)
+versions\c\build.bat           # on Windows, with gcc (MinGW-w64) in PATH
 ```
 
-Cele patru variante dau **exact aceleași** rezultate (stări, punctaje, mesaje) pe exemplu, pe toate
-cele trei organizări de foldere și pe cele trei moduri de compilare; verificarea:
-`python3 tests/api_client.py --url http://127.0.0.1:PORT --ws COPIE_EXEMPLU --out rezumat.json`, apoi
-`python3 tests/compare_summaries.py rezumat1.json rezumat2.json`.
+The same for `versions/c++/` (`build.sh`, `build.bat`, `Makefile`; needs C++17). On Windows use a
+MinGW-w64 (Code::Blocks 20.03 or newer, MSYS2, w64devkit). After changing the interface
+(`common/gui/index.html`) or anything else in `common/`, run `python3 common/sync.py` first: it copies
+the shared files into all versions and regenerates the embedded headers for C and C++.
 
-## Siguranță
+The Web version uses the `olieval-run` helper (from `common/runner/`) for limits and exact
+measurements. It is prebuilt in `versions/web/bin/` for Windows and Linux; otherwise the Web version
+compiles it on its first start when it finds `gcc`. Without it, it runs in **fallback mode** (no
+memory limit, processor time only through the probe).
 
-Serverul ascultă doar pe `127.0.0.1`, cu un cod de acces nou la fiecare pornire, deci alte site-uri
-sau alte calculatoare nu îl pot folosi. Programele elevilor rulează cu limite de timp și memorie, dar
-**cu drepturile utilizatorului tău** (ca la Evaluatorul OJI): nu sunt izolate de restul fișierelor.
-Evaluează surse necunoscute într-un cont separat sau într-o mașină virtuală.
+## Testing
+
+`python3 tests/run_all.py` runs the four versions on fresh copies of the examples (all three folder
+layouts and all three build modes), checks that they give **exactly the same** statuses, scores and
+messages, and checks the translation files. See [tests/README.md](tests/README.md).
+
+## Safety
+
+The server listens only on `127.0.0.1`, with a new access code at every start, so other web sites or
+other computers cannot use it. The students' programs run with time and memory limits, but **with
+your user's rights** (like the OJI Evaluator): they are not isolated from your other files. Evaluate
+unknown sources in a separate account or in a virtual machine.

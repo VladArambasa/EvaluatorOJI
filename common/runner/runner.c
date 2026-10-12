@@ -1,7 +1,5 @@
-/*
- * runner.c — vezi runner.h.  Compilează pe Linux/macOS (POSIX) și Windows (MinGW).
- */
-/* API Windows minim: Windows 7 (unele MinGW mai vechi pornesc de la XP/2003) */
+/* RUNNER.C - SEE RUNNER.H. BUILDS ON POSIX AND WINDOWS (MINGW) */
+/* MINIMUM WINDOWS API: WINDOWS 7 (OLD MINGW DEFAULTS TO XP/2003) */
 #if defined(_WIN32) && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0601)
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
@@ -16,50 +14,48 @@
 #include <string.h>
 #include <errno.h>
 
-/* ---------------------------------------------------------------------------------------
- * Descrieri de erori
- * ------------------------------------------------------------------------------------- */
+/* === ERROR DESCRIPTIONS === */
 #ifndef _WIN32
 #include <signal.h>
 const char *rn_signal_name(int sig)
 {
     switch (sig) {
-    case SIGSEGV: return "SIGSEGV - acces invalid la memorie (vector depășit, pointer greșit sau stivă depășită)";
-    case SIGFPE:  return "SIGFPE - eroare aritmetică (ex. împărțire la zero)";
-    case SIGABRT: return "SIGABRT - program oprit cu abort (assert eșuat sau excepție neprinsă)";
-    case SIGKILL: return "SIGKILL - program oprit forțat";
-    case SIGXCPU: return "SIGXCPU - limita de timp procesor depășită";
-    case SIGXFSZ: return "SIGXFSZ - fișier de ieșire prea mare";
-    case SIGBUS:  return "SIGBUS - eroare de acces la memorie";
-    case SIGILL:  return "SIGILL - instrucțiune ilegală";
-    case SIGPIPE: return "SIGPIPE - scriere într-un canal închis";
-    case SIGTERM: return "SIGTERM - program oprit";
-    default:      return "semnal necunoscut";
+    case SIGSEGV: return "SIGSEGV - invalid memory access (array out of bounds, bad pointer or stack overflow)";
+    case SIGFPE:  return "SIGFPE - arithmetic error (e.g. division by zero)";
+    case SIGABRT: return "SIGABRT - program aborted (failed assert or uncaught exception)";
+    case SIGKILL: return "SIGKILL - program killed";
+    case SIGXCPU: return "SIGXCPU - CPU time limit exceeded";
+    case SIGXFSZ: return "SIGXFSZ - output file too large";
+    case SIGBUS:  return "SIGBUS - memory access error";
+    case SIGILL:  return "SIGILL - illegal instruction";
+    case SIGPIPE: return "SIGPIPE - write to a closed pipe";
+    case SIGTERM: return "SIGTERM - program terminated";
+    default:      return "unknown signal";
     }
 }
 #else
-const char *rn_signal_name(int sig) { (void)sig; return "semnal"; }
+const char *rn_signal_name(int sig) { (void)sig; return "signal"; }
 #endif
 
 #ifdef _WIN32
 static const char *ntstatus_name(unsigned int c)
 {
     switch (c) {
-    case 0xC0000005u: return "ACCESS_VIOLATION - acces invalid la memorie (vector depășit sau pointer greșit)";
-    case 0xC00000FDu: return "STACK_OVERFLOW - depășire stivă (recursivitate prea adâncă sau tablouri locale mari)";
-    case 0xC0000094u: return "INTEGER_DIVIDE_BY_ZERO - împărțire la zero";
-    case 0xC000008Eu: return "FLOAT_DIVIDE_BY_ZERO - împărțire la zero (real)";
-    case 0xC0000095u: return "INTEGER_OVERFLOW - depășire aritmetică";
-    case 0xC0000409u: return "STACK_BUFFER_OVERRUN - program oprit forțat (abort / depășire de buffer)";
-    case 0xC0000017u: return "NO_MEMORY - memorie insuficientă";
-    case 0xC000012Du: return "COMMITMENT_LIMIT - limita de memorie atinsă";
-    case 0xC000001Du: return "ILLEGAL_INSTRUCTION - instrucțiune ilegală";
-    case 0xC0000374u: return "HEAP_CORRUPTION - memorie dinamică coruptă";
-    case 0xC0000135u: return "DLL_NOT_FOUND - lipsește o bibliotecă DLL (ex. libstdc++-6.dll)";
-    case 0xC0000139u: return "ENTRYPOINT_NOT_FOUND - bibliotecă DLL incompatibilă";
-    case 0xC0000142u: return "DLL_INIT_FAILED - inițializare DLL eșuată";
-    case 0xC000013Au: return "CONTROL_C_EXIT - program întrerupt";
-    case 0xC0000420u: return "ASSERTION_FAILURE - assert eșuat";
+    case 0xC0000005u: return "ACCESS_VIOLATION - invalid memory access (array out of bounds or bad pointer)";
+    case 0xC00000FDu: return "STACK_OVERFLOW - stack overflow (recursion too deep or large local arrays)";
+    case 0xC0000094u: return "INTEGER_DIVIDE_BY_ZERO - division by zero";
+    case 0xC000008Eu: return "FLOAT_DIVIDE_BY_ZERO - division by zero (floating point)";
+    case 0xC0000095u: return "INTEGER_OVERFLOW - arithmetic overflow";
+    case 0xC0000409u: return "STACK_BUFFER_OVERRUN - program aborted (abort or buffer overrun)";
+    case 0xC0000017u: return "NO_MEMORY - not enough memory";
+    case 0xC000012Du: return "COMMITMENT_LIMIT - memory limit reached";
+    case 0xC000001Du: return "ILLEGAL_INSTRUCTION - illegal instruction";
+    case 0xC0000374u: return "HEAP_CORRUPTION - heap corruption";
+    case 0xC0000135u: return "DLL_NOT_FOUND - a DLL is missing (e.g. libstdc++-6.dll)";
+    case 0xC0000139u: return "ENTRYPOINT_NOT_FOUND - incompatible DLL";
+    case 0xC0000142u: return "DLL_INIT_FAILED - DLL initialization failed";
+    case 0xC000013Au: return "CONTROL_C_EXIT - program interrupted";
+    case 0xC0000420u: return "ASSERTION_FAILURE - failed assert";
     default:          return NULL;
     }
 }
@@ -76,30 +72,28 @@ const char *rn_status_text(const rn_result *r)
 {
     static RN_TLS char buf[160];
     if (!r->started) return r->error;
-    if (r->timed_out) return "oprit la limita de timp";
-    if (r->cancelled) return "oprit de utilizator";
+    if (r->timed_out) return "stopped at the time limit";
+    if (r->cancelled) return "stopped by the user";
 #ifndef _WIN32
     if (r->signal) {
         const char *n = rn_signal_name(r->signal);
-        if (strcmp(n, "semnal necunoscut") != 0) return n;
-        snprintf(buf, sizeof buf, "semnal %d", r->signal);
+        if (strcmp(n, "unknown signal") != 0) return n;
+        snprintf(buf, sizeof buf, "signal %d", r->signal);
         return buf;
     }
 #else
     if (r->win_status >= 0xC0000000u) {
         const char *n = ntstatus_name(r->win_status);
         if (n) return n;
-        snprintf(buf, sizeof buf, "eroare la execuție (cod 0x%08X)", r->win_status);
+        snprintf(buf, sizeof buf, "runtime error (code 0x%08X)", r->win_status);
         return buf;
     }
 #endif
-    snprintf(buf, sizeof buf, "cod de ieșire %d", r->exit_code);
+    snprintf(buf, sizeof buf, "exit code %d", r->exit_code);
     return buf;
 }
 
-/* =======================================================================================
- * POSIX
- * ===================================================================================== */
+/* === POSIX === */
 #ifndef _WIN32
 #include <unistd.h>
 #include <fcntl.h>
@@ -226,23 +220,23 @@ int rn_run(const rn_spec *s, rn_result *r)
 
     memset(r, 0, sizeof *r);
     if (s->argv == NULL || s->argv[0] == NULL) {
-        snprintf(r->error, sizeof r->error, "Comandă goală");
+        snprintf(r->error, sizeof r->error, "Empty command");
         return -1;
     }
     prog = rn_find_program(s->argv[0]);
     if (prog == NULL) {
-        snprintf(r->error, sizeof r->error, "Programul nu a fost găsit: %s", s->argv[0]);
+        snprintf(r->error, sizeof r->error, "Program not found: %s", s->argv[0]);
         return -1;
     }
     fin = open_rd(s->stdin_path);
     if (fin < 0) {
-        snprintf(r->error, sizeof r->error, "Nu pot deschide intrarea %s: %s", s->stdin_path, strerror(errno));
+        snprintf(r->error, sizeof r->error, "Cannot open the input %s: %s", s->stdin_path, strerror(errno));
         free(prog);
         return -1;
     }
     fout = open_wr(s->stdout_path);
     if (fout < 0) {
-        snprintf(r->error, sizeof r->error, "Nu pot crea %s: %s", s->stdout_path ? s->stdout_path : "/dev/null", strerror(errno));
+        snprintf(r->error, sizeof r->error, "Cannot create %s: %s", s->stdout_path ? s->stdout_path : "/dev/null", strerror(errno));
         close(fin);
         free(prog);
         return -1;
@@ -250,14 +244,14 @@ int rn_run(const rn_spec *s, rn_result *r)
     if (s->stderr_path && s->stdout_path && strcmp(s->stderr_path, s->stdout_path) == 0) ferr = fout;
     else ferr = open_wr(s->stderr_path);
     if (ferr < 0) {
-        snprintf(r->error, sizeof r->error, "Nu pot crea %s: %s", s->stderr_path, strerror(errno));
+        snprintf(r->error, sizeof r->error, "Cannot create %s: %s", s->stderr_path, strerror(errno));
         close(fin); close(fout);
         free(prog);
         return -1;
     }
     envp = build_env(s->env_add);
     if (envp == NULL || pipe(ep) != 0) {
-        snprintf(r->error, sizeof r->error, "Resurse insuficiente pentru lansare");
+        snprintf(r->error, sizeof r->error, "Not enough resources to start the program");
         close(fin); close(fout); if (ferr != fout) close(ferr);
         free(prog); free(envp);
         return -1;
@@ -268,14 +262,14 @@ int rn_run(const rn_spec *s, rn_result *r)
     t0 = rn_now_ms();
     pid = fork();
     if (pid < 0) {
-        snprintf(r->error, sizeof r->error, "fork a eșuat: %s", strerror(errno));
+        snprintf(r->error, sizeof r->error, "fork failed: %s", strerror(errno));
         close(ep[0]); close(ep[1]);
         close(fin); close(fout); if (ferr != fout) close(ferr);
         free(prog); free(envp);
         return -1;
     }
     if (pid == 0) {
-        /* procesul copil: doar apeluri sigure după fork */
+        /* CHILD: ONLY ASYNC-SIGNAL-SAFE CALLS AFTER FORK */
         sigset_t all;
         int e;
         struct rlimit core;
@@ -296,17 +290,17 @@ int rn_run(const rn_spec *s, rn_result *r)
         setrlimit(RLIMIT_CORE, &core);
         if (dup2(fin, 0) < 0 || dup2(fout, 1) < 0 || dup2(ferr, 2) < 0) {
             e = errno;
-            if (write(ep[1], "D", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* nimic */ }
+            if (write(ep[1], "D", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* IGNORE */ }
             _exit(127);
         }
         if (s->cwd && s->cwd[0] && chdir(s->cwd) != 0) {
             e = errno;
-            if (write(ep[1], "C", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* nimic */ }
+            if (write(ep[1], "C", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* IGNORE */ }
             _exit(127);
         }
         execve(prog, (char *const *)s->argv, envp);
         e = errno;
-        if (write(ep[1], "E", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* nimic */ }
+        if (write(ep[1], "E", 1) < 0 || write(ep[1], &e, sizeof e) < 0) { /* IGNORE */ }
         _exit(127);
     }
     close(ep[1]);
@@ -336,7 +330,7 @@ int rn_run(const rn_spec *s, rn_result *r)
         nanosleep(&ts, NULL);
     }
     t1 = rn_now_ms();
-    kill(-pid, SIGKILL); /* eventualele procese rămase din grup */
+    kill(-pid, SIGKILL); /* KILL ANY LEFTOVER PROCESSES OF THE GROUP */
     r->wall_ms = t1 - t0;
     {
         char tag = 0;
@@ -344,8 +338,8 @@ int rn_run(const rn_spec *s, rn_result *r)
         if (read(ep[0], &tag, 1) == 1 && read(ep[0], &e, sizeof e) == (ssize_t)sizeof e) {
             r->started = 0;
             snprintf(r->error, sizeof r->error, "%s: %s",
-                     tag == 'C' ? "Nu pot intra în folderul de lucru" :
-                     tag == 'D' ? "Nu pot redirecta intrarea/ieșirea" : "Nu pot lansa programul",
+                     tag == 'C' ? "Cannot enter the working folder" :
+                     tag == 'D' ? "Cannot redirect input/output" : "Cannot start the program",
                      strerror(e));
         }
     }
@@ -369,9 +363,7 @@ int rn_run(const rn_spec *s, rn_result *r)
     return r->started ? 0 : -1;
 }
 
-/* =======================================================================================
- * Windows
- * ===================================================================================== */
+/* === WINDOWS === */
 #else
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -410,7 +402,7 @@ char *rn_w_to_u8(const wchar_t *w)
     return s;
 }
 
-/* --- buffer de caractere largi --- */
+/* WIDE CHAR BUFFER */
 typedef struct { wchar_t *p; size_t n, cap; } wbuf;
 
 static void wb_putn(wbuf *b, const wchar_t *s, size_t n)
@@ -431,7 +423,7 @@ static void wb_putn(wbuf *b, const wchar_t *s, size_t n)
 static void wb_put(wbuf *b, const wchar_t *s) { wb_putn(b, s, wcslen(s)); }
 static void wb_putc(wbuf *b, wchar_t c) { wb_putn(b, &c, 1); }
 
-/* citare compatibilă cu CommandLineToArgvW / CRT */
+/* QUOTING COMPATIBLE WITH COMMANDLINETOARGVW / CRT */
 static void append_quoted(wbuf *b, const wchar_t *a)
 {
     const wchar_t *p;
@@ -470,7 +462,7 @@ static int has_ext(const wchar_t *name)
     return wcschr(b, L'.') != NULL;
 }
 
-/* încearcă dir\name(+ext); întoarce malloc-ul căii găsite sau NULL */
+/* TRY DIR\NAME(+EXT); RETURN THE MALLOC'D PATH OR NULL */
 static wchar_t *try_dir(const wchar_t *dir, const wchar_t *name)
 {
     static const wchar_t *exts[] = { L".exe", L".com", L".bat", L".cmd", L"" };
@@ -523,7 +515,7 @@ static wchar_t *search_path_w(const wchar_t *name, int skip_store, wchar_t **sto
     return found;
 }
 
-/* caută Python3* în folderele uzuale de instalare */
+/* FIND PYTHON3* IN THE USUAL INSTALL FOLDERS */
 static wchar_t *find_python_install(void)
 {
     wchar_t base[3][MAX_PATH];
@@ -612,7 +604,7 @@ static void win_err(char *out, size_t cap, const char *prefix, DWORD code)
         size_t l = strlen(u8);
         while (l && (u8[l - 1] == '\n' || u8[l - 1] == '\r' || u8[l - 1] == ' ' || u8[l - 1] == '.')) u8[--l] = 0;
     }
-    snprintf(out, cap, "%s: %s (cod %lu)", prefix, u8 ? u8 : "", (unsigned long)code);
+    snprintf(out, cap, "%s: %s (code %lu)", prefix, u8 ? u8 : "", (unsigned long)code);
     free(u8);
     if (msg) LocalFree(msg);
 }
@@ -689,12 +681,12 @@ int rn_run(const rn_spec *s, rn_result *r)
 
     memset(r, 0, sizeof *r);
     if (s->argv == NULL || s->argv[0] == NULL) {
-        snprintf(r->error, sizeof r->error, "Comandă goală");
+        snprintf(r->error, sizeof r->error, "Empty command");
         return -1;
     }
     prog = rn_find_program(s->argv[0]);
     if (prog == NULL) {
-        snprintf(r->error, sizeof r->error, "Programul nu a fost găsit: %s", s->argv[0]);
+        snprintf(r->error, sizeof r->error, "Program not found: %s", s->argv[0]);
         return -1;
     }
     wprog = rn_u8_to_w(prog);
@@ -710,13 +702,13 @@ int rn_run(const rn_spec *s, rn_result *r)
     sa.bInheritHandle = TRUE;
     hin = open_handle(s->stdin_path, 0, &sa);
     if (hin == INVALID_HANDLE_VALUE) {
-        win_err(r->error, sizeof r->error, "Nu pot deschide intrarea", GetLastError());
+        win_err(r->error, sizeof r->error, "Cannot open the input", GetLastError());
         free(prog); free(wprog); free(cmd.p);
         return -1;
     }
     hout = open_handle(s->stdout_path, 1, &sa);
     if (hout == INVALID_HANDLE_VALUE) {
-        win_err(r->error, sizeof r->error, "Nu pot crea fișierul de ieșire", GetLastError());
+        win_err(r->error, sizeof r->error, "Cannot create the output file", GetLastError());
         CloseHandle(hin);
         free(prog); free(wprog); free(cmd.p);
         return -1;
@@ -724,7 +716,7 @@ int rn_run(const rn_spec *s, rn_result *r)
     if (s->stderr_path && s->stdout_path && strcmp(s->stderr_path, s->stdout_path) == 0) herr = hout;
     else herr = open_handle(s->stderr_path, 1, &sa);
     if (herr == INVALID_HANDLE_VALUE) {
-        win_err(r->error, sizeof r->error, "Nu pot crea fișierul de erori", GetLastError());
+        win_err(r->error, sizeof r->error, "Cannot create the error file", GetLastError());
         CloseHandle(hin); CloseHandle(hout);
         free(prog); free(wprog); free(cmd.p);
         return -1;
@@ -781,7 +773,7 @@ int rn_run(const rn_spec *s, rn_result *r)
         }
     }
     if (!ok) {
-        win_err(r->error, sizeof r->error, "Nu pot lansa programul", GetLastError());
+        win_err(r->error, sizeof r->error, "Cannot start the program", GetLastError());
     } else {
         r->started = 1;
         if (job && AssignProcessToJobObject(job, pi.hProcess)) injob = 1;

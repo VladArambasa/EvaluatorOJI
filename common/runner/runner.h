@@ -1,7 +1,7 @@
 /*
- * runner.h — lansează un proces cu limite (timp, memorie, stivă, ieșire) și îl măsoară.
- * Linux/macOS: fork + setrlimit + execve + wait4.   Windows: CreateProcessW + Job Object.
- * Toate șirurile sunt UTF-8.
+ * RUNNER.H - RUN A PROCESS WITH LIMITS (TIME, MEMORY, STACK, OUTPUT) AND MEASURE IT
+ * POSIX: FORK + SETRLIMIT + EXECVE + WAIT4. WINDOWS: CREATEPROCESSW + JOB OBJECT
+ * ALL STRINGS ARE UTF-8
  */
 #ifndef OLIEVAL_RUNNER_H
 #define OLIEVAL_RUNNER_H
@@ -11,51 +11,51 @@ extern "C" {
 #endif
 
 typedef struct {
-    const char *const *argv;    /* argv[0] = programul; listă terminată cu NULL */
-    const char *cwd;            /* folderul curent (NULL = cel al evaluatorului) */
-    const char *stdin_path;     /* NULL = dispozitivul nul */
-    const char *stdout_path;    /* NULL = dispozitivul nul */
-    const char *stderr_path;    /* NULL = dispozitivul nul; egal cu stdout_path = același fișier */
-    const char *const *env_add; /* "NUME=VALOARE", terminată cu NULL (poate fi NULL) */
-    long long wall_ms;          /* limita de timp real (0 = fără) */
-    long long cpu_s;            /* limita de timp procesor în secunde (0 = fără) */
-    long long mem_kb;           /* limita dură de memorie (0 = fără) */
-    long long stack_kb;         /* limita stivei — doar POSIX (0 = implicit) */
-    long long fsize_kb;         /* dimensiunea maximă a unui fișier scris — doar POSIX (0 = fără) */
-    int single_process;         /* Windows: interzice procesele copil (system("pause") etc.) */
-    volatile int *cancel;       /* dacă devine != 0, procesul este oprit */
+    const char *const *argv;    /* ARGV[0] = PROGRAM; NULL-TERMINATED */
+    const char *cwd;            /* WORKING FOLDER (NULL = CURRENT) */
+    const char *stdin_path;     /* NULL = NULL DEVICE */
+    const char *stdout_path;    /* NULL = NULL DEVICE */
+    const char *stderr_path;    /* NULL = NULL DEVICE; SAME AS STDOUT_PATH = SAME FILE */
+    const char *const *env_add; /* NAME=VALUE LIST, NULL-TERMINATED (MAY BE NULL) */
+    long long wall_ms;          /* WALL TIME LIMIT (0 = NONE) */
+    long long cpu_s;            /* CPU TIME LIMIT IN SECONDS (0 = NONE) */
+    long long mem_kb;           /* HARD MEMORY LIMIT (0 = NONE) */
+    long long stack_kb;         /* STACK LIMIT, POSIX ONLY (0 = DEFAULT) */
+    long long fsize_kb;         /* MAX WRITTEN FILE SIZE, POSIX ONLY (0 = NONE) */
+    int single_process;         /* WINDOWS: NO CHILD PROCESSES (E.G. SYSTEM PAUSE) */
+    volatile int *cancel;       /* NONZERO = STOP THE PROCESS */
 } rn_spec;
 
 typedef struct {
-    int started;                /* 1 dacă procesul a pornit */
-    char error[512];            /* motivul pentru care nu a pornit */
-    int exited;                 /* 1 = s-a terminat normal (cod de ieșire) */
-    int exit_code;              /* codul de ieșire */
-    unsigned int win_status;    /* Windows: codul brut (ex. 0xC00000FD) */
-    int signal;                 /* POSIX: semnalul care l-a oprit */
-    int timed_out;              /* oprit la limita de timp */
-    int cancelled;              /* oprit de utilizator */
-    double wall_ms;             /* timp real */
-    double cpu_ms;              /* timp procesor (user + sistem) */
-    long long peak_kb;          /* RAM maxim (Linux ru_maxrss, Windows PeakWorkingSetSize) */
-    long long peak_commit_kb;   /* Windows: memoria comisă maximă */
-    int mem_limit_hit;          /* Windows: limita Job Object atinsă */
+    int started;                /* 1 IF THE PROCESS STARTED */
+    char error[512];            /* WHY IT DID NOT START */
+    int exited;                 /* 1 = NORMAL EXIT (EXIT CODE VALID) */
+    int exit_code;              /* EXIT CODE */
+    unsigned int win_status;    /* WINDOWS: RAW STATUS (E.G. 0XC00000FD) */
+    int signal;                 /* POSIX: TERMINATING SIGNAL */
+    int timed_out;              /* STOPPED AT THE TIME LIMIT */
+    int cancelled;              /* STOPPED BY THE USER */
+    double wall_ms;             /* WALL TIME */
+    double cpu_ms;              /* CPU TIME (USER + SYSTEM) */
+    long long peak_kb;          /* PEAK RAM (LINUX RU_MAXRSS, WINDOWS PEAKWORKINGSETSIZE) */
+    long long peak_commit_kb;   /* WINDOWS: PEAK COMMITTED MEMORY */
+    int mem_limit_hit;          /* WINDOWS: JOB OBJECT LIMIT HIT */
 } rn_result;
 
-/* Rulează procesul; întoarce 0 dacă a pornit, -1 altfel (vezi res->error). */
+/* RUN THE PROCESS; RETURN 0 IF STARTED, -1 OTHERWISE (SEE RES->ERROR) */
 int rn_run(const rn_spec *spec, rn_result *res);
 
-/* Caută un program în PATH (+ locații uzuale MinGW/Python pe Windows). Rezultat malloc sau NULL. */
+/* FIND A PROGRAM IN PATH (+ USUAL MINGW/PYTHON FOLDERS ON WINDOWS); MALLOC'D OR NULL */
 char *rn_find_program(const char *name);
 
-/* Descrierea unui semnal / cod NTSTATUS, în română. */
+/* DESCRIBE A SIGNAL / RUN STATUS (ENGLISH) */
 const char *rn_signal_name(int sig);
 const char *rn_status_text(const rn_result *r);
 
 #ifdef _WIN32
 #include <wchar.h>
-wchar_t *rn_u8_to_w(const char *s);   /* malloc */
-char *rn_w_to_u8(const wchar_t *s);   /* malloc */
+wchar_t *rn_u8_to_w(const char *s);   /* MALLOC'D */
+char *rn_w_to_u8(const wchar_t *s);   /* MALLOC'D */
 #endif
 
 #ifdef __cplusplus
