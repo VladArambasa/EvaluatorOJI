@@ -1,0 +1,1 @@
+Aici build.sh pune executabilul program
